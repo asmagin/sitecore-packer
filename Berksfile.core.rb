@@ -19,6 +19,8 @@ def gusztavvargadr_packer_sources
   gusztavvargadr_packer_cookbook 'sql17d'
   gusztavvargadr_packer_cookbook 'vs17c'
 
+  gusztavvargadr_packer_cookbook 'sc_sql17d'
+
   gusztavvargadr_cookbook 'components', 'windows'
   gusztavvargadr_cookbook 'components', 'virtualbox'
   gusztavvargadr_cookbook 'components', 'docker'
