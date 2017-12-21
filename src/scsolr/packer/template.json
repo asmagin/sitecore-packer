@@ -1,0 +1,6 @@
+{
+  "variables": {
+    "name": "scsolr",
+    "description": "SOLR 6.6.2"
+  }
+}

@@ -1,4 +1,4 @@
-name 'gusztavvargadr_packer_sc_sql17d'
+name 'gusztavvargadr_packer_scsql17d'
 maintainer 'Gusztáv Varga'
 maintainer_email 'me@gusztavvargadr.me'
 license 'MIT'
