@@ -1,0 +1,18 @@
+Vagrant.configure('2') do |config|
+  config.vm.box = 'gusztavvargadr/u14'
+
+  config.vm.provider 'hyperv' do |hyperv, override|
+    hyperv.memory = 1024
+    hyperv.cpus = 1
+    hyperv.differencing_disk = true
+
+    override.vm.network 'public_network', bridge: ENV['VAGRANT_NETWORK_BRIDGE']
+    override.vm.synced_folder '.', '/vagrant', type: 'smb', smb_username: ENV['VAGRANT_SMB_USERNAME'], smb_password: ENV['VAGRANT_SMB_PASSWORD']
+  end
+
+  config.vm.provider 'virtualbox' do |virtualbox|
+    virtualbox.memory = 1024
+    virtualbox.cpus = 1
+    virtualbox.linked_clone = true
+  end
+end

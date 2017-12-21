@@ -1,0 +1,30 @@
+---
+driver:
+  name: vagrant
+  vagrantfiles:
+    - ../../../../core/chef/Vagrantfile.kitchen
+
+provisioner:
+  name: chef_solo
+
+verifier:
+  name: inspec
+
+platforms:
+  - name: w16s
+    transport:
+      name: winrm
+    driver:
+      box: gusztavvargadr/w16s
+
+suites:
+  - name: 14x
+    run_list:
+      - recipe[gusztavvargadr_windows::updates]
+      - recipe[gusztavvargadr_sql::2014_requirements]
+      - recipe[gusztavvargadr_sql::2014_express]
+  - name: 14d
+    run_list:
+      - recipe[gusztavvargadr_windows::updates]
+      - recipe[gusztavvargadr_sql::2014_requirements]
+      - recipe[gusztavvargadr_sql::2014_developer]

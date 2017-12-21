@@ -1,0 +1,23 @@
+---
+driver:
+  name: vagrant
+  vagrantfiles:
+    - ../../../../../../Vagrantfile.kitchen
+
+provisioner:
+  name: chef_solo
+
+verifier:
+  name: inspec
+
+platforms:
+  - name: w16s
+    transport:
+      name: winrm
+    driver:
+      box: gusztavvargadr/w16s
+
+suites:
+  - name: default
+    run_list:
+      - recipe[gusztavvargadr_virtualbox::guest_additions]

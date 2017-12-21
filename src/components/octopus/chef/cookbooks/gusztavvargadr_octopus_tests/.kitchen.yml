@@ -1,0 +1,96 @@
+---
+driver:
+  name: vagrant
+  vagrantfiles:
+    - ../../../../core/chef/Vagrantfile.kitchen
+
+provisioner:
+  name: chef_solo
+
+verifier:
+  name: inspec
+
+platforms:
+  - name: w16s
+    transport:
+      name: winrm
+    driver:
+      box: gusztavvargadr/w16s-sql14d
+
+suites:
+  - name: server
+    run_list:
+      - recipe[gusztavvargadr_octopus_tests::server]
+    attributes:
+      gusztavvargadr_octopus:
+        server:
+          execute_username: vagrant
+          execute_password: vagrant
+          web_addresses:
+            - http://localhost
+            - http://127.0.0.1
+          web_username: vagrant
+          web_password: Vagrant42
+          import:
+            gusztavvargadr_octopus_tests::server_import:
+              password: Octopus42
+  - name: tentacle-listening
+    run_list:
+      - recipe[gusztavvargadr_octopus_tests::tentacle_listening]
+    attributes:
+      gusztavvargadr_octopus:
+        server:
+          execute_username: vagrant
+          execute_password: vagrant
+          web_addresses:
+            - http://localhost
+            - http://127.0.0.1
+          web_username: vagrant
+          web_password: Vagrant42
+          import:
+            gusztavvargadr_octopus_tests::server_import:
+              password: Octopus42
+        tentacle:
+          execute_username: vagrant
+          execute_password: vagrant
+          server_web_address: http://localhost
+          server_api_key: API-6ENORPWQM3NWT7G6P47W5USM
+          server_thumbprint: 96195237FCE647FFE277DE7CE749264AC65DAFFF
+          node_name: tentacle-listening
+          environment_names:
+            - environment
+          tenant_names:
+            - tenant
+          role_names:
+            - tentacle-listening
+  - name: tentacle-polling
+    run_list:
+      - recipe[gusztavvargadr_octopus_tests::tentacle_polling]
+    attributes:
+      gusztavvargadr_octopus:
+        server:
+          execute_username: vagrant
+          execute_password: vagrant
+          web_addresses:
+            - http://localhost
+            - http://127.0.0.1
+          web_username: vagrant
+          web_password: Vagrant42
+          import:
+            gusztavvargadr_octopus_tests::server_import:
+              password: Octopus42
+        tentacle:
+          execute_username: vagrant
+          execute_password: vagrant
+          server_web_address: http://localhost
+          server_api_key: API-6ENORPWQM3NWT7G6P47W5USM
+          node_name: tentacle-polling
+          environment_names:
+            - environment
+          tenant_names:
+            - tenant
+          role_names:
+            - tentacle-polling
+  - name: client
+    run_list:
+      - recipe[gusztavvargadr_octopus_tests::client]

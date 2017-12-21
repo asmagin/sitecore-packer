@@ -1,0 +1,8 @@
+{
+  "$type": "Octopus.Core.Model.Users.ApiKey, Octopus.Core",
+  "Id": "apikeys-OSzp0ZkJYDVKL4MykWqyuxjY",
+  "Purpose": "vagrant",
+  "UserId": "Users-1",
+  "ApiKeyHashed": "3E8$vcD3njlRoq5NkmsrOH2iGQ==$QEkq6wzHZhlCcJR4pZu0GMMPencL7t5G",
+  "Created": "2017-06-18T00:47:19.4088645+00:00"
+}
