@@ -1,0 +1,10 @@
+name 'gusztavvargadr_packer_scpre'
+maintainer 'Alex Smagin'
+maintainer_email 'me@asmagin.com'
+license 'MIT'
+description 'Installs/Configures Packer Sitecore 9.0 Prerequisites'
+long_description 'Installs/Configures Packer Sitecore 9.0 Prerequisites'
+version '0.0.0'
+
+depends 'gusztavvargadr_packer_w'
+depends 'gusztavvargadr_windows'

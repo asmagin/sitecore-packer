@@ -1,3 +1,3 @@
 default['gusztavvargadr_virtualbox']['guest_additions'] = {
-  'version' => '5.1.22',
+  'version' => '5.2.4',
 }

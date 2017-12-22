@@ -38,7 +38,7 @@ packerTemplates = packerTemplates.
   Concat(w16s_sql17d).
   Concat(w16s_scsql17d).
   Concat(w16s_scsolr).
-  Concat(w16s_pre).
+  Concat(w16s_scpre).
   ToList();
 
 packerTemplate = configuration;

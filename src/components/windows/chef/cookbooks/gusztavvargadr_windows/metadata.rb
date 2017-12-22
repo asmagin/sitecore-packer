@@ -7,3 +7,4 @@ long_description 'Installs/Configures Windows'
 version '0.0.0'
 
 depends 'windows', '~> 3.1.1'
+depends 'webpi', '~> 4.2.1'
