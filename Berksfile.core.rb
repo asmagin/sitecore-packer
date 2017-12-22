@@ -29,6 +29,8 @@ def gusztavvargadr_packer_sources
   gusztavvargadr_cookbook 'components', 'iis'
   gusztavvargadr_cookbook 'components', 'sql'
   gusztavvargadr_cookbook 'components', 'vs'
+  
+  gusztavvargadr_cookbook 'components', 'solr'
 end
 
 def gusztavvargadr_packer_cookbook(type, name = '')

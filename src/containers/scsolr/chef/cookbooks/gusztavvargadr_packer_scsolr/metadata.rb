@@ -7,3 +7,4 @@ long_description 'Installs/Configures Packer SOLR 6.6.2'
 version '0.0.0'
 
 depends 'gusztavvargadr_packer_w'
+depends 'gusztavvargadr_solr'
