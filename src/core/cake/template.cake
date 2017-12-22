@@ -118,7 +118,7 @@ void PackerTemplate_MergeDirectories(PackerTemplate template) {
   PackerTemplate_Log(template, "Merge Directories");
 
   foreach (var component in template.Components) {
-    foreach (var sourceDirectory in GetDirectories("src/*")) {
+    foreach (var sourceDirectory in GetDirectories("src/containers/*")) {
       var sourceDirectoryName = sourceDirectory.GetDirectoryName();
       if (!component.IsMatching(sourceDirectoryName)) {
         continue;
@@ -203,7 +203,7 @@ void PackerTemplate_MergeJson(PackerTemplate template) {
       runList.Add(component.Name);
     }
 
-    foreach (var sourceDirectory in GetDirectories("src/*")) {
+    foreach (var sourceDirectory in GetDirectories("src/containers/*")) {
       var sourceDirectoryName = sourceDirectory.GetDirectoryName();
       if (!component.IsMatching(sourceDirectoryName)) {
         continue;

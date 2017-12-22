@@ -1,5 +1,5 @@
 directory = File.dirname(__FILE__)
-require "#{directory}/lib/gusztavvargadr/infrastructure/src/components/core/chef/Berksfile.core"
+require "#{directory}/src/components/core/chef/Berksfile.core"
 
 def gusztavvargadr_packer_sources
   gusztavvargadr_sources
@@ -34,5 +34,5 @@ end
 
 def gusztavvargadr_packer_cookbook(type, name = '')
   name = type if name.empty?
-  cookbook "gusztavvargadr_packer_#{name}", path: "#{File.dirname(__FILE__)}/src/#{type}/chef/cookbooks/gusztavvargadr_packer_#{name}"
+  cookbook "gusztavvargadr_packer_#{name}", path: "#{File.dirname(__FILE__)}/src/containers/#{type}/chef/cookbooks/gusztavvargadr_packer_#{name}"
 end

@@ -1,4 +1,4 @@
-require "#{File.dirname(__FILE__)}/lib/gusztavvargadr/infrastructure/src/components/core/vagrant/Vagrantfile.core"
+require "#{File.dirname(__FILE__)}/src/components/core/vagrant/Vagrantfile.core"
 
 Environment.new(name: 'packer.local') do |environment|
   create_packer_vms(environment, 'w10e')
