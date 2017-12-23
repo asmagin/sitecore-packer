@@ -40,6 +40,7 @@ action :install do
   end
 
   directory directory_path do
+    recursive true
     action :delete
   end
 end
