@@ -21,9 +21,9 @@ action :run do
   script_log_path = "#{script_directory_path}\\#{script_name}.log"
   file script_file_path do
     content <<-EOH
-      # #{command}
+      # #{new_resource.command}
       $(
-        #{code}
+        #{new_resource.code}
       ) *>&1 > #{script_log_path}
     EOH
     action :create
@@ -58,7 +58,7 @@ action :run do
     code <<-EOH
       while ((Get-ScheduledTask -TaskName "#{windows_task_name}").State -ne "Ready")
       {
-        Start-Sleep #{wait_poll}
+        Start-Sleep #{new_resource.wait_poll}
       }
     EOH
     timeout new_resource.timeout

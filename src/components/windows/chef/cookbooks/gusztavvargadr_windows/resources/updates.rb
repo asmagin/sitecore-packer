@@ -51,7 +51,7 @@ action :install do
 
     msu_file_path = "#{directory_path}/msu.msu"
     remote_file msu_file_path do
-      source msu_source
+      source new_resource.msu_source
       action :create
     end
 

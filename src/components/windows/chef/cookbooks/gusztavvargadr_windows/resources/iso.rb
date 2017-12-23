@@ -4,19 +4,19 @@ property :iso_drive_letter, String, required: true
 default_action :mount
 
 action :mount do
-  powershell_script "Mount '#{iso_path}' at '#{iso_drive_letter}'" do
+  powershell_script "Mount '#{new_resource.iso_path}' at '#{new_resource.iso_drive_letter}'" do
     code <<-EOH
-      $mountResult = Mount-DiskImage #{iso_path.tr('/', '\\')} -PassThru -NoDriveLetter
-      mountvol #{iso_drive_letter}: ($mountResult | Get-Volume).UniqueId
+      $mountResult = Mount-DiskImage #{new_resource.iso_path.tr('/', '\\')} -PassThru -NoDriveLetter
+      mountvol #{new_resource.iso_drive_letter}: ($mountResult | Get-Volume).UniqueId
     EOH
     action :run
   end
 end
 
 action :dismount do
-  powershell_script "Dismount '#{iso_path}'" do
+  powershell_script "Dismount '#{new_resource.iso_path}'" do
     code <<-EOH
-      Dismount-DiskImage #{iso_path}
+      Dismount-DiskImage #{new_resource.iso_path}
     EOH
     action :run
   end

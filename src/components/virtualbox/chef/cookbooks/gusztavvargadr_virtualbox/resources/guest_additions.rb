@@ -10,7 +10,7 @@ action :install do
     action :create
   end
 
-  guest_additions_version = guest_additions_options['version']
+  guest_additions_version = new_resource.guest_additions_options['version']
   iso_file_name = "VBoxGuestAdditions_#{guest_additions_version}.iso"
   iso_file_path = "#{directory_path}/#{iso_file_name}"
   iso_file_source_url = "http://download.virtualbox.org/virtualbox/#{guest_additions_version}/#{iso_file_name}"
