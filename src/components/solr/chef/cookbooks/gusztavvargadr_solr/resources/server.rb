@@ -3,7 +3,7 @@ property :server_options, Hash, required: true
 default_action :install
 
 action :prepare do
-  java_home = server_options['java_path']
+  java_home = new_resource.server_options['java_path']
   java_path = "#{java_home}/bin"
 
   env 'JAVA_HOME' do
@@ -44,8 +44,16 @@ action :install do
     action :create
   end
 
-  powershell_script "Enable HTTPS for SOLR" do
+  # Generate SSL cert
+  powershell_script "Generate SSL cert" do
     code "& '#{script_file_path}' -KeystoreFile '#{server_options['solr_path']}/server/etc/solr-ssl.keystore.jks' -Clobber"
     action :run
+  end
+
+  # Enable HTTPS for SOLR
+  cookbook_file "#{server_options['solr_path']}/bin/solr.in.cmd" do
+    source 'solr.in.cmd'
+    cookbook 'gusztavvargadr_solr'
+    action :create
   end
 end
