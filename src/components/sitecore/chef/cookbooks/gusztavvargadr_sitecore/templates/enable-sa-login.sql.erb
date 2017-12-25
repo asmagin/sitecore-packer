@@ -1,0 +1,7 @@
+ALTER LOGIN sa ENABLE ; 
+GO
+
+ALTER LOGIN sa WITH PASSWORD = '<%= @password %>',
+    CHECK_POLICY = OFF,
+    CHECK_EXPIRATION = OFF;
+GO

@@ -1,5 +1,30 @@
 # Packer
 
+## Building Instructions
+- Put **license.xml** file to **/src/components/sitecore/chef/cookbooks/gusztavvargadr_sitecore/files/license.xml**
+- Put **dev.sitecore.net** credentials into **src/components/sitecore/chef/cookbooks/gusztavvargadr_sitecore/attributes/secret.rb**. You can find sample next to this file.
+
+---
+
+## TODO: update
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 **Contents** [TL;DR] | [Overview] | [Getting started] | [Usage] | [Next steps] | [Contributing] | [Resources]  
 
 This repository contains Packer templates for .NET development with Docker, Visual Studio, IIS and and SQL Server on Windows, building virtual machine images and Vagrant boxes for VirtualBox, Hyper-V and AWS, provisioned with Chef.

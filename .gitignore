@@ -2,3 +2,7 @@ tools/**
 !tools/packages.config
 build
 .vagrant
+
+# Sitecore Secrets
+src/components/sitecore/chef/cookbooks/gusztavvargadr_sitecore/attributes/secret.rb
+src/components/sitecore/chef/cookbooks/gusztavvargadr_sitecore/files/license.xml
