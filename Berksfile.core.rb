@@ -21,7 +21,6 @@ def gusztavvargadr_packer_sources
 
   gusztavvargadr_packer_cookbook 'scsql17d'
   gusztavvargadr_packer_cookbook 'scsolr'
-  gusztavvargadr_packer_cookbook 'scpre'
   gusztavvargadr_packer_cookbook 'sc90'
 
   gusztavvargadr_cookbook 'components', 'windows'

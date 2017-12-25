@@ -62,15 +62,10 @@ action :install_and_update_sif do
   end
 end
 
-action :install_and_update_sif do
-  # Install & update SIF
-  powershell_script "Install & update SIF" do
-    code <<-EOH
-      $ProgressPreference='SilentlyContinue';
-      Register-PSRepository -Name SitecoreGallery -SourceLocation https://sitecore.myget.org/F/sc-powershell/api/v2 -InstallationPolicy Trusted;
-      Install-Module SitecoreInstallFramework;
-      Update-Module SitecoreInstallFramework;
-    EOH
-    action :run
-  end
-end
+# action :change_admin_password do
+#   user 'Set Local Administrator (vagrant) Password' do
+#     username 'vagrant'
+#     action :manage
+#     password 'sitecore'
+#   end
+# end

@@ -58,8 +58,8 @@ action :install do
   end
 
   # Download Sitecore
-  powershell_script "Install Sitecore" do
-    code "#{script_file_path}"
+  gusztavvargadr_windows_powershell_script_elevated "Install Sitecore" do
+    code script_file_path
     action :run
   end
 end
