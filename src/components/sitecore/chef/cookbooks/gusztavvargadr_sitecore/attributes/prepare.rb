@@ -1,4 +1,7 @@
 default['gusztavvargadr_sitecore']['prepare'] = {
+  'sql' => {
+    'sa_password' => 'Vagrant42',
+  },
   'chocolatey_packages' => {
     'webpi' => {
       'elevated' => true,

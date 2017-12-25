@@ -20,6 +20,7 @@ def gusztavvargadr_packer_sources
   gusztavvargadr_packer_cookbook 'vs17c'
 
   gusztavvargadr_packer_cookbook 'scsql17d'
+  gusztavvargadr_packer_cookbook 'scsql16d'
   gusztavvargadr_packer_cookbook 'scsolr'
   gusztavvargadr_packer_cookbook 'sc90'
 
