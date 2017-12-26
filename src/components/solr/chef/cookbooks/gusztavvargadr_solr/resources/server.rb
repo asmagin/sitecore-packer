@@ -45,8 +45,9 @@ action :install do
   end
 
   # Generate SSL cert
-  powershell_script "Generate SSL cert" do
+  gusztavvargadr_windows_powershell_script_elevated "Generate SSL cert" do
     code "& '#{script_file_path}' -KeystoreFile '#{server_options['solr_path']}/server/etc/solr-ssl.keystore.jks' -Clobber"
+    cwd 'c:/tmp'
     action :run
   end
 

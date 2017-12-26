@@ -40,7 +40,7 @@ action :install do
     action :run
   end
 
-  # Copy license 
+  # Copy license
   license_file_name = 'license.xml'
   license_file_path = "#{sitecore['root']}/#{license_file_name}"
   cookbook_file license_file_path do
@@ -60,6 +60,7 @@ action :install do
   # Download Sitecore
   gusztavvargadr_windows_powershell_script_elevated "Install Sitecore" do
     code script_file_path
+    cwd sitecore['root']
     action :run
   end
 end
