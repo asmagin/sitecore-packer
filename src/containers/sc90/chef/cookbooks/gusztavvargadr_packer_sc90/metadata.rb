@@ -8,3 +8,4 @@ version '0.0.0'
 
 depends 'gusztavvargadr_packer_w'
 depends 'gusztavvargadr_sitecore'
+depends 'gusztavvargadr_develop'

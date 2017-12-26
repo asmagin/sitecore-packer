@@ -6,24 +6,24 @@ var recursive = Argument("recursive", false);
 
 packerTemplates = new List<PackerTemplate>();
 
-var w10e = PackerTemplates_Create("w10e");
-var w10e_dc = PackerTemplates_Create("w10e-dc", parents: w10e);
-var w10e_dotnet = PackerTemplates_Create("w10e-dotnet", parents: w10e);
-var w10e_vs17c = PackerTemplates_Create("w10e-vs17c", parents: w10e_dotnet);
+// var w10e = PackerTemplates_Create("w10e");
+// var w10e_dc = PackerTemplates_Create("w10e-dc", parents: w10e);
+// var w10e_dotnet = PackerTemplates_Create("w10e-dotnet", parents: w10e);
+// var w10e_vs17c = PackerTemplates_Create("w10e-vs17c", parents: w10e_dotnet);
 
-packerTemplates = packerTemplates.
-  Concat(w10e).
-  Concat(w10e_dc).
-  Concat(w10e_dotnet).
-  Concat(w10e_vs17c).
-  ToList();
+// packerTemplates = packerTemplates.
+//   Concat(w10e).
+//   Concat(w10e_dc).
+//   Concat(w10e_dotnet).
+//   Concat(w10e_vs17c).
+//   ToList();
 
 var w16s = PackerTemplates_Create("w16s", amazon: true);
-var w16s_dc = PackerTemplates_Create("w16s-dc", parents: w16s);
+// var w16s_dc = PackerTemplates_Create("w16s-dc", parents: w16s);
 var w16s_dotnet = PackerTemplates_Create("w16s-dotnet", parents: w16s);
-var w16s_vs17c = PackerTemplates_Create("w16s-vs17c", parents: w16s_dotnet);
+// var w16s_vs17c = PackerTemplates_Create("w16s-vs17c", parents: w16s_dotnet);
 var w16s_iis = PackerTemplates_Create("w16s-iis", parents: w16s_dotnet);
-var w16s_sql17d = PackerTemplates_Create("w16s-sql17d", parents: w16s_dotnet);
+// var w16s_sql17d = PackerTemplates_Create("w16s-sql17d", parents: w16s_dotnet);
 
 // var w16s_scsql17d = PackerTemplates_Create("w16s-scsql17d", parents: w16s_iis);
 // var w16s_scsolr = PackerTemplates_Create("w16s-scsolr", parents: w16s_scsql17d);
@@ -35,11 +35,11 @@ var w16s_sc90 = PackerTemplates_Create("w16s-sc90", parents: w16s_scsolr);
 
 packerTemplates = packerTemplates.
   Concat(w16s).
-  Concat(w16s_dc).
+  // Concat(w16s_dc).
   Concat(w16s_dotnet).
-  Concat(w16s_vs17c).
+  // Concat(w16s_vs17c).
   Concat(w16s_iis).
-  Concat(w16s_sql17d).
+  // Concat(w16s_sql17d).
   // Concat(w16s_scsql17d).
   Concat(w16s_scsql16d).
   Concat(w16s_scsolr).
