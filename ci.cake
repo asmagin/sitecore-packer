@@ -71,36 +71,36 @@ IEnumerable<PackerTemplate> PackerTemplates_Create(string type, bool amazon = fa
   items.Add(virtualBoxCore);
   items.Add(virtualBoxSysprep);
 
-  var hyperVCore = PackerTemplate_Create(
-    type,
-    "hyperv-core",
-    new [] { PackerBuilder_Create(parents == null ? "hyperv-iso" : "hyperv-vmcx") },
-    new [] { PackerProvisioner_Create("chef") },
-    new [] { PackerPostProcessor_Create("vagrant-hyperv") },
-    parents != null ? parents.First(item => item.IsMatching("hyperv-core")) : null
-  );
-  var hyperVSysprep = PackerTemplate_Create(
-    type,
-    "hyperv-sysprep",
-    new [] { PackerBuilder_Create("hyperv-vmcx") },
-    new [] { PackerProvisioner_Create("sysprep") },
-    new [] { PackerPostProcessor_Create("vagrant-hyperv") },
-    hyperVCore
-  );
-  items.Add(hyperVCore);
-  items.Add(hyperVSysprep);
+  // var hyperVCore = PackerTemplate_Create(
+  //   type,
+  //   "hyperv-core",
+  //   new [] { PackerBuilder_Create(parents == null ? "hyperv-iso" : "hyperv-vmcx") },
+  //   new [] { PackerProvisioner_Create("chef") },
+  //   new [] { PackerPostProcessor_Create("vagrant-hyperv") },
+  //   parents != null ? parents.First(item => item.IsMatching("hyperv-core")) : null
+  // );
+  // var hyperVSysprep = PackerTemplate_Create(
+  //   type,
+  //   "hyperv-sysprep",
+  //   new [] { PackerBuilder_Create("hyperv-vmcx") },
+  //   new [] { PackerProvisioner_Create("sysprep") },
+  //   new [] { PackerPostProcessor_Create("vagrant-hyperv") },
+  //   hyperVCore
+  // );
+  // items.Add(hyperVCore);
+  // items.Add(hyperVSysprep);
 
-  if (amazon) {
-    var amazonSysprep = PackerTemplate_Create(
-      type,
-      "amazon-sysprep",
-      new [] { PackerBuilder_Create("amazon-ebs") },
-      new [] { PackerProvisioner_Create("chef"), PackerProvisioner_Create("amazon-shutdown") },
-      new [] { PackerPostProcessor_Create("vagrant-amazon") },
-      null
-    );
-    items.Add(amazonSysprep);
-  }
+  // if (amazon) {
+  //   var amazonSysprep = PackerTemplate_Create(
+  //     type,
+  //     "amazon-sysprep",
+  //     new [] { PackerBuilder_Create("amazon-ebs") },
+  //     new [] { PackerProvisioner_Create("chef"), PackerProvisioner_Create("amazon-shutdown") },
+  //     new [] { PackerPostProcessor_Create("vagrant-amazon") },
+  //     null
+  //   );
+  //   items.Add(amazonSysprep);
+  // }
 
   return items;
 }
