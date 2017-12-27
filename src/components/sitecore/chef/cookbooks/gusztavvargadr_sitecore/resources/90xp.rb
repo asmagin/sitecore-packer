@@ -63,4 +63,31 @@ action :install do
     cwd sitecore['root']
     action :run
   end
+
+  # remove Default Website
+  iis_site 'Default Web Site' do
+    action [:stop, :delete]
+  end
+
+  iis_pool 'DefaultAppPool' do
+    action [:stop, :delete]
+  end
+
+  iis_site "#{sitecore['prefix']}.local" do
+    bindings "http/*:80:#{sitecore['prefix']}.local,http/*:80:*.local"
+    action [:config]
+  end
+
+  # Run post install script for xconnect
+  script_file_name = 'xconnect-post-install.sql'
+  script_file_path = "c:/tmp/#{script_file_name}"
+  template script_file_path do
+    source "#{script_file_name}.erb"
+    variables('sitecore' => sitecore)
+  end
+
+  powershell_script "Run post install script for xconnect" do
+    code "Invoke-Sqlcmd -InputFile '#{script_file_path}' -ServerInstance 'localhost'"
+    action :run
+  end
 end

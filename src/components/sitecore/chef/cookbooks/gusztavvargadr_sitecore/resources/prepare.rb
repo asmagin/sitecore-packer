@@ -61,11 +61,3 @@ action :install_and_update_sif do
     action :run
   end
 end
-
-# action :change_admin_password do
-#   user 'Set Local Administrator (vagrant) Password' do
-#     username 'vagrant'
-#     action :manage
-#     password 'sitecore'
-#   end
-# end

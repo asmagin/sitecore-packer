@@ -7,3 +7,4 @@ long_description 'Installs/Configures Sitecore'
 version '0.0.0'
 
 depends 'gusztavvargadr_windows'
+depends 'iis', '~> 6.8.0'
