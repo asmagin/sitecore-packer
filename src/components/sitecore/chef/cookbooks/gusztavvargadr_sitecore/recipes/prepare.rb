@@ -27,3 +27,8 @@ gusztavvargadr_sitecore_prepare '' do
   options node['gusztavvargadr_sitecore']['prepare']
   action :install_and_update_sif
 end
+
+gusztavvargadr_sitecore_prepare '' do
+  options node['gusztavvargadr_sitecore']['prepare']
+  action :enable_firewall
+end

@@ -61,3 +61,15 @@ action :install_and_update_sif do
     action :run
   end
 end
+
+action :enable_firewall do
+  # Enable SBM and file sharing ports
+  powershell_script 'Enable Firewall' do
+    code <<-EOH
+    netsh advfirewall firewall set rule name="File and Printer Sharing (NB-Session-In)" dir=in new enable=yes
+    netsh advfirewall firewall set rule name="File and Printer Sharing (SMB-In)" dir=in new enable=yes
+    netsh advfirewall firewall set rule name="File and Printer Sharing (Echo Request - ICMPv4-In)" dir=in new enable=yes
+    EOH
+    action :run
+  end
+end

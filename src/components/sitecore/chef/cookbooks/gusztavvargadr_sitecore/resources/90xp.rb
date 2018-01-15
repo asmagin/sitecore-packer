@@ -90,4 +90,16 @@ action :install do
     code "Invoke-Sqlcmd -InputFile '#{script_file_path}' -ServerInstance 'localhost'"
     action :run
   end
+
+  # Fix permissions
+  powershell_script "Fix permissions" do
+    code <<-EOH
+      $permission = 'BUILTIN\\IIS_IUSRS', 'Modify', 'Allow'
+      $accessRule = New-Object System.Security.AccessControl.FileSystemAccessRule $permission
+      $acl = Get-Acl 'C:/inetpub/wwwroot/sc90.local'
+      $acl.SetAccessRule($accessRule)
+      $acl | Set-Acl 'C:/inetpub/wwwroot/sc90.local'
+    EOH
+    action :run
+  end
 end
