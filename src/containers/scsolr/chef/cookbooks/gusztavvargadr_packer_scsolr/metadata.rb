@@ -4,7 +4,7 @@ maintainer_email 'me@asmagin.com'
 license 'MIT'
 description 'Installs/Configures Packer SOLR 6.6.2'
 long_description 'Installs/Configures Packer SOLR 6.6.2'
-version '0.0.0'
+version '1.0.0'
 
 depends 'gusztavvargadr_packer_w'
 depends 'gusztavvargadr_solr'

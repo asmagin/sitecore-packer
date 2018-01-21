@@ -10,7 +10,7 @@ action :enable_contained_db_auth do
     action :create
   end
 
-  powershell_script "Enabled contained database authentication" do
+  powershell_script 'Enabled contained database authentication' do
     code "Invoke-Sqlcmd -InputFile '#{script_file_path}' -ServerInstance 'localhost'"
     action :run
   end
@@ -26,7 +26,7 @@ action :enable_mixed_auth do
     action :create
   end
 
-  powershell_script "Enabled mixed authentication" do
+  powershell_script 'Enabled mixed authentication' do
     code "Invoke-Sqlcmd -InputFile '#{script_file_path}' -ServerInstance 'localhost'"
     action :run
   end
@@ -43,7 +43,7 @@ action :enable_sa_login do
     )
   end
 
-  powershell_script "Enabled SA login" do
+  powershell_script 'Enabled SA login' do
     code "Invoke-Sqlcmd -InputFile '#{script_file_path}' -ServerInstance 'localhost'"
     action :run
   end
@@ -51,7 +51,7 @@ end
 
 action :install_and_update_sif do
   # Install & update SIF
-  powershell_script "Install & update SIF" do
+  powershell_script 'Install & update SIF' do
     code <<-EOH
       $ProgressPreference='SilentlyContinue';
       Register-PSRepository -Name SitecoreGallery -SourceLocation https://sitecore.myget.org/F/sc-powershell/api/v2 -InstallationPolicy Trusted;
@@ -64,11 +64,11 @@ end
 
 action :enable_firewall do
   # Enable SBM and file sharing ports
-  powershell_script 'Enable Firewall' do
+  gusztavvargadr_windows_powershell_script_elevated 'Enable Firewall' do
     code <<-EOH
-    netsh advfirewall firewall set rule name="File and Printer Sharing (NB-Session-In)" dir=in new enable=yes
-    netsh advfirewall firewall set rule name="File and Printer Sharing (SMB-In)" dir=in new enable=yes
-    netsh advfirewall firewall set rule name="File and Printer Sharing (Echo Request - ICMPv4-In)" dir=in new enable=yes
+      netsh advfirewall firewall set rule name="File and Printer Sharing (NB-Session-In)" dir=in new enable=yes
+      netsh advfirewall firewall set rule name="File and Printer Sharing (SMB-In)" dir=in new enable=yes
+      netsh advfirewall firewall set rule name="File and Printer Sharing (Echo Request - ICMPv4-In)" dir=in new enable=yes
     EOH
     action :run
   end

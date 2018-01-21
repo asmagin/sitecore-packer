@@ -23,6 +23,7 @@ def gusztavvargadr_packer_sources
   gusztavvargadr_packer_cookbook 'scsql16d'
   gusztavvargadr_packer_cookbook 'scsolr'
   gusztavvargadr_packer_cookbook 'sc90'
+  gusztavvargadr_packer_cookbook 'sc901'
 
   gusztavvargadr_cookbook 'components', 'windows'
   gusztavvargadr_cookbook 'components', 'virtualbox'

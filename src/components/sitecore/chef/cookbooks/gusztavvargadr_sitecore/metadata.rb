@@ -4,7 +4,7 @@ maintainer_email 'me@gusztavvargadr.me'
 license 'MIT'
 description 'Installs/Configures Sitecore'
 long_description 'Installs/Configures Sitecore'
-version '0.0.0'
+version '1.0.0'
 
 depends 'gusztavvargadr_windows'
 depends 'iis', '~> 6.8.0'
