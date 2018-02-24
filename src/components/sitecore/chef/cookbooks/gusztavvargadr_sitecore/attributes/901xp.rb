@@ -10,5 +10,6 @@ default['gusztavvargadr_sitecore']['901xp'] = {
     'sql_server' => 'localhost',
     'sql_admin_user' => 'sa',
     'sql_admin_password' => 'Vagrant42',
+    'collectionuser_password' => 'Test12345',
   }
 }
