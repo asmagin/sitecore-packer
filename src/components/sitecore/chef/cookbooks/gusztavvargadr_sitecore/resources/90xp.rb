@@ -12,20 +12,20 @@ action :install do
   sitecore = new_resource.options['sitecore']
 
   # Download Sitecore
-  powershell_script "Download Sitecore installation zip" do
+  powershell_script 'Download Sitecore installation zip' do
     code <<-EOH
       $ProgressPreference='SilentlyContinue';
 
       if(-not(Test-Path "#{sitecore['package_full_path']}")) {
         $loginRequest = Invoke-RestMethod -Uri https://dev.sitecore.net/api/authorization -Method Post -ContentType "application/json" -Body "{username: '#{user}', password: '#{password}'}" -SessionVariable session -UseBasicParsing
-        Invoke-WebRequest -Uri "#{sitecore['url']}" -WebSession $session -OutFile "#{sitecore['package_full_path']}" -UseBasicParsing
+        Invoke-WebRequest -Uri "#{sitecore['package_url']}" -WebSession $session -OutFile "#{sitecore['package_full_path']}" -UseBasicParsing
       }
     EOH
     action :run
   end
 
   # Extract archive
-  powershell_script "Unpack Sitecore" do
+  powershell_script 'Unpack Sitecore' do
     code <<-EOH
       & 7z x "#{sitecore['package_full_path']}" -o"#{sitecore['root']}" -aoa
     EOH
@@ -33,7 +33,7 @@ action :install do
   end
 
   # Extract config files
-  powershell_script "Unpack config files" do
+  powershell_script 'Unpack config files' do
     code <<-EOH
       & 7z x "#{sitecore['package_config_path']}" -o"#{sitecore['root']}" -aoa
     EOH
@@ -53,12 +53,12 @@ action :install do
   script_file_name = 'install.ps1'
   script_file_path = "#{sitecore['root']}/#{script_file_name}"
   template script_file_path do
-    source "#{script_file_name}.erb"
+    source "#{sitecore['install_file_name']}.erb"
     variables('sitecore' => sitecore)
   end
 
   # Download Sitecore
-  gusztavvargadr_windows_powershell_script_elevated "Install Sitecore" do
+  gusztavvargadr_windows_powershell_script_elevated 'Install Sitecore' do
     code script_file_path
     cwd sitecore['root']
     action :run
@@ -86,19 +86,33 @@ action :install do
     variables('sitecore' => sitecore)
   end
 
-  powershell_script "Run post install script for xconnect" do
+  powershell_script 'Run post install script for xconnect' do
     code "Invoke-Sqlcmd -InputFile '#{script_file_path}' -ServerInstance 'localhost'"
     action :run
   end
 
+  # copy Sitecore.Ship
+  remote_directory sitecore['site_path'] do
+    source 'ship'
+    mode '0777'
+    action :create
+  end
+
+  # copy Sitecore PowerShell
+  remote_directory sitecore['site_path'] do
+    source 'spe'
+    mode '0777'
+    action :create
+  end
+
   # Fix permissions
-  powershell_script "Fix permissions" do
+  powershell_script 'Fix permissions' do
     code <<-EOH
       $permission = 'BUILTIN\\IIS_IUSRS', 'Modify', 'Allow'
       $accessRule = New-Object System.Security.AccessControl.FileSystemAccessRule $permission
-      $acl = Get-Acl 'C:/inetpub/wwwroot/sc90.local'
+      $acl = Get-Acl '#{sitecore['site_path']}'
       $acl.SetAccessRule($accessRule)
-      $acl | Set-Acl 'C:/inetpub/wwwroot/sc90.local'
+      $acl | Set-Acl '#{sitecore['site_path']}'
     EOH
     action :run
   end
