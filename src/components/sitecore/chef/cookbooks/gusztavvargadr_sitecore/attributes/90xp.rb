@@ -13,5 +13,5 @@ default['gusztavvargadr_sitecore']['90xp'] = {
     'sql_admin_user' => 'sa',
     'sql_collectionuser_password' => 'Test12345',
     'sql_server' => 'localhost',
-  }
+  },
 }

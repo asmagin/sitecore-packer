@@ -94,26 +94,32 @@ action :install do
   # copy Sitecore.Ship
   remote_directory sitecore['site_path'] do
     source 'ship'
-    mode '0777'
     action :create
   end
 
   # copy Sitecore PowerShell
   remote_directory sitecore['site_path'] do
     source 'spe'
-    mode '0777'
     action :create
   end
 
   # Fix permissions
-  powershell_script 'Fix permissions' do
-    code <<-EOH
-      $permission = 'BUILTIN\\IIS_IUSRS', 'Modify', 'Allow'
-      $accessRule = New-Object System.Security.AccessControl.FileSystemAccessRule $permission
-      $acl = Get-Acl '#{sitecore['site_path']}'
-      $acl.SetAccessRule($accessRule)
-      $acl | Set-Acl '#{sitecore['site_path']}'
-    EOH
-    action :run
+  directory "c:/inetpub/wwwroot/sc90.local" do
+    rights :modify, 'BUILTIN\IIS_IUSRS'
+  end
+  
+  directory "c:/inetpub/wwwroot/sc90.xconnect" do
+    rights :modify, 'BUILTIN\IIS_IUSRS'
+  end
+  
+  directory "C:/ProgramData/Microsoft/Crypto " do
+    rights :modify, 'BUILTIN\IIS_IUSRS'
+  end
+  
+  # Fix counters
+  group 'Performance Monitor Users' do
+    members ['IIS APPPOOL\sc90.local', 'IIS APPPOOL\sc90.xconnect', ]
+    append true
+    action :modify
   end
 end

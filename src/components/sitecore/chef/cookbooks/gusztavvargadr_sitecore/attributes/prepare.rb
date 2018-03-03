@@ -6,6 +6,10 @@ default['gusztavvargadr_sitecore']['prepare'] = {
     'webpi' => {
       'elevated' => true,
     },
+    'nodejs.install' => {
+      'version' => '8.9.4',
+      'elevated' => true,
+    },
   },
   'webpi_packages' => {
     'WDeploy36' => {
