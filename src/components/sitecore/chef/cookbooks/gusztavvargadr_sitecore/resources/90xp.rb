@@ -74,8 +74,30 @@ action :install do
   end
 
   iis_site "#{sitecore['prefix']}.local" do
-    bindings "http/*:80:#{sitecore['prefix']}.local,http/*:80:*.local"
+    site_id 1
+    bindings "http/*:80:,http/*:80:*.local,http/*:80:*.azurewebsites.net"
     action [:config]
+  end
+
+  # Confgure SSL certificate for sc90.local
+  gusztavvargadr_windows_powershell_script_elevated 'Create certificate' do
+    code <<-EOH
+      $subject = "#{sitecore['prefix']}.local"
+
+      $cert = Get-ChildItem Cert:\\LocalMachine\\My | Where-Object { $_.Subject -eq "CN=$subject" }
+      if (!$cert) {
+          $cert = New-SelfSignedCertificate -Subject "DO_NOT_TRUST_SitecoreVagrant" -CertStoreLocation Cert:\\LocalMachine\\My
+      }
+
+      $guid = [guid]::NewGuid().ToString("B")
+      netsh http add sslcert hostnameport="*.local:443" certhash="$($cert.Thumbprint)" certstorename=MY appid="$guid"
+      netsh http add sslcert hostnameport="*.azurewebsites.net:443" certhash="$($cert.Thumbprint)" certstorename=MY appid="$guid"
+
+      New-WebBinding -name $subject -Protocol https  -HostHeader "*.local" -Port 443 -SslFlags 1
+      New-WebBinding -name $subject -Protocol https  -HostHeader "*.azurewebsites.net" -Port 443 -SslFlags 1
+
+      EOH
+    action :run
   end
 
   # Run post install script for xconnect
@@ -107,15 +129,15 @@ action :install do
   directory "c:/inetpub/wwwroot/sc90.local" do
     rights :modify, 'BUILTIN\IIS_IUSRS'
   end
-  
+
   directory "c:/inetpub/wwwroot/sc90.xconnect" do
     rights :modify, 'BUILTIN\IIS_IUSRS'
   end
-  
+
   directory "C:/ProgramData/Microsoft/Crypto " do
     rights :modify, 'BUILTIN\IIS_IUSRS'
   end
-  
+
   # Fix counters
   group 'Performance Monitor Users' do
     members ['IIS APPPOOL\sc90.local', 'IIS APPPOOL\sc90.xconnect', ]
