@@ -4,5 +4,5 @@ build
 .vagrant
 
 # Sitecore Secrets
-/src/components/sitecore/chef/cookbooks/*/attributes/secrets.rb
-/src/components/sitecore/chef/cookbooks/*/files/license.xml
+/src/components/**/attributes/secrets.rb
+/src/components/**/files/license.xml
