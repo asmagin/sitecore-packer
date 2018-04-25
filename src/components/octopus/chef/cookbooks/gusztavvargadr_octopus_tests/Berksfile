@@ -1,7 +1,0 @@
-require "#{File.dirname(__FILE__)}/../../../../core/chef/Berksfile.core"
-
-gusztavvargadr_sources
-
-gusztavvargadr_cookbook 'components', 'octopus', 'tests'
-gusztavvargadr_cookbook 'components', 'octopus'
-gusztavvargadr_cookbook 'components', 'windows'

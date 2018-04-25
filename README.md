@@ -1,6 +1,6 @@
 # Packer for Sitecore
 
-**Contents** [Overview] | [Getting started] | [Usage] | [Next steps] | [Contributing] | [Resources]  
+**Contents** [Overview] | [Getting started] | [Usage] | [Next steps] | [Contributing] | [Resources]
 
 This repository contains Packer templates for a local Sitecore hosting environment with IIS and and SQL Server on Windows, SOLR and Sitecore 9.0 building virtual machine images and Vagrant boxes for VirtualBox, provisioned with Chef.
 
@@ -8,11 +8,11 @@ This repository contains Packer templates for a local Sitecore hosting environme
 
 **Contents**
 
-**Note** This section covers the details of the published [Vagrant boxes] this repository builds. See the [Getting started] section to build your own virtual machine images and Vagrant boxes.  
+**Note** This section covers the details of the published [Vagrant boxes] this repository builds. See the [Getting started] section to build your own virtual machine images and Vagrant boxes.
 
 This repository contains [Packer] templates for the following scenarios:
 
-- [Sitecore 9.0 hosting] using IIS, SQL Server 2016 and SOLR.
+* [Sitecore 9.0 hosting] using IIS, SQL Server 2016 and SOLR.
 
 The virtual machine images and [Vagrant] boxes are built for [VirtualBox] and are provisioned using [Chef].
 
@@ -23,9 +23,9 @@ Most of the components, including the core operating systems, share the followin
 * Unless noted otherwise, they are installed using the default configuration options.
 
 **IMPORTANT! Required licenses and distributions (not included)**
-- Put **license.xml** file to **/src/components/sitecore/chef/cookbooks/gusztavvargadr_sitecore/files/license.xml**
-- Put **dev.sitecore.net** credentials into **src/components/sitecore/chef/cookbooks/gusztavvargadr_sitecore/attributes/secret.rb**. You can find sample next to this file.
-- Put a link to **SQL Server 2016 Dev SP1** into **src/components/sql/chef/cookbooks/gusztavvargadr_sql/attributes/2016_developer.rb**
+* Put **license.xml** file to **/src/components/sitecore/chef/cookbooks/scp_sitecore/files/license.xml**
+* Put **dev.sitecore.net** credentials into **src/components/sitecore/chef/cookbooks/scp_sitecore/attributes/secret.rb**. You can find sample next to this file.
+* Put a link to **SQL Server 2016 Dev SP1** into **src/components/sql/chef/cookbooks/scp_sql/attributes/2016_developer.rb**
 ---
 
 [Overview]: #overview
@@ -41,30 +41,30 @@ The following Vagrant boxes can be used for generic experiments on the respectiv
 
 They contain the core operating system with the minimum configuration required to make Vagrant work, and some of the commonly used tools installed and options configured for easier provisioning. All the other Vagrant boxes below are based on these configurations as well.
 
-- **Windows Server 2016**
+* **Windows Server 2016**
 
 In the box:
 
-- **Windows Server 2016 Standard** 1607 (14393.1770)
-  - Operating system
-    - Administrator user with user name `vagrant` and password `vagrant` set to never expire
-    - WinRM service enabled
-    - UAC disabled
-    - Windows Updates installed and service disabled
-    - Windows Defender service disabled
-    - Remote Desktop enabled
-    - Generalized with Sysprep
-  - Tools
-    - [Chocolatey](https://chocolatey.org/packages/chocolatey/) 0.10.8
-    - [7-Zip](https://chocolatey.org/packages/7zip/) 16.4.0
-    - [Chef Client](https://chocolatey.org/packages/chef-client/) 13.4.24
-    - **VirtualBox** [VirtualBox Guest Additions](https://www.virtualbox.org/manual/ch04.html) 5.2.4
-      - Recommended to have VirtualBox version 5.2.4 or later on the host
-  - Vagrant box
-    - WinRM communicator
-    - 2 CPU
-    - 4 GB RAM
-    - **VirtualBox** Port forwarding for RDP from 3389 to 33389 with auto correction
+* **Windows Server 2016 Standard** 1607 (14393.1770)
+  * Operating system
+    * Administrator user with user name `vagrant` and password `vagrant` set to never expire
+    * WinRM service enabled
+    * UAC disabled
+    * Windows Updates installed and service disabled
+    * Windows Defender service disabled
+    * Remote Desktop enabled
+    * Generalized with Sysprep
+  * Tools
+    * [Chocolatey](https://chocolatey.org/packages/chocolatey/) 0.10.8
+    * [7-Zip](https://chocolatey.org/packages/7zip/) 16.4.0
+    * [Chef Client](https://chocolatey.org/packages/chef-client/) 13.4.24
+    * **VirtualBox** [VirtualBox Guest Additions](https://www.virtualbox.org/manual/ch04.html) 5.2.4
+      * Recommended to have VirtualBox version 5.2.4 or later on the host
+  * Vagrant box
+    * WinRM communicator
+    * 2 CPU
+    * 4 GB RAM
+    * **VirtualBox** Port forwarding for RDP from 3389 to 33389 with auto correction
 
 ### Sitecore hosting
 
@@ -72,31 +72,29 @@ The following Vagrant boxes can be used for Sitecore 9.0 hosting scenarios.
 
 They contain the respective hosting tools with the default configuration are based on the core [operating systems].
 
-- **IIS 10**
-  - **[Server][w16s-iis]** with Windows Server 2016 Standard
-- **SQL Server 2016 SP1**
-  - **[Developer][w16s-scsql16d]** with Windows Server 2016 Standard
-- **SOLR 6.6.2**
-  - **[Developer][w16s-scsolr]** with Solr 6.6.2
-- **SOLR 6.6.2**
-  - **[Developer][w16s-scsolr]** with Solr 6.6.2
-- **Sitecore 9.0 Initial release**
-  - **[Developer][w16s-sc90]** with Sitecore 9.0 installed via SIF
-- **Sitecore 9.0 Update 1**
-  - **[Developer][w16s-sc901]** with Sitecore 9.0.1 rev. 171219 installed via SIF
+* **IIS 10**
+  * **[Server][w16s-iis]** with Windows Server 2016 Standard
+* **SQL Server 2016 SP1**
+  * **[Developer][w16s-sql16d]** with Windows Server 2016 Standard
+* **SOLR 6.6.2**
+  * **[Developer][w16s-solr]** with Solr 6.6.2
+* **Sitecore 9.0 Initial release**
+  * **[Developer][w16s-sc90]** with Sitecore 9.0 installed via SIF
+* **Sitecore 9.0 Update 1**
+  * **[Developer][w16s-sc901]** with Sitecore 9.0.1 rev. 171219 installed via SIF
 
 ## Getting started
 
-**Note** The rest of this document covers the details of building virtual machine images and Vagrant boxes, and assumes that you are familiar with the basics of [Packer]. If that's not the case, it's recommended that you take a quick look at its [getting started guide][PackerGettingStarted].  
+**Note** The rest of this document covers the details of building virtual machine images and Vagrant boxes, and assumes that you are familiar with the basics of [Packer]. If that's not the case, it's recommended that you take a quick look at its [getting started guide][packergettingstarted].
 
-**Note** Building the Packer templates have been tested on Windows hosts only, but they are supposed to run on any other platform as well, given that the actual virtualization provider (e.g. VirtualBox) supports it. [Let me know][Contributing] if you encounter any issues and I'm glad to help.  
+**Note** Building the Packer templates have been tested on Windows hosts only, but they are supposed to run on any other platform as well, given that the actual virtualization provider (e.g. VirtualBox) supports it. [Let me know][contributing] if you encounter any issues and I'm glad to help.
 
 Follow the steps below to install the required tools:
 
-1. Install [Packer][PackerInstallation].
-1. Install the [Chef Development Kit][ChefDKInstallation].
-1. Install the tools for the virtualization provider you want to use.
-    - **VirtualBox** Install [VirtualBox][VirtualBoxInstallation].
+1.  Install [Packer][PackerInstallation].
+1.  Install the [Chef Development Kit][ChefDKInstallation].
+1.  Install the tools for the virtualization provider you want to use.
+    * **VirtualBox** Install [VirtualBox][VirtualBoxInstallation].
 
 You are now ready to build a virtual machine image and a Vagrant box.
 
@@ -139,8 +137,8 @@ Executing task: packer-info
 w16s-virtualbox-core: Info
 w16s-dotnet-virtualbox-core: Info
 w16s-iis-virtualbox-core: Info
-w16s-scsql16d-virtualbox-core: Info
-w16s-scsolr-virtualbox-core: Info
+w16s-sql16d-virtualbox-core: Info
+w16s-solr-virtualbox-core: Info
 w16s-sc90-virtualbox-core: Info
 w16s-sc901-virtualbox-core: Info
 ...
@@ -152,7 +150,7 @@ You can filter this further to list only the templates for a given virtual machi
 $ .\ci.ps1 info w16s
 ```
 
-**Note** You can use this filtering with all the `ci.ps1` commands below as well. It selects all the templates which contain the specified argument as a substring, so you can filter for components (`w16s`, `iis`, etc.) or providers (`virtualbox`) easily.  
+**Note** You can use this filtering with all the `ci.ps1` commands below as well. It selects all the templates which contain the specified argument as a substring, so you can filter for components (`w16s`, `iis`, etc.) or providers (`virtualbox`) easily.
 
 The output will contain only the matching templates:
 
@@ -162,7 +160,7 @@ The output will contain only the matching templates:
 packer-info
 ========================================
 Executing task: packer-info
-w16s-scsolr-virtualbox-core: Info
+w16s-solr-virtualbox-core: Info
 ...
 ```
 
@@ -172,7 +170,7 @@ Now, invoke the `restore` command with the name of the template you want to buil
 
 ```powershell
 $ .\ci.ps1 restore w16s-virtualbox-core
-``` 
+```
 
 This will create the folder `build/w16s/virtualbox-core` in the root of your clone with all the files required to invoke the Packer build. This setup is self-contained, so you can adjust the parameters manually in `template.json` or the other resources and / or even copy it to a different machine and simply invoke `packer build template.json` there. Most of the time though, you just simply want to build as it is, as the templates are already preconfigured with some reasonable defaults. This can be done of course with the build script as well:
 
@@ -270,7 +268,7 @@ Omitting this parameter will apply the command to all the templates, so the foll
 $ .\ci.ps1 clean
 ```
 
-**Note** The `clean` command removes only the Packer build templates and artifacts, the eventually imported Vagrant boxes and virtual machines need to be removed manually.  
+**Note** The `clean` command removes only the Packer build templates and artifacts, the eventually imported Vagrant boxes and virtual machines need to be removed manually.
 
 [Cleaning up]: #cleaning-up
 

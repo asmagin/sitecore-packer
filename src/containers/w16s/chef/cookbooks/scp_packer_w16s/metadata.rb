@@ -1,0 +1,10 @@
+name 'scp_packer_w16s'
+maintainer 'Alex Smagin'
+maintainer_email 'me@asmagin.com'
+license 'MIT'
+description 'Installs/Configures Packer Windows Server 2016 Standard'
+long_description 'Installs/Configures Packer Windows Server 2016 Standard'
+version '0.0.0'
+
+depends 'scp_packer_w'
+depends 'scp_windows'

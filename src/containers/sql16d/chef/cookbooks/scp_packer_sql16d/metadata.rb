@@ -1,0 +1,10 @@
+name 'scp_packer_sql16d'
+maintainer 'Alex Smagin'
+maintainer_email 'me@asmagin.com'
+license 'MIT'
+description 'Installs/Configures Packer SQL Server 2016 Developer'
+long_description 'Installs/Configures Packer SQL Server 2016 Developer'
+version '1.0.0'
+
+depends 'scp_packer_w'
+depends 'scp_sql'

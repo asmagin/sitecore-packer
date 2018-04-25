@@ -1,43 +1,34 @@
 directory = File.dirname(__FILE__)
 require "#{directory}/src/components/core/chef/Berksfile.core"
 
-def gusztavvargadr_packer_sources
-  gusztavvargadr_sources
+def scp_packer_sources
+  scp_sources
 
-  gusztavvargadr_packer_cookbook 'w'
-  # gusztavvargadr_packer_cookbook 'w', 'hyperv_iso'
-  # gusztavvargadr_packer_cookbook 'w', 'hyperv_vmcx'
-  gusztavvargadr_packer_cookbook 'w', 'virtualbox_iso'
-  gusztavvargadr_packer_cookbook 'w', 'virtualbox_ovf'
-  # gusztavvargadr_packer_cookbook 'w', 'amazon_ebs'
+  scp_packer_cookbook 'w'
+  scp_packer_cookbook 'w', 'virtualbox_iso'
+  scp_packer_cookbook 'w', 'virtualbox_ovf'
+  # scp_packer_cookbook 'w', 'amazon_ebs'
 
-  # gusztavvargadr_packer_cookbook 'w10e'
-  gusztavvargadr_packer_cookbook 'w16s'
-  # gusztavvargadr_packer_cookbook 'dc'
-  gusztavvargadr_packer_cookbook 'dotnet'
-  gusztavvargadr_packer_cookbook 'iis'
-  # gusztavvargadr_packer_cookbook 'sql17d'
-  # gusztavvargadr_packer_cookbook 'vs17c'
+  scp_packer_cookbook 'w16s'
+  scp_packer_cookbook 'dotnet'
+  scp_packer_cookbook 'iis'
 
-  gusztavvargadr_packer_cookbook 'scsql17d'
-  gusztavvargadr_packer_cookbook 'scsql16d'
-  gusztavvargadr_packer_cookbook 'scsolr'
-  gusztavvargadr_packer_cookbook 'sc90'
-  gusztavvargadr_packer_cookbook 'sc901'
+  scp_packer_cookbook 'sql16d'
+  scp_packer_cookbook 'solr'
+  scp_packer_cookbook 'sc90'
+  scp_packer_cookbook 'sc901'
 
-  gusztavvargadr_cookbook 'components', 'windows'
-  gusztavvargadr_cookbook 'components', 'virtualbox'
-  # gusztavvargadr_cookbook 'components', 'docker'
-  gusztavvargadr_cookbook 'components', 'iis'
-  gusztavvargadr_cookbook 'components', 'sql'
-  # gusztavvargadr_cookbook 'components', 'vs'
+  scp_cookbook 'components', 'windows'
+  scp_cookbook 'components', 'virtualbox'
+  scp_cookbook 'components', 'iis'
+  scp_cookbook 'components', 'sql'
 
-  gusztavvargadr_cookbook 'components', 'solr'
-  gusztavvargadr_cookbook 'components', 'sitecore'
-  gusztavvargadr_cookbook 'components', 'develop'
+  scp_cookbook 'components', 'solr'
+  scp_cookbook 'components', 'sitecore'
+  scp_cookbook 'components', 'develop'
 end
 
-def gusztavvargadr_packer_cookbook(type, name = '')
+def scp_packer_cookbook(type, name = '')
   name = type if name.empty?
-  cookbook "gusztavvargadr_packer_#{name}", path: "#{File.dirname(__FILE__)}/src/containers/#{type}/chef/cookbooks/gusztavvargadr_packer_#{name}"
+  cookbook "scp_packer_#{name}", path: "#{File.dirname(__FILE__)}/src/containers/#{type}/chef/cookbooks/scp_packer_#{name}"
 end

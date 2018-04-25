@@ -1,9 +1,9 @@
-def gusztavvargadr_sources
+def scp_sources
   source 'https://supermarket.chef.io'
 end
 
-def gusztavvargadr_cookbook(type, name, version = '')
-  cookbook_name = "gusztavvargadr_#{name}"
+def scp_cookbook(type, name, version = '')
+  cookbook_name = "scp_#{name}"
   cookbook_name = "#{cookbook_name}_#{version}" unless version.to_s.empty?
 
   cookbook_path = "#{File.dirname(__FILE__)}/../../../../src/#{type}/#{name}/chef/cookbooks/#{cookbook_name}"

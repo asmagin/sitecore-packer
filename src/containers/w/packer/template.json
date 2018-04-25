@@ -3,7 +3,7 @@
     "name": "",
     "description": "",
     "version": "0.7.0",
-    "author": "gusztavvargadr",
+    "author": "asmagin",
     "output_directory": "output"
   },
   "description": "{{user `description`}}",

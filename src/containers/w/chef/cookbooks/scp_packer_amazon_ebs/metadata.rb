@@ -1,0 +1,7 @@
+name 'scp_packer_amazon_ebs'
+maintainer 'Alex Smagin'
+maintainer_email 'me@asmagin.com'
+license 'MIT'
+description 'Installs/Configures Packer Amazon EBS'
+long_description 'Installs/Configures Packer Amazon EBS'
+version '0.0.0'

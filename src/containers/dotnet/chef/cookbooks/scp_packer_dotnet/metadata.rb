@@ -1,0 +1,10 @@
+name 'scp_packer_dotnet'
+maintainer 'Alex Smagin'
+maintainer_email 'me@asmagin.com'
+license 'MIT'
+description 'Installs/Configures Packer .NET Framework and .NET Core Runtimes'
+long_description 'Installs/Configures Packer .NET Framework and .NET Core Runtimes'
+version '0.0.0'
+
+depends 'scp_packer_w'
+depends 'scp_windows'

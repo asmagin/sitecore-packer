@@ -1,0 +1,11 @@
+name 'scp_packer_sc901'
+maintainer 'Alex Smagin'
+maintainer_email 'me@asmagin.com'
+license 'MIT'
+description 'Installs/Configures Packer Sitecore 9.0.1'
+long_description 'Installs/Configures Packer Sitecore 9.0.1'
+version '1.0.0'
+
+depends 'scp_packer_w'
+depends 'scp_sitecore'
+depends 'scp_develop'

@@ -1,17 +1,9 @@
 require "#{File.dirname(__FILE__)}/src/components/core/vagrant/Vagrantfile.core"
 
 Environment.new(name: 'packer.local') do |environment|
-  create_packer_vms(environment, 'w10e')
-  create_packer_vms(environment, 'w10e-dc')
-  create_packer_vms(environment, 'w10e-dotnet')
-  create_packer_vms(environment, 'w10e-vs17c')
-
   create_packer_vms(environment, 'w16s')
-  create_packer_vms(environment, 'w16s-dc')
   create_packer_vms(environment, 'w16s-dotnet')
-  create_packer_vms(environment, 'w16s-vs17c')
   create_packer_vms(environment, 'w16s-iis')
-  create_packer_vms(environment, 'w16s-sql17d')
 end
 
 def create_packer_vms(environment, name)
@@ -26,32 +18,20 @@ def create_local_packer_vm(environment, name, type)
     VirtualBoxProvider.new(vm) do |provider|
       provider.override.vm.box_url = "file://#{File.dirname(__FILE__)}/build/#{name}/virtualbox-#{type}/output/vagrant.box"
     end
-
-    HyperVProvider.new(vm) do |provider|
-      provider.override.vm.box_url = "file://#{File.dirname(__FILE__)}/build/#{name}/hyperv-#{type}/output/vagrant.box"
-
-      provider.vagrant.differencing_disk = true
-      provider.vagrant.enable_virtualization_extensions = true
-    end
   end
 end
 
 def create_cloud_packer_vm(environment, name)
-  PackerVM.new(environment, name: "#{name}-cloud", box: "gusztavvargadr/#{name}") do |vm|
+  PackerVM.new(environment, name: "#{name}-cloud", box: "scp/#{name}") do |vm|
     VirtualBoxProvider.new(vm)
-
-    HyperVProvider.new(vm) do |provider|
-      provider.vagrant.differencing_disk = true
-      provider.vagrant.enable_virtualization_extensions = true
-    end
   end
 end
 
 class PackerVM < VM
   @@packer = {
     autostart: false,
-    memory: 4096,
-    cpus: 2,
+    memory: 8192,
+    cpus: 4,
     linked_clone: false,
   }
 

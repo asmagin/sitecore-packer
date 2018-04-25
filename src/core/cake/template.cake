@@ -189,10 +189,6 @@ void PackerTemplate_MergeJson(PackerTemplate template) {
         var parentBuildOutputFile = File(parentBuildDirectory + "/" + manifest["builds"][0]["files"][1]["name"].ToString());
         jsonTemplateVariables["virtualbox_source_path"] = buildDirectory.GetRelativePath(parentBuildOutputFile).ToString();
       }
-      if (template.Builders.Any(item => item.IsMatching("hyperv"))) {
-        var parentBuildOutputDirectory = parentBuildDirectory + "/output";
-        jsonTemplateVariables["hyperv_clone_from_vmxc_path"] = parentBuildOutputDirectory;
-      }
     }
   }
   var descriptions = new List<string>();
@@ -262,10 +258,10 @@ void PackerTemplate_MergeJson(PackerTemplate template) {
 
   jsonTemplateVariables["description"] = string.Join(", ", descriptions);
 
-  jsonTemplateVariables["chef_run_list_prepare"] = string.Join(",", runList.Select(item => "recipe[gusztavvargadr_packer_" + item.Replace("-", "_") + "::prepare]"));
-  jsonTemplateVariables["chef_run_list_install"] = string.Join(",", runList.Select(item => "recipe[gusztavvargadr_packer_" + item.Replace("-", "_") + "::install]"));
-  jsonTemplateVariables["chef_run_list_patch"] = string.Join(",", runList.Select(item => "recipe[gusztavvargadr_packer_" + item.Replace("-", "_") + "::patch]"));
-  jsonTemplateVariables["chef_run_list_cleanup"] = string.Join(",", runList.Select(item => "recipe[gusztavvargadr_packer_" + item.Replace("-", "_") + "::cleanup]"));
+  jsonTemplateVariables["chef_run_list_prepare"] = string.Join(",", runList.Select(item => "recipe[scp_packer_" + item.Replace("-", "_") + "::prepare]"));
+  jsonTemplateVariables["chef_run_list_install"] = string.Join(",", runList.Select(item => "recipe[scp_packer_" + item.Replace("-", "_") + "::install]"));
+  jsonTemplateVariables["chef_run_list_patch"] = string.Join(",", runList.Select(item => "recipe[scp_packer_" + item.Replace("-", "_") + "::patch]"));
+  jsonTemplateVariables["chef_run_list_cleanup"] = string.Join(",", runList.Select(item => "recipe[scp_packer_" + item.Replace("-", "_") + "::cleanup]"));
   
   var jsonTemplate = new JObject();
   jsonTemplate["variables"] = jsonTemplateVariables;

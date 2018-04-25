@@ -1,8 +1,0 @@
-{
-  "$type": "Octopus.Migrator.ExportProcess.ServerMetadata, Octopus.Migrator",
-  "Id": "WIN-QAJ7JDCJ897",
-  "Name": "WIN-QAJ7JDCJ897",
-  "Created": "2017-09-04T19:42:54.1518387+00:00",
-  "DatabaseVersion": "3.16.7",
-  "Hello": "m6tUAsoEOQPvhk/9N6nK/A==|AAAAAAAAAAAAAAAAAAAAAA=="
-}

@@ -1,0 +1,10 @@
+name 'scp_windows'
+maintainer 'Alex Smagin'
+maintainer_email 'me@asmagin.com'
+license 'MIT'
+description 'Installs/Configures Windows'
+long_description 'Installs/Configures Windows'
+version '0.0.0'
+
+depends 'windows', '~> 4.0.1'
+depends 'webpi', '~> 4.2.1'

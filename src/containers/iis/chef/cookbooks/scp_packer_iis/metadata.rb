@@ -1,0 +1,10 @@
+name 'scp_packer_iis'
+maintainer 'Alex Smagin'
+maintainer_email 'me@asmagin.com'
+license 'MIT'
+description 'Installs/Configures Packer IIS'
+long_description 'Installs/Configures Packer IIS'
+version '0.0.0'
+
+depends 'scp_packer_w'
+depends 'scp_iis'

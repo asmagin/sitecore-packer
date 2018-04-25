@@ -1,0 +1,6 @@
+require "#{File.dirname(__FILE__)}/../../../../core/chef/Berksfile.core"
+
+scp_sources
+
+scp_cookbook 'components', 'iis'
+scp_cookbook 'components', 'windows'
