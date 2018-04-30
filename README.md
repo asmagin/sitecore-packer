@@ -74,15 +74,17 @@ The following Vagrant boxes can be used for Sitecore 9.0 hosting scenarios.
 They contain the respective hosting tools with the default configuration are based on the core [operating systems].
 
 * **IIS 10**
-  * **[Server][w16s-iis]** with Windows Server 2016 Standard
+  * **[w16s-iis]** with Windows Server 2016 Standard
 * **SQL Server 2016 SP1**
-  * **[Developer][w16s-sql16d]** with Windows Server 2016 Standard
+  * **w16s-sql16d]** with Windows Server 2016 Standard
 * **SOLR 6.6.2**
-  * **[Developer][w16s-solr]** with Solr 6.6.2
+  * **[w16s-solr]** with Solr 6.6.2
 * **Sitecore 9.0 Initial release**
-  * **[Developer][w16s-sc900]** with Sitecore 9.0 installed via SIF
+  * **[w16s-sc900]** with Sitecore 9.0 installed via SIF
 * **Sitecore 9.0 Update 1**
-  * **[Developer][w16s-sc901]** with Sitecore 9.0.1 rev. 171219 installed via SIF
+  * **[w16s-sc901]** with Sitecore 9.0.1 rev. 171219 installed via SIF
+* **Sitecore Experience Commerce 9.0 Update-1**
+  * **[w16s-xc901]** with Sitecore Experience Commerce 9.0 Update-1 rev. 2018.03-2.1.55 installed via SIF
 
 ## Getting started
 
@@ -140,6 +142,7 @@ w16s-sql16d-virtualbox-core: Info
 w16s-solr-virtualbox-core: Info
 w16s-sc900-virtualbox-core: Info
 w16s-sc901-virtualbox-core: Info
+w16s-xc901-virtualbox-core: Info
 ...
 ```
 
