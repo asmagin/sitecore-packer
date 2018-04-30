@@ -6,15 +6,17 @@ var recursive = Argument("recursive", false);
 
 packerTemplates = new List<PackerTemplate>();
 
-
 var w16s = PackerTemplates_Create("w16s", amazon: true);
 var w16s_dotnet = PackerTemplates_Create("w16s-dotnet", parents: w16s);
 var w16s_iis = PackerTemplates_Create("w16s-iis", parents: w16s_dotnet);
 
 var w16s_sql16d = PackerTemplates_Create("w16s-sql16d", parents: w16s_iis);
 var w16s_solr = PackerTemplates_Create("w16s-solr", parents: w16s_sql16d);
-var w16s_sc90 = PackerTemplates_Create("w16s-sc90", parents: w16s_solr);
+
+var w16s_sc900 = PackerTemplates_Create("w16s-sc900", parents: w16s_solr);
 var w16s_sc901 = PackerTemplates_Create("w16s-sc901", parents: w16s_solr);
+
+var w16s_xc901 = PackerTemplates_Create("w16s-xc901", parents: w16s_sc901);
 
 packerTemplates = packerTemplates.
   Concat(w16s).
@@ -22,8 +24,9 @@ packerTemplates = packerTemplates.
   Concat(w16s_iis).
   Concat(w16s_sql16d).
   Concat(w16s_solr).
-  Concat(w16s_sc90).
+  Concat(w16s_sc900).
   Concat(w16s_sc901).
+  Concat(w16s_xc901).
   ToList();
 
 packerTemplate = configuration;

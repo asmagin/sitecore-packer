@@ -1,0 +1,8 @@
+$prefix = "<%= @sitecore['prefix'] %>"
+
+$certParams =
+@{
+    Path            = "$PSScriptRoot\createcert.json"
+    CertificateName = "$prefix.commerce"
+}
+Install-SitecoreConfiguration @certParams -Verbose

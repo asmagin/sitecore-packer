@@ -1,5 +1,5 @@
-scp_sitecore_90xp '' do
-  options node['scp_sitecore']['901xp']
+scp_sitecore_install '' do
+  options Chef::Mixin::DeepMerge.deep_merge(node['scp_sitecore']['install'], node['scp_sitecore']['901xp'])
   secrets node['scp_sitecore']['secrets']
   action :install
 end

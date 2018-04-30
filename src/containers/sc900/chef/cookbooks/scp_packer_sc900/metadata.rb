@@ -1,4 +1,4 @@
-name 'scp_packer_sc90'
+name 'scp_packer_sc900'
 maintainer 'Alex Smagin'
 maintainer_email 'me@asmagin.com'
 license 'MIT'

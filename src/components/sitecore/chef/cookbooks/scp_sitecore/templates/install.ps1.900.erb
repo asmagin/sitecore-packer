@@ -11,12 +11,20 @@ $SqlAdminUser = "<%= @sitecore['sql_admin_user'] %>"
 $SqlAdminPassword = "<%= @sitecore['sql_admin_password'] %>"
 
 #install client certificate for xconnect
-$certParams =
+$xConnectCertParams =
 @{
     Path = "$PSScriptRoot\xconnect-createcert.json"
     CertificateName = "$prefix.xconnect_client"
 }
-Install-SitecoreConfiguration @certParams -Verbose
+Install-SitecoreConfiguration @xConnectCertParams -Verbose
+
+#install client certificate for sitecore
+$sitecoreCertParams =
+@{
+    Path = "$PSScriptRoot\xconnect-createcert.json"
+    CertificateName = "$prefix.local_client"
+}
+Install-SitecoreConfiguration @sitecoreCertParams -Verbose
 
 #install solr cores for xdb
 $solrParams =
@@ -36,7 +44,7 @@ $xconnectParams =
     Package = "$PSScriptRoot\Sitecore 9.0.0 rev. 171002 (OnPrem)_xp0xconnect.scwdp.zip"
     LicenseFile = "$PSScriptRoot\license.xml"
     Sitename = $XConnectCollectionService
-    XConnectCert = $certParams.CertificateName
+    XConnectCert = $xconnectCertParams.CertificateName
     SqlDbPrefix = $prefix
     SqlServer = $SqlServer
     SqlAdminUser = $SqlAdminUser
@@ -69,7 +77,8 @@ $sitecoreParams =
     SqlAdminPassword = $SqlAdminPassword
     SolrCorePrefix = $prefix
     SolrUrl = $SolrUrl
-    XConnectCert = $certParams.CertificateName
+    XConnectCert = $xconnectCertParams.CertificateName
+    SSLCert = $sitecoreCertParams.CertificateName
     Sitename = $sitecoreSiteName
     XConnectCollectionService = "https://$XConnectCollectionService"
 }

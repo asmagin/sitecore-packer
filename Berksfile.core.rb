@@ -15,8 +15,13 @@ def scp_packer_sources
 
   scp_packer_cookbook 'sql16d'
   scp_packer_cookbook 'solr'
-  scp_packer_cookbook 'sc90'
+
+  # Sitecore 9.0
+  scp_packer_cookbook 'sc900'
   scp_packer_cookbook 'sc901'
+
+  # Sitecore Commerce 9.0
+  scp_packer_cookbook 'xc901'
 
   scp_cookbook 'components', 'windows'
   scp_cookbook 'components', 'virtualbox'
@@ -25,6 +30,7 @@ def scp_packer_sources
 
   scp_cookbook 'components', 'solr'
   scp_cookbook 'components', 'sitecore'
+  scp_cookbook 'components', 'commerce'
   scp_cookbook 'components', 'develop'
 end
 

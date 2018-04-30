@@ -23,17 +23,18 @@ Most of the components, including the core operating systems, share the followin
 * Unless noted otherwise, they are installed using the default configuration options.
 
 **IMPORTANT! Required licenses and distributions (not included)**
+
 * Put **license.xml** file to **/src/components/sitecore/chef/cookbooks/scp_sitecore/files/license.xml**
 * Put **dev.sitecore.net** credentials into **src/components/sitecore/chef/cookbooks/scp_sitecore/attributes/secret.rb**. You can find sample next to this file.
 * Put a link to **SQL Server 2016 Dev SP1** into **src/components/sql/chef/cookbooks/scp_sql/attributes/2016_developer.rb**
+
 ---
 
-[Overview]: #overview
-
-[Packer]: https://www.packer.io/
-[Vagrant]: https://www.vagrantup.com/
-[VirtualBox]: https://www.virtualbox.org/
-[Chef]: https://chef.io/chef/
+[overview]: #overview
+[packer]: https://www.packer.io/
+[vagrant]: https://www.vagrantup.com/
+[virtualbox]: https://www.virtualbox.org/
+[chef]: https://chef.io/chef/
 
 ### Operating systems
 
@@ -79,7 +80,7 @@ They contain the respective hosting tools with the default configuration are bas
 * **SOLR 6.6.2**
   * **[Developer][w16s-solr]** with Solr 6.6.2
 * **Sitecore 9.0 Initial release**
-  * **[Developer][w16s-sc90]** with Sitecore 9.0 installed via SIF
+  * **[Developer][w16s-sc900]** with Sitecore 9.0 installed via SIF
 * **Sitecore 9.0 Update 1**
   * **[Developer][w16s-sc901]** with Sitecore 9.0.1 rev. 171219 installed via SIF
 
@@ -91,34 +92,32 @@ They contain the respective hosting tools with the default configuration are bas
 
 Follow the steps below to install the required tools:
 
-1.  Install [Packer][PackerInstallation].
-1.  Install the [Chef Development Kit][ChefDKInstallation].
+1.  Install [Packer][packerinstallation].
+1.  Install the [Chef Development Kit][chefdkinstallation].
 1.  Install the tools for the virtualization provider you want to use.
-    * **VirtualBox** Install [VirtualBox][VirtualBoxInstallation].
+    * **VirtualBox** Install [VirtualBox][virtualboxinstallation].
 
 You are now ready to build a virtual machine image and a Vagrant box.
 
-**Note** It is recommended to set up [caching for Packer][PackerCaching], so you can reuse the downloaded resources (e.g. OS ISOs) across different builds. Make sure you have a bunch of free disk space for the cache and the build artifacts.  
+**Note** It is recommended to set up [caching for Packer][packercaching], so you can reuse the downloaded resources (e.g. OS ISOs) across different builds. Make sure you have a bunch of free disk space for the cache and the build artifacts.
 
-[Getting started]: #getting-started
-
-[PackerGettingStarted]: https://www.packer.io/intro/getting-started/install.html
-[PackerInstallation]: https://www.packer.io/docs/install/index.html
-[ChefDKInstallation]: https://downloads.chef.io/chefdk/
-[VirtualBoxInstallation]: https://www.virtualbox.org/wiki/Downloads/
-[PackerCaching]: https://www.packer.io/docs/other/environment-variables.html#packer_cache_dir
+[getting started]: #getting-started
+[packergettingstarted]: https://www.packer.io/intro/getting-started/install.html
+[packerinstallation]: https://www.packer.io/docs/install/index.html
+[chefdkinstallation]: https://downloads.chef.io/chefdk/
+[virtualboxinstallation]: https://www.virtualbox.org/wiki/Downloads/
+[packercaching]: https://www.packer.io/docs/other/environment-variables.html#packer_cache_dir
 
 ## Usage
 
 **Contents** [Building base images] | [Building images for distribution] | [Chaining builds further] | [Testing] | [Cleaning up]
 
-This repository uses some [custom wrapper scripts][SourceCoreCake] using [Cake] to generate the Packer templates and the related resources (e.g. the unattended install configuration) required to build the virtual machine images. Besides supporting easier automation, this approach helps with reusing parts of the templates and the
+This repository uses some [custom wrapper scripts][sourcecorecake] using [Cake] to generate the Packer templates and the related resources (e.g. the unattended install configuration) required to build the virtual machine images. Besides supporting easier automation, this approach helps with reusing parts of the templates and the
 related resources, and makes chaining builds and creating new configurations quite easy.
 
-[Usage]: #usage
-
-[SourceCoreCake]: src/core/cake/
-[Cake]: http://cakebuild.net/
+[usage]: #usage
+[sourcecorecake]: src/core/cake/
+[cake]: http://cakebuild.net/
 
 ### Building base images
 
@@ -139,7 +138,7 @@ w16s-dotnet-virtualbox-core: Info
 w16s-iis-virtualbox-core: Info
 w16s-sql16d-virtualbox-core: Info
 w16s-solr-virtualbox-core: Info
-w16s-sc90-virtualbox-core: Info
+w16s-sc900-virtualbox-core: Info
 w16s-sc901-virtualbox-core: Info
 ...
 ```
@@ -180,7 +179,7 @@ $ .\ci.ps1 build w16s-virtualbox-core
 
 This will trigger the Packer build process, which usually requires only patience. Depending on the selected configuration, a few minutes or hours later, the build output will be created, in this case in the `build/w16s/virtualbox-core/output` directory in the root of your clone. Virtual machine images like this can be directly used with the respective virtualization provider or Vagrant on the host machine.
 
-[Building base images]: #building-base-images
+[building base images]: #building-base-images
 
 ### Building images for distribution
 
@@ -192,10 +191,9 @@ $ .\ci.ps1 build w16s-virtualbox-sysprep
 
 Note that this will include restoring the build folder with the template and the related resources automatically, and then invoking the build process in a single step. It will also reuse the output of the `w16s-virtualbox-core` build, so it does not need to do the same steps for a Vagrant box the original build already included (e.g. the core OS installation itself, installing Windows updates, etc.). Once the build completes, the native image and the Vagrant box will be available in the `build/w16s/virtualbox-sysprep/output` folder.
 
-[Building images for distribution]: #building-images-for-distribution
-
-[Sysprep]: https://docs.microsoft.com/en-us/windows-hardware/manufacture/desktop/sysprep--generalize--a-windows-installation
-[VagrantDistribute]: https://www.vagrantup.com/docs/boxes/base.html#distributing-the-box
+[building images for distribution]: #building-images-for-distribution
+[sysprep]: https://docs.microsoft.com/en-us/windows-hardware/manufacture/desktop/sysprep--generalize--a-windows-installation
+[vagrantdistribute]: https://www.vagrantup.com/docs/boxes/base.html#distributing-the-box
 
 ### Chaining builds further
 
@@ -217,7 +215,7 @@ $ .\ci.ps1 build w16s-iis-virtualbox-sysprep --recursive=true
 
 This will in turn invoke the `restore` and `build` stages for the `w16s-virtualbox-core` and `w16s-iis-virtualbox-core` images as well. By default, `restore` and `build` is skipped if the output from a previous build exists. You can force the build to run again using the `rebuild` command instead, which will `clean` the build directories first.
 
-[Chaining builds further]: #chaining-builds-further
+[chaining builds further]: #chaining-builds-further
 
 ### Testing
 
@@ -237,16 +235,15 @@ Similarly, you can test the `sysprep` ones as well before publishing:
 $ vagrant up w16s-sysprep
 ```
 
-When working with multiple virtualization providers, you can specify which one to use for each test machine [using the command line][VagrantCLIUpProvider], or [define your preferences globally][VagrantPreferredProviders].
+When working with multiple virtualization providers, you can specify which one to use for each test machine [using the command line][vagrantcliupprovider], or [define your preferences globally][vagrantpreferredproviders].
 
-You can use the standard Vagrant commands to [clean up the boxes][VagrantCLIBox] after testing.
+You can use the standard Vagrant commands to [clean up the boxes][vagrantclibox] after testing.
 
-[Testing]: #testing
-
-[Vagrantfile]: Vagrantfile
-[VagrantCLIUpProvider]: https://www.vagrantup.com/docs/cli/up.html#provider-x
-[VagrantPreferredProviders]: https://www.vagrantup.com/docs/other/environmental-variables.html#vagrant_preferred_providers
-[VagrantCLIBox]: https://www.vagrantup.com/docs/cli/box.html
+[testing]: #testing
+[vagrantfile]: Vagrantfile
+[vagrantcliupprovider]: https://www.vagrantup.com/docs/cli/up.html#provider-x
+[vagrantpreferredproviders]: https://www.vagrantup.com/docs/other/environmental-variables.html#vagrant_preferred_providers
+[vagrantclibox]: https://www.vagrantup.com/docs/cli/box.html
 
 ### Cleaning up
 
@@ -270,13 +267,13 @@ $ .\ci.ps1 clean
 
 **Note** The `clean` command removes only the Packer build templates and artifacts, the eventually imported Vagrant boxes and virtual machines need to be removed manually.
 
-[Cleaning up]: #cleaning-up
+[cleaning up]: #cleaning-up
 
 ## Next steps
 
 Take a look at the repository of [virtual workstations] to easily automate and share your development environment configurations using the Vagrant boxes above.
 
-[Next steps]: #next-steps
+[next steps]: #next-steps
 
 ## Contributing
 
@@ -288,11 +285,10 @@ TODO: custom template and build
 
 Any feedback, [issues] or [pull requests] are welcome and greatly appreciated. Chek out the [milestones] for the list of planned releases.
 
-[Contributing]: #contributing
-
-[Issues]: https://github.com/asmagin/packer/issues/
-[Pull requests]: https://github.com/asmagin/packer/pulls/
-[Milestones]: https://github.com/asmagin/packer/milestones/ 
+[contributing]: #contributing
+[issues]: https://github.com/asmagin/packer/issues/
+[pull requests]: https://github.com/asmagin/packer/pulls/
+[milestones]: https://github.com/asmagin/packer/milestones/
 
 ## Resources
 
@@ -311,10 +307,9 @@ This repository borrows awesome ideas and solutions from the following sources:
 * [Joe Fitzgerald]
 * [Boxcutter]
 
-[Resources]: #resources
-
-[Gusztav Vargadr]: https://github.com/gusztavvargadr/packer/
-[Matt Wrock]: https://github.com/mwrock/packer-templates/
-[Jacqueline]: https://github.com/jacqinthebox/packer-templates/
-[Joe Fitzgerald]: https://github.com/joefitzgerald/packer-windows/
-[Boxcutter]: https://github.com/boxcutter/windows/
+[resources]: #resources
+[gusztav vargadr]: https://github.com/gusztavvargadr/packer/
+[matt wrock]: https://github.com/mwrock/packer-templates/
+[jacqueline]: https://github.com/jacqinthebox/packer-templates/
+[joe fitzgerald]: https://github.com/joefitzgerald/packer-windows/
+[boxcutter]: https://github.com/boxcutter/windows/
