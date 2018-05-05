@@ -14,7 +14,7 @@ Vagrant.configure("2") do |config|
   # Every Vagrant development environment requires a box. You can search for
   # boxes at https://vagrantcloud.com/search.
   config.vm.box = "w16s-sc901"
-  # config.vm.box_url = ["file:///D:/.projects/oss/packer/build/w16s-sc901/virtualbox-core/output/vagrant.box"]
+  config.vm.box_url = ["file:///D:/.projects/oss/packer/build/w16s-sc901/virtualbox-core/output/vagrant.box"]
 
   # Disable automatic box update checking. If you disable this, then
   # boxes will only be checked for updates when the user runs
@@ -34,8 +34,11 @@ Vagrant.configure("2") do |config|
 
   # Create a private network, which allows host-only access to the machine
   # using a specific IP.
-  config.vm.network "private_network", ip: "192.168.50.4",
-    virtualbox__intnet: true
+  # Create a private network, which allows host-only access to the machine
+  # using a specific IP.
+  config.vm.network 'private_network', ip: '192.168.50.4', auto_config: true
+  config.vm.hostname = "sc9.local.azurewebsites.net"
+  config.hostsupdater.aliases = [ "sc9.local", "sc9.local.azurewebsites.net" ]
 
   # Create a public network, which generally matched to bridged network.
   # Bridged networks make the machine appear as another physical device on

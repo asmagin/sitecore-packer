@@ -4,10 +4,14 @@
       "Type": "string",
       "Description": "The name of the certificate to be created."
     },
+    "CertificateDnsName": {
+      "Type": "string",
+      "Reference": "CertificateName",
+      "Description": "The name of the certificate to be created."
+    },
     "CertPath": {
       "Type": "string",
-      "Description":
-        "The physical path on disk where certificates will be stored.",
+      "Description": "The physical path on disk where certificates will be stored.",
       "DefaultValue": "c:\\certificates"
     },
     "RootCertFileName": {
@@ -18,12 +22,11 @@
   },
   "Variables": {
     // The name dns name of the root certificate.
-    "Root.Cert.DnsName":
-      "[concat('DO_NOT_TRUST_', parameter('RootCertFileName'))]",
+    "Security.Root.CertificateDnsName": "[concat('DO_NOT_TRUST_', parameter('RootCertFileName'))]",
     // The certificate store for the root certificate.
-    "Root.Cert.Store": "cert:\\LocalMachine\\Root",
+    "Security.Root.CertificateStore": "cert:\\LocalMachine\\Root",
     // The certificate store for the client certificate.
-    "Client.Cert.Store": "cert:\\LocalMachine\\My"
+    "Security.Client.CertificateStore": "cert:\\LocalMachine\\My"
   },
   "Tasks": {
     "CreatePaths": {
@@ -40,37 +43,34 @@
         "Path": "[parameter('CertPath')]",
         "Name": "[parameter('RootCertFileName')]",
         "StoreLocation": "LocalMachine",
-        "DnsName": "[variable('Root.Cert.DnsName')]"
+        "DnsName": "[variable('Security.Root.CertificateDnsName')]"
       }
     },
     "ImportRootCertificate": {
       // Import the root certificate.
       "Type": "ImportCertificate",
       "Params": {
-        "CertStoreLocation": "[variable('Root.Cert.Store')]",
-        "FilePath":
-          "[concat(joinpath(parameter('CertPath'), parameter('RootCertFileName')), '.crt')]"
+        "CertStoreLocation": "[variable('Security.Root.CertificateStore')]",
+        "FilePath": "[concat(joinpath(parameter('CertPath'), parameter('RootCertFileName')), '.crt')]"
       }
     },
     "ImportRootCertificateToLocalMachine": {
       // Import the root certificate to LocalMachine (make it searche able)
       "Type": "ImportCertificate",
       "Params": {
-        "CertStoreLocation": "[variable('Client.Cert.Store')]",
-        "FilePath":
-          "[concat(joinpath(parameter('CertPath'), parameter('RootCertFileName')), '.crt')]"
+        "CertStoreLocation": "[variable('Security.Client.CertificateStore')]",
+        "FilePath": "[concat(joinpath(parameter('CertPath'), parameter('RootCertFileName')), '.crt')]"
       }
     },
     "CreateSignedCert": {
       // Create a certificate signed by the root authority.
       "Type": "NewSignedCertificate",
       "Params": {
-        "Signer":
-          "[GetCertificate(variable('Root.Cert.DnsName'), variable('Root.Cert.Store'))]",
+        "Signer": "[GetCertificate(variable('Security.Root.CertificateDnsName'), variable('Security.Root.CertificateStore'))]",
         "Path": "[parameter('CertPath')]",
-        "CertStoreLocation": "[variable('Client.Cert.Store')]",
+        "CertStoreLocation": "[variable('Security.Client.CertificateStore')]",
         "Name": "[parameter('CertificateName')]",
-        "DnsName": "[parameter('CertificateName')]"
+        "DnsName": "[parameter('CertificateDnsName')]"
       }
     }
   }
