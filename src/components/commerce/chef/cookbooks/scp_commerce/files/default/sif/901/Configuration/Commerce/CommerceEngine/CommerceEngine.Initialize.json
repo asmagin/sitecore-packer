@@ -1,0 +1,78 @@
+﻿// -------------------------------------------------------------------------- //
+//         Sitecore Install Framework - Initialize Commerce Services          //
+//                                                                            //
+//  Run this configuration to initialize Commerce Services.                   //
+//                                                                            //
+//  NOTE: Only single line comments are accepted in configurations.           //
+// -------------------------------------------------------------------------- //
+
+{
+  "Parameters": {
+    "CommerceAuthoringDir": { "Type": "string" },
+    "CommerceMinionsDir": { "Type": "string" },
+    "CommerceOpsDir": { "Type": "string" },
+    "CommerceShopsDir": { "Type": "string" },
+    "CommerceShopsHostHeader": { "Type": "string" },
+    "SitecoreIdentityServerHostHeader": { "Type": "string", "DefaultValue": "SitecoreIdentityServer", "Description": "Sitecore Identity Server name" },
+
+    "SitecoreAdminAccount": { "Type": "psobject", "Description": "Sitecore Admin account." }
+  },
+  "Variables": {
+    "EnsureSyncDefaultContentPathsParam": "/commerceops/EnsureSyncDefaultContentPaths(environment='envNameValue',shopName='CommerceEngineDefaultStorefront')",
+    "InitializeParam": "/commerceops/InitializeEnvironment(environment='envNameValue')",
+    "UrlCheckCommandStatus": "[concat('https://', concat(parameter('CommerceShopsHostHeader'), '/commerceops/CheckCommandStatus(taskId=taskIdValue)'))]",
+    "UrlCommerceShopsServicesBootstrap": "[concat('https://', concat(parameter('CommerceShopsHostHeader'), '/commerceops/Bootstrap()'))]",
+    "UrlEnsureSyncDefaultContentPaths": "[concat('https://', concat(parameter('CommerceShopsHostHeader'), variable('EnsureSyncDefaultContentPathsParam')))]",
+    "UrlInitializeEnvironment": "[concat('https://', concat(parameter('CommerceShopsHostHeader'), variable('InitializeParam')))]",
+    "UrlIdentityServerGetToken": "[concat('https://', concat(parameter('SitecoreIdentityServerHostHeader'), '/connect/token'))]"
+  },
+  "Modules": ["InitializeCommerce"],
+  "Tasks": {
+    "DisableCsrfValidation": {
+      "Type": "DisableCsrfValidation",
+      "Params": {
+        "CommerceServicesPathCollection": [
+          "[parameter('CommerceOpsDir')]",
+          "[parameter('CommerceShopsDir')]",
+          "[parameter('CommerceAuthoringDir')]",
+          "[parameter('CommerceMinionsDir')]"
+        ]
+      }
+    },
+    "GetIdServerToken": {
+      "Type": "GetIdServerToken",
+      "Params": {
+        "SitecoreAdminAccount": "[parameter('SitecoreAdminAccount')]",
+        "UrlIdentityServerGetToken": "[variable('UrlIdentityServerGetToken')]"
+      }
+    },
+    "BootStrapCommerceServices": {
+      "Type": "BootStrapCommerceServices",
+      "Params": {
+        "UrlCommerceShopsServicesBootstrap": "[variable('UrlCommerceShopsServicesBootstrap')]"
+      }
+    },
+    "EnsureSyncDefaultContentPaths": {
+      "Type": "EnsureSyncDefaultContentPaths",
+      "Params": {
+        "UrlEnsureSyncDefaultContentPaths": "[variable('UrlEnsureSyncDefaultContentPaths')]",
+        "UrlCheckCommandStatus": "[variable('UrlCheckCommandStatus')]",
+        "Environments": [
+          "AdventureWorksAuthoring",
+          "HabitatAuthoring"
+        ]
+      }
+    },
+    "InitializeCommerceServices": {
+      "Type": "InitializeCommerceServices",
+      "Params": {
+        "UrlInitializeEnvironment": "[variable('UrlInitializeEnvironment')]",
+        "UrlCheckCommandStatus": "[variable('UrlCheckCommandStatus')]",
+        "Environments": [
+          "AdventureWorksAuthoring",
+          "HabitatAuthoring"
+        ]
+      }
+    }
+  }
+}

@@ -1,6 +1,7 @@
 default['scp_commerce']['install'] = {
   'sitecore' => {
-    'password' => 'Test12345',
+    'user' => 'vagrant',
+    'password' => 'vagrant',
     'port_biz' => '4200',
     'port_ops' => '5015',
     'prefix' => 'sc9',

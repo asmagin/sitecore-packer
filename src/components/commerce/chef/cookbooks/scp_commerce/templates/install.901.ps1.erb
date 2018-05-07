@@ -1,88 +1,154 @@
 #Requires -Version 3
 
+# Hide progress bar to speed up installtion
+$global:ProgressPreference = 'silentlyContinue'
+Clear-Host
+
+# Parameters
 $prefix = "<%= @sitecore['prefix'] %>"
-$solrUrl = "<%= @sitecore['solr_url'] %>"
-$solrRoot = "<%= @sitecore['solr_root'] %>"
-$password = "<%= @sitecore['password'] %>"
-$sqlServer = "<%= @sitecore['sql_server'] %>"
-$speZipPath = "<%= @sitecore['package_spe_zip_path'] %>"
-$sxaZipPath = "<%= @sitecore['package_sxa_zip_path'] %>"
-$nugetPath = "<%= @sitecore['package_nuget_path'] %>"
+$siteName = "$prefix.local"
+$commerceSiteName = "$prefix.commerce"
+
+$commerceSearchProvider = "SOLR"
 $engineSdkPath = "<%= @sitecore['package_sdk_path'] %>"
+$nugetPath = "<%= @sitecore['package_nuget_path'] %>"
+$password = "<%= @sitecore['password'] %>"
+$siteHostHeader = "$prefix.local"
+$solrInstallDir = "<%= @sitecore['solr_root'] %>"
+$solrUrl = "<%= @sitecore['solr_url'] %>"
+$speZipPath = "<%= @sitecore['package_spe_zip_path'] %>"
+$sqlServer = "<%= @sitecore['sql_server'] %>"
+$sxaZipPath = "<%= @sitecore['package_sxa_zip_path'] %>"
+$user = "<%= @sitecore['user'] %>"
 
-$SiteName = "$prefix.local"
-$SiteHostHeaderName = "commerce.$prefix.local"
-$SqlDbPrefix = "$($prefix)_xc"
-$CommerceSearchProvider = "SOLR"
-
+# Import additional modules
 $global:DEPLOYMENT_DIRECTORY = Split-Path $MyInvocation.MyCommand.Path
 $modulesPath = ( Join-Path -Path $DEPLOYMENT_DIRECTORY -ChildPath "Modules" )
 if ($env:PSModulePath -notlike "*$modulesPath*") {
-  $p = $env:PSModulePath + ";" + $modulesPath
-  [Environment]::SetEnvironmentVariable("PSModulePath", $p)
+    $p = $env:PSModulePath + ";" + $modulesPath
+    [Environment]::SetEnvironmentVariable("PSModulePath", $p)
 }
-
 
 $params = @{
-  Path                               = Resolve-Path '.\Configuration\Commerce\Master_SingleServer.json'
-  SiteName                           = $SiteName
-  SiteHostHeaderName                 = $SiteHostHeaderName
-  InstallDir                         = "$($Env:SYSTEMDRIVE)\inetpub\wwwroot\$prefix.local"
-  XConnectInstallDir                 = "$($Env:SYSTEMDRIVE)\inetpub\wwwroot\$prefix.xconnect"
-  CertificateName                    = "$($SiteName)_client"
-  CommerceServicesDbServer           = $sqlServer    #OR "SQLServerName\SQLInstanceName"
-  CommerceServicesDbName             = "$($SqlDbPrefix)_SharedEnvironments"
-  CommerceServicesGlobalDbName       = "$($SqlDbPrefix)_Global"
-  SitecoreDbServer                   = $sqlServer            #OR "SQLServerName\SQLInstanceName"
-  SitecoreCoreDbName                 = "$($prefix)_Core"
-  SitecoreUsername                   = "sitecore\admin"
-  SitecoreUserPassword               = "b"
-  CommerceSearchProvider             = $CommerceSearchProvider
-  SolrUrl                            = $solrUrl
-  SolrRoot                           = $solrRoot
-  SolrService                        = "SOLR"
-  SolrSchemas                        = ( Join-Path -Path $DEPLOYMENT_DIRECTORY -ChildPath "SolrSchemas" )
-  SearchIndexPrefix                  = ""
-  AzureSearchServiceName             = ""
-  AzureSearchAdminKey                = ""
-  AzureSearchQueryKey                = ""
-  CommerceEngineDacPac               = "$engineSdkPath\Sitecore.Commerce.Engine.DB.dacpac"
-  CommerceOpsServicesPort            = "5015"
-  CommerceShopsServicesPort          = "5005"
-  CommerceAuthoringServicesPort      = "5000"
-  CommerceMinionsServicesPort        = "5010"
-  SitecoreCommerceEngineZipPath      = Resolve-Path -Path "..\Sitecore.Commerce.Engine.2.*.zip"
-  SitecoreBizFxServicesContentPath   = Resolve-Path -Path "..\bizfx"
-  SitecoreIdentityServerZipPath      = Resolve-Path -Path "..\Sitecore.IdentityServer.1.*.zip"
-  CommerceEngineCertificatePath      = "c:\certificates\$prefix.commerce.crt"
-  SiteUtilitiesSrc                   = ( Join-Path -Path $DEPLOYMENT_DIRECTORY -ChildPath "SiteUtilityPages" )
-  HabitatImagesModuleFullPath        = Resolve-Path -Path "..\Sitecore.Commerce.Habitat.Images-*.zip"
-  AdvImagesModuleFullPath            = Resolve-Path -Path "..\Adventure Works Images.zip"
-  CommerceConnectModuleFullPath      = Resolve-Path -Path "..\Sitecore Commerce Connect*.zip"
-  CEConnectPackageFullPath           = Resolve-Path -Path "..\Sitecore.Commerce.Engine.Connect*.update"
-  PowerShellExtensionsModuleFullPath = $speZipPath
-  SXAModuleFullPath                  = $sxaZipPath
-  SXACommerceModuleFullPath          = Resolve-Path -Path "..\Sitecore Commerce Experience Accelerator 1.*.zip"
-  SXAStorefrontModuleFullPath        = Resolve-Path -Path "..\Sitecore Commerce Experience Accelerator Storefront 1.*.zip"
-  SXAStorefrontThemeModuleFullPath   = Resolve-Path -Path "..\Sitecore Commerce Experience Accelerator Storefront Themes*.zip"
-  SXAStorefrontCatalogModuleFullPath = Resolve-Path -Path "..\Sitecore Commerce Experience Accelerator Habitat Catalog*.zip"
-  MergeToolFullPath                  = "$nugetPath\tools\VSToolsPath\Web\Microsoft.Web.XmlTransform.dll"
-  UserAccount                        = @{
-      Domain   = $Env:COMPUTERNAME
-      UserName = 'CSFndRuntimeUser'
-      Password = $password
-  }
-  BraintreeAccount                   = @{
-      MerchantId = ''
-      PublicKey  = ''
-      PrivateKey = ''
-  }
-  SitecoreIdentityServerName         = "SitecoreIdentityServer"
+    Path                                     = Resolve-Path '.\Configuration\Commerce\Master_SingleServer.json'
+
+    # General configurations
+    CommerceSearchProvider                   = $commerceSearchProvider
+    RootCertFileName                         = "SitecoreRootCert"
+
+    # SOLR
+    SolrCorePrefix                           = $prefix
+    SolrInstallDir                           = $solrInstallDir
+    SolrSchemasDir                           = ( Join-Path -Path $DEPLOYMENT_DIRECTORY -ChildPath "SolrSchemas" )
+    SolrServiceName                          = "SOLR"
+    SolrUrl                                  = $solrUrl
+
+    # Azure Search
+    AzureSearchIndexPrefix                   = $prefix
+    AzureSearchServiceName                   = ""
+    AzureSearchAdminKey                      = ""
+    AzureSearchQueryKey                      = ""
+
+    # CM instance and XConnect settings
+    SiteName                                 = $siteName
+    SiteHostHeader                           = $siteHostHeader
+    SiteInstallDir                           = "$($Env:SYSTEMDRIVE)\inetpub\wwwroot\$prefix.local"
+    XConnectInstallDir                       = "$($Env:SYSTEMDRIVE)\inetpub\wwwroot\$prefix.xconnect"
+
+    # SQL
+    SqlCommerceServicesDbName                = "$($prefix)_SharedEnvironments"
+    SqlCommerceServicesDbServer              = $sqlServer    #OR "SQLServerName\SQLInstanceName"
+    SqlCommerceServicesGlobalDbName          = "$($prefix)_Global"
+    SqlSitecoreCoreDbName                    = "$($prefix)_Core"
+    SqlSitecoreDbServer                      = $sqlServer            #OR "SQLServerName\SQLInstanceName"
+
+    # Commerce Services
+    CommerceAuthoring                        = "$commerceSiteName-authoring"
+    CommerceAuthoringCertificateDnsName      = "*.sc9.local"
+    CommerceAuthoringCertificateName         = "all.sc9.local"
+    CommerceAuthoringDir                     = "$($Env:SYSTEMDRIVE)\inetpub\wwwroot\$commerceSiteName-authoring"
+    CommerceAuthoringHostHeader              = "commerce-authoring.$siteName"
+    CommerceAuthoringServicesPort            = "443"
+
+    CommerceMinions                          = "$commerceSiteName-minions"
+    CommerceMinionsCertificateDnsName        = "*.sc9.local"
+    CommerceMinionsCertificateName           = "all.sc9.local"
+    CommerceMinionsDir                       = "$($Env:SYSTEMDRIVE)\inetpub\wwwroot\$commerceSiteName-minions"
+    CommerceMinionsHostHeader                = "commerce-minions.$siteName"
+    CommerceMinionsServicesPort              = "443"
+
+    CommerceOps                              = "$commerceSiteName-ops"
+    CommerceOpsCertificateDnsName            = "*.sc9.local"
+    CommerceOpsCertificateName               = "all.sc9.local"
+    CommerceOpsDir                           = "$($Env:SYSTEMDRIVE)\inetpub\wwwroot\$commerceSiteName-ops"
+    CommerceOpsHostHeader                    = "commerce-ops.$siteName"
+    CommerceOpsServicesPort                  = "443"
+
+    CommerceShops                            = "$commerceSiteName-shops"
+    CommerceShopsCertificateDnsName          = "*.sc9.local"
+    CommerceShopsCertificateName             = "all.sc9.local"
+    CommerceShopsDir                         = "$($Env:SYSTEMDRIVE)\inetpub\wwwroot\$commerceSiteName-shops"
+    CommerceShopsHostHeader                  = "commerce-shops.$siteName"
+    CommerceShopsServicesPort                = "443"
+
+    SitecoreIdentityServer                   = "$commerceSiteName-identity"
+    SitecoreIdentityServerCertificateDnsName = "*.sc9.local"
+    SitecoreIdentityServerCertificateName    = "all.sc9.local"
+    SitecoreIdentityServerDir                = "$($Env:SYSTEMDRIVE)\inetpub\wwwroot\$commerceSiteName-identity"
+    SitecoreIdentityServerHostHeader         = "identity.$siteName"
+    SitecoreIdentityServerServicesPort       = "443"
+
+    SitecoreBizFx                            = "$commerceSiteName-bizfx"
+    SitecoreBizFxCertificateDnsName          = "*.sc9.local"
+    SitecoreBizFxCertificateName             = "all.sc9.local"
+    SitecoreBizFxDir                         = "$($Env:SYSTEMDRIVE)\inetpub\wwwroot\$commerceSiteName-bizfx"
+    SitecoreBizFxHostHeader                  = "bizfx.$siteName"
+    SitecoreBizFxServicesPort                = "443"
+
+    CommerceServicesPrefix                   = $prefix
+    CommerceEngineCertificatePath            = "c:\certificates\$commerceSiteName.crt"
+    CommerceEngineCertificateName            = $commerceSiteName
+
+    # Packages
+    PackageAdventureWorksImagesPath          = Resolve-Path -Path "..\Adventure Works Images.zip"
+    PackageCEConnectPath                     = Resolve-Path -Path "..\Sitecore.Commerce.Engine.Connect*.update"
+    PackageCommerceConnectPath               = Resolve-Path -Path "..\Sitecore Commerce Connect*.zip"
+    PackageCommerceEngineDacPacPath          = "$engineSdkPath\Sitecore.Commerce.Engine.DB.dacpac"
+    PackageHabitatImagesPath                 = Resolve-Path -Path "..\Sitecore.Commerce.Habitat.Images-*.zip"
+    PackagePowerShellExtensionsPath          = $speZipPath
+    PackageSitecoreBizFxServicesContentDir   = Resolve-Path -Path "..\bizfx"
+    PackageSitecoreCommerceEnginePath        = Resolve-Path -Path "..\Sitecore.Commerce.Engine.2.*.zip"
+    PackageSitecoreIdentityServerPath        = Resolve-Path -Path "..\Sitecore.IdentityServer.1.*.zip"
+    PackageSXACommercePath                   = Resolve-Path -Path "..\Sitecore Commerce Experience Accelerator 1.*.zip"
+    PackageSXAPath                           = $sxaZipPath
+    PackageSXAStorefrontCatalogPath          = Resolve-Path -Path "..\Sitecore Commerce Experience Accelerator Habitat Catalog*.zip"
+    PackageSXAStorefrontPath                 = Resolve-Path -Path "..\Sitecore Commerce Experience Accelerator Storefront 1.*.zip"
+    PackageSXAStorefrontThemePath            = Resolve-Path -Path "..\Sitecore Commerce Experience Accelerator Storefront Themes*.zip"
+
+    # Tools
+    ToolsSiteUtilitiesDir                    = ( Join-Path -Path $DEPLOYMENT_DIRECTORY -ChildPath "SiteUtilityPages" )
+    ToolsMergeToolPath                       = "$nugetPath\tools\VSToolsPath\Web\Microsoft.Web.XmlTransform.dll"
+
+    # Accounts
+    SitecoreUsername                         = "sitecore\admin"
+    SitecoreUserPassword                     = "b"
+
+    UserAccount                              = @{
+        Domain   = $Env:COMPUTERNAME
+        UserName = $user
+        Password = $password
+    }
+
+    BraintreeAccount                         = @{
+        MerchantId = ''
+        PublicKey  = ''
+        PrivateKey = ''
+    }
 }
 
-if ($CommerceSearchProvider -eq "SOLR") {
-  Install-SitecoreConfiguration @params
+if ($commerceSearchProvider -eq "SOLR") {
+    Install-SitecoreConfiguration @params
 }
-elseif ($CommerceSearchProvider -eq "AZURE") {
-  Install-SitecoreConfiguration @params -Skip InstallSolrCores
+elseif ($commerceSearchProvider -eq "AZURE") {
+    Install-SitecoreConfiguration @params -Skip InstallSolrCores
 }
