@@ -1,31 +1,13 @@
 {
   "Parameters": {
-    "CertificateName": {
-      "Type": "string",
-      "Description": "The name of the certificate to be created."
-    },
-    "CertificateDnsName": {
-      "Type": "string",
-      "Reference": "CertificateName",
-      "Description": "The name of the certificate to be created."
-    },
-    "CertPath": {
-      "Type": "string",
-      "Description": "The physical path on disk where certificates will be stored.",
-      "DefaultValue": "c:\\certificates"
-    },
-    "RootCertFileName": {
-      "Type": "string",
-      "Description": "The file name of the root certificate to be created.",
-      "DefaultValue": "SitecoreRootCert"
-    }
+    "CertificateName": { "Type": "string", "Description": "The name of the certificate to be created." },
+    "CertificateDnsName": { "Type": "string", "Default": "*.local", "Description": "The name of the certificate to be created." },
+    "CertPath": { "Type": "string", "Description": "The physical path on disk where certificates will be stored.", "DefaultValue": "c:\\certificates" },
+    "RootCertFileName": { "Type": "string", "Description": "The file name of the root certificate to be created.", "DefaultValue": "SitecoreRootCert" }
   },
   "Variables": {
-    // The name dns name of the root certificate.
     "Security.Root.CertificateDnsName": "[concat('DO_NOT_TRUST_', parameter('RootCertFileName'))]",
-    // The certificate store for the root certificate.
     "Security.Root.CertificateStore": "cert:\\LocalMachine\\Root",
-    // The certificate store for the client certificate.
     "Security.Client.CertificateStore": "cert:\\LocalMachine\\My"
   },
   "Tasks": {

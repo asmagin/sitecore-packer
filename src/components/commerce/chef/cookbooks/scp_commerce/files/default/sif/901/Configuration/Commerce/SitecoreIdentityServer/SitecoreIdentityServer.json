@@ -1,0 +1,144 @@
+﻿// -------------------------------------------------------------------------- //
+//         Sitecore Install Framework - Deploy Sitecore IdentityServer        //
+//                                                                            //
+//  Run this configuration to deploy Sitecore IdentityServer.                 //
+//                                                                            //
+//  NOTE: Only single line comments are accepted in configurations.           //
+// -------------------------------------------------------------------------- //
+{
+  "Parameters": {
+    "SitecoreIdentityServer": { "Type": "string" },
+    "SitecoreIdentityServerCertificateDnsName": { "Type": "string" },
+    "SitecoreIdentityServerDir": { "Type": "string" },
+    "SitecoreIdentityServerHostHeader": { "Type": "string", "DefaultValue": "SitecoreIdentityServer", "Description": "Sitecore Identity Server name" },
+    "SitecoreIdentityServerServicesPort": { "Type": "string", "DefaultValue": "5050" },
+
+    "CommerceAuthoringHostHeader": { "Type": "string" },
+    "CommerceAuthoringServicesPort": { "Type": "string" },
+
+    "SitecoreBizFxHostHeader": { "Type": "string" },
+    "SitecoreBizFxServicesPort": { "Type": "string" },
+
+    "SqlSitecoreDbServer": { "Type": "string", "Description": "Sitecore database server name" },
+    "SqlSitecoreCoreDbName": { "Type": "string", "Description": "Sitecore Core database name" },
+
+    "PackageSitecoreIdentityServerPath": { "Type": "string", "Description": "Sitecore IdentityServer Zip Path" },
+
+    "SiteHostHeader": { "Type": "string", "Description": "The host header name of the site to be deployed." },
+
+    "RootCertFileName": { "Type": "string", "DefaultValue": "SitecoreRootCert", "Description": "The file name of the root certificate to be created." },
+
+    "UserAccount": { "Type": "psobject", "DefaultValue": { "UserName": "", "Domain": "$env:COMPUTERNAME", "Password": "" } }
+  },
+  "Variables": {
+    "Security.Root.CertificateDnsName": "[concat('DO_NOT_TRUST_', parameter('RootCertFileName'))]",
+    "Security.Root.CertificateStore": "cert:\\LocalMachine\\Root",
+    "Security.CertificateStore": "cert:\\LocalMachine\\My",
+    "Security.CertificateName": "identity.server",
+    "Security.SitecoreIdentityServer.CertificateThumbprint": "[GetCertificateThumbprint(parameter('SitecoreIdentityServerCertificateDnsName'), variable('Security.CertificateStore'))]"
+  },
+  "Modules": ["ManageCommerceService", "DeployCommerceContent", "WindowsLocalUser"],
+  "Tasks": {
+    "StopSite": {
+      "Type": "ManageWebsite",
+      "Params": {
+        "Name": "[parameter('SitecoreIdentityServer')]",
+        "Action": "Stop",
+        "ErrorAction": "SilentlyContinue"
+      }
+    },
+    "RemoveSite": {
+      "Type": "ManageCommerceService",
+      "Params": {
+        "Name": "[parameter('SitecoreIdentityServer')]",
+        "Action": "Remove-Website"
+      }
+    },
+    "StopAppPool": {
+      "Type": "ManageAppPool",
+      "Params": {
+        "Name": "[parameter('SitecoreIdentityServer')]",
+        "Action": "Stop",
+        "ErrorAction": "SilentlyContinue"
+      }
+    },
+    "RemoveAppPool": {
+      "Type": "ManageCommerceService",
+      "Params": {
+        "Name": "[parameter('SitecoreIdentityServer')]",
+        "Action": "Remove-WebAppPool"
+      }
+    },
+    "RemoveSiteFolder": {
+      "Type": "ManageCommerceService",
+      "Params": {
+        "Name": "[parameter('SitecoreIdentityServer')]",
+        "PhysicalPath": "[parameter('SitecoreIdentityServerDir')]",
+        "Action": "Remove-Item"
+      }
+    },
+    "DeployCommerceContent": {
+      "Type": "DeployCommerceContent",
+      "Params": {
+        "Name": "SitecoreIdentityServer",
+        "ServicesContentPath": "[parameter('PackageSitecoreIdentityServerPath')]",
+
+        "CommerceAuthoringHostHeader": "[parameter('CommerceAuthoringHostHeader')]",
+        "CommerceAuthoringServicesPort": "[parameter('CommerceAuthoringServicesPort')]",
+        "SitecoreBizFxHostHeader": "[parameter('SitecoreBizFxHostHeader')]",
+        "SitecoreBizFxServicesPort": "[parameter('SitecoreBizFxServicesPort')]",
+        "SitecoreIdentityServerHostHeader": "[parameter('SitecoreIdentityServerHostHeader')]",
+        "SitecoreIdentityServerServicesPort": "[parameter('SitecoreIdentityServerServicesPort')]",
+
+        "SiteHostHeader": "[parameter('SiteHostHeader')]",
+
+        "PhysicalPath": "[parameter('SitecoreIdentityServerDir')]",
+        "SqlSitecoreDbServer": "[parameter('SqlSitecoreDbServer')]",
+        "SqlSitecoreCoreDbName": "[parameter('SqlSitecoreCoreDbName')]",
+        "UserAccount": "[parameter('UserAccount')]"
+      }
+    },
+    "CreatePaths": {
+      "Type": "EnsurePath",
+      "Params": {
+        "Exists": ["[parameter('SitecoreIdentityServerDir')]"]
+      }
+    },
+    "CreateWebAppPool": {
+      "Type": "ManageCommerceService",
+      "Params": {
+        "Name": "[parameter('SitecoreIdentityServer')]",
+        "Action": "Create-WebAppPool",
+        "UserAccount": "[parameter('UserAccount')]"
+      }
+    },
+    "IssuingCertificate": {
+      "Type": "IssuingCertificate",
+      "Params": {
+        "CertificateDnsName": "[variable('Security.CertificateName')]",
+        "CertificatePassword": "sitecore",
+        "CertificateStore": "[variable('Security.CertificateStore')]",
+        "CertificateFriendlyName": "[variable('Security.CertificateName')]",
+        "IDServerPath": "[parameter('SitecoreIdentityServerDir')]"
+      }
+    },
+    "CreateWebsite": {
+      "Type": "ManageCommerceService",
+      "Params": {
+        "Name": "[parameter('SitecoreIdentityServer')]",
+        "Action": "Create-Website",
+        "AppPoolName": "[parameter('SitecoreIdentityServer')]",
+        "PhysicalPath": "[parameter('SitecoreIdentityServerDir')]",
+        "Hostname": "[parameter('SitecoreIdentityServerHostHeader')]",
+        "Port": "[parameter('SitecoreIdentityServerServicesPort')]",
+        "CertificateThumbprint": "[variable('Security.SitecoreIdentityServer.CertificateThumbprint')]"
+      }
+    },
+    "CreateHostHeader": {
+      "Type": "HostHeader",
+      "Params": {
+        "HostName": "[parameter('SitecoreIdentityServerHostHeader')]"
+      }
+    }
+  }
+}

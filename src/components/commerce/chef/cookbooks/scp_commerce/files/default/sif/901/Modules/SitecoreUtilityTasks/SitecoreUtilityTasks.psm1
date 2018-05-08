@@ -4,12 +4,12 @@ Function Invoke-InstallModuleTask {
     [Parameter(Mandatory = $true)]
     [string]$ModuleFullPath,
     [Parameter(Mandatory = $true)]
-    [string]$ModulesDirDst,
+    [string]$SitecoreAppDataPackagesDir,
     [Parameter(Mandatory = $true)]
     [string]$BaseUrl
   )
 
-  Copy-Item $ModuleFullPath -destination $ModulesDirDst -force
+  Copy-Item $ModuleFullPath -destination $SitecoreAppDataPackagesDir -force
 
   $moduleToInstall = Split-Path -Path $ModuleFullPath -Leaf -Resolve
 
@@ -26,12 +26,12 @@ Function Invoke-InstallPackageTask {
     [Parameter(Mandatory = $true)]
     [string]$PackageFullPath,
     [Parameter(Mandatory = $true)]
-    [string]$PackagesDirDst,
+    [string]$SitecoreAdminPackagesDir,
     [Parameter(Mandatory = $true)]
     [string]$BaseUrl
   )
 	
-  Copy-Item $PackageFullPath -destination $PackagesDirDst -force
+  Copy-Item $PackageFullPath -destination $SitecoreAdminPackagesDir -force
 
   $packageToInstall = Split-Path -Path $PackageFullPath -Leaf -Resolve
 

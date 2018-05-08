@@ -1,0 +1,108 @@
+{
+  "Parameters": {
+    "CommerceAuthoringCertificateDnsName": { "Type": "string" },
+    "CommerceAuthoringCertificateName": { "Type": "string" },
+
+    "CommerceMinionsCertificateDnsName": { "Type": "string" },
+    "CommerceMinionsCertificateName": { "Type": "string" },
+
+    "CommerceOpsCertificateDnsName": { "Type": "string" },
+    "CommerceOpsCertificateName": { "Type": "string" },
+
+    "CommerceShopsCertificateDnsName": { "Type": "string" },
+    "CommerceShopsCertificateName": { "Type": "string" },
+
+    "SitecoreBizFxCertificateDnsName": { "Type": "string" },
+    "SitecoreBizFxCertificateName": { "Type": "string" },
+
+    "SitecoreIdentityServerCertificateDnsName": { "Type": "string" },
+    "SitecoreIdentityServerCertificateName": { "Type": "string" },
+
+    "CommerceEngineCertificateDnsName": { "Type": "string" },
+    "CommerceEngineCertificateName": { "Type": "string" },
+
+    "CertPath": { "Type": "string", "Description": "The physical path on disk where certificates will be stored.", "DefaultValue": "c:\\certificates" },
+    "RootCertFileName": { "Type": "string", "Description": "The file name of the root certificate to be created.", "DefaultValue": "SitecoreRootCert" },
+
+    "UserAccount": { "Type": "psobject" }
+  },
+  "Modules": ["InstallSitecoreConfiguration", "ManageCommerceService"],
+  "Tasks": {
+    "CommerceEngineCertificate": {
+      "Type": "InstallSitecoreConfiguration",
+      "Params": {
+        "Path": ".\\Configuration\\Commerce\\Certificates\\createcert.json",
+
+        "CertificateDnsName": "[parameter('CommerceEngineCertificateDnsName')]",
+        "CertificateName": "[parameter('CommerceEngineCertificateName')]"
+      }
+    },
+    "GenerateCommerceAuthoringCertificate": {
+      "Type": "InstallSitecoreConfiguration",
+      "Params": {
+        "Path": ".\\Configuration\\Commerce\\Certificates\\createcert.json",
+
+        "CertificateDnsName": "[parameter('CommerceAuthoringCertificateDnsName')]",
+        "CertificateName": "[parameter('CommerceAuthoringCertificateName')]"
+      }
+    },
+    "GenerateCommerceMinionsCertificate": {
+      "Type": "InstallSitecoreConfiguration",
+      "Params": {
+        "Path": ".\\Configuration\\Commerce\\Certificates\\createcert.json",
+
+        "CertificateDnsName": "[parameter('CommerceMinionsCertificateDnsName')]",
+        "CertificateName": "[parameter('CommerceMinionsCertificateName')]"
+      }
+    },
+    "GenerateCommerceOpsCertificate": {
+      "Type": "InstallSitecoreConfiguration",
+      "Params": {
+        "Path": ".\\Configuration\\Commerce\\Certificates\\createcert.json",
+
+        "CertificateDnsName": "[parameter('CommerceOpsCertificateDnsName')]",
+        "CertificateName": "[parameter('CommerceOpsCertificateName')]"
+      }
+    },
+    "GenerateCommerceShopsCertificate": {
+      "Type": "InstallSitecoreConfiguration",
+      "Params": {
+        "Path": ".\\Configuration\\Commerce\\Certificates\\createcert.json",
+
+        "CertificateDnsName": "[parameter('CommerceShopsCertificateDnsName')]",
+        "CertificateName": "[parameter('CommerceShopsCertificateName')]"
+      }
+    },
+    "GenerateSitecoreBizFxCertificate": {
+      "Type": "InstallSitecoreConfiguration",
+      "Params": {
+        "Path": ".\\Configuration\\Commerce\\Certificates\\createcert.json",
+
+        "CertificateDnsName": "[parameter('SitecoreBizFxCertificateDnsName')]",
+        "CertificateName": "[parameter('SitecoreBizFxCertificateName')]"
+      }
+    },
+    "GenerateSitecoreIdentityServerCertificate": {
+      "Type": "InstallSitecoreConfiguration",
+      "Params": {
+        "Path": ".\\Configuration\\Commerce\\Certificates\\createcert.json",
+
+        "CertificateDnsName": "[parameter('SitecoreIdentityServerCertificateDnsName')]",
+        "CertificateName": "[parameter('SitecoreIdentityServerCertificateName')]"
+      }
+    },
+    "SetCertStorePermissions": {
+      "Type": "SetPermissions",
+      "Params": {
+        "Path": "[parameter('CertPath')]",
+        "Rights": [
+          {
+            "User": "[parameter('UserAccount'))]",
+            "FileSystemRights": ["Read"],
+            "InheritanceFlags": ["None"]
+          }
+        ]
+      }
+    }
+  }
+}
