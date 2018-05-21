@@ -33,7 +33,7 @@ action :install do
     action :run
   end
 
-  ## Download SXA (to c:\tmp\sitecore\assets)
+  ## Download SXA (to c:\tmp\sitecore)
   powershell_script 'Download SXA' do
     code <<-EOH
       $ProgressPreference='SilentlyContinue';
@@ -46,7 +46,7 @@ action :install do
     action :run
   end
 
-  ## Download SPE (to c:\tmp\sitecore\assets)
+  ## Download SPE (to c:\tmp\sitecore)
   powershell_script 'Download SPE' do
     code <<-EOH
       $ProgressPreference='SilentlyContinue';
@@ -58,7 +58,7 @@ action :install do
     action :run
   end
 
-  ## Download NuGet (to c:\tmp\sitecore\assets)
+  ## Download NuGet (to c:\tmp\sitecore)
   powershell_script 'Download [MSBuild.Microsoft.VisualStudio.Web.targets] Nuget' do
     code <<-EOH
       $ProgressPreference='SilentlyContinue';
@@ -70,7 +70,7 @@ action :install do
     action :run
   end
 
-  ## Exctract NuGet files (to c:\tmp\sitecore\assets\...)
+  ## Exctract NuGet files (to c:\tmp\sitecore)
   powershell_script 'Unpack [MSBuild.Microsoft.VisualStudio.Web.targets] Nuget' do
     code <<-EOH
       & 7z x "#{sitecore['package_nuget_zip_path']}" -o"#{sitecore['package_nuget_path']}/" -aoa
@@ -102,28 +102,6 @@ action :install do
     action :run
   end
 
-  # Install certificates
-  ## Generate certificates installation script from template
-  script_file_name = 'certificates.ps1'
-  script_file_path = "#{sitecore['tmp']}/#{script_file_name}"
-  template script_file_path do
-    source "certificates.#{sitecore['version']}.ps1.erb"
-    variables('sitecore' => sitecore)
-  end
-
-  ## Copy certificates configuration files
-  remote_directory sitecore['tmp'] do
-    source "certificates/#{sitecore['version']}"
-    action :create
-  end
-
-  ## Run certificates generations
-  scp_windows_powershell_script_elevated 'Install Sitecore' do
-    code script_file_path
-    cwd sitecore['tmp']
-    action :run
-  end
-
   # Install Commerce
   ## Stop xConnect
   iis_pool "#{sitecore['prefix']}.xconnect" do
@@ -150,7 +128,6 @@ action :install do
     cwd sitecore['package_config_path']
     action :run
   end
-  
 
   ## Start xConnect
   iis_pool "#{sitecore['prefix']}.xconnect" do

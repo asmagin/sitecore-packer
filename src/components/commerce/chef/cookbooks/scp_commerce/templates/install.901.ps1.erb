@@ -1,25 +1,42 @@
+<#
+.SYNOPSIS
+    Installs the Sitecore Commerce Platform to the machine where this script is executed.
+.DESCRIPTION
+    Installs the Sitecore Commerce Platform to the machine where this script is executed.
+    First make sure you have installed all the pre-requisites for SC9 from the Installation Guide
+    Then make sure you walk through 2.2 Download the Sitecore XC release package and prerequisites of the SC9 Installation Guide, before running this script  
+.EXAMPLE(S)
+    C:\PS> Deploy-Sitecore-Commerce.ps1
+.NOTES
+    Author(s):  Alex Smagin
+                Robbert Hock
+#>
+
 #Requires -Version 3
 
-# Hide progress bar to speed up installtion
+#parameters
+param(
+    [string]$Prefix = "<%= @sitecore['prefix'] %>",
+    [string]$SiteName = "$Prefix.local",	
+    [string]$SiteHostHeader = "$Prefix.local",	
+    [string]$SqlDbPrefix = $Prefix,
+    [string]$CommerceSearchProvider = "SOLR",
+    [string]$CommerceSiteName = "$Prefix.commerce",
+    [string]$Drive = $($Env:SYSTEMDRIVE),
+    [string]$XConnectSiteHostHeaderName = "$($Prefix).xconnect",
+    [string]$SolrUrl = "<%= @sitecore['solr_url'] %>",
+    [string]$SolrInstallDir = "<%= @sitecore['solr_root'] %>",
+    [string]$SolrService = "SOLR",
+    [string]$SqlServer = "<%= @sitecore['sql_server'] %>",
+    [string]$SitecoreUsername = "sitecore\admin",
+    [string]$SitecoreUserPassword = "b",
+    [string]$CommerceServerUserName = "<%= @sitecore['user'] %>",
+    [string]$CommerceServerUserPassword = "<%= @sitecore['password'] %>"
+)
+
+# Hide progress bar to speed up installation
 $global:ProgressPreference = 'silentlyContinue'
 Clear-Host
-
-# Parameters
-$prefix = "<%= @sitecore['prefix'] %>"
-$siteName = "$prefix.local"
-$commerceSiteName = "$prefix.commerce"
-
-$commerceSearchProvider = "SOLR"
-$engineSdkPath = "<%= @sitecore['package_sdk_path'] %>"
-$nugetPath = "<%= @sitecore['package_nuget_path'] %>"
-$password = "<%= @sitecore['password'] %>"
-$siteHostHeader = "$prefix.local"
-$solrInstallDir = "<%= @sitecore['solr_root'] %>"
-$solrUrl = "<%= @sitecore['solr_url'] %>"
-$speZipPath = "<%= @sitecore['package_spe_zip_path'] %>"
-$sqlServer = "<%= @sitecore['sql_server'] %>"
-$sxaZipPath = "<%= @sitecore['package_sxa_zip_path'] %>"
-$user = "<%= @sitecore['user'] %>"
 
 # Import additional modules
 $global:DEPLOYMENT_DIRECTORY = Split-Path $MyInvocation.MyCommand.Path
@@ -33,110 +50,110 @@ $params = @{
     Path                                     = Resolve-Path '.\Configuration\Commerce\Master_SingleServer.json'
 
     # General configurations
-    CommerceSearchProvider                   = $commerceSearchProvider
+    CommerceSearchProvider                   = $CommerceSearchProvider
     RootCertFileName                         = "SitecoreRootCert"
 
     # SOLR
-    SolrCorePrefix                           = $prefix
-    SolrInstallDir                           = $solrInstallDir
+    SolrCorePrefix                           = $Prefix
+    SolrInstallDir                           = $SolrInstallDir
     SolrSchemasDir                           = ( Join-Path -Path $DEPLOYMENT_DIRECTORY -ChildPath "SolrSchemas" )
-    SolrServiceName                          = "SOLR"
-    SolrUrl                                  = $solrUrl
+    SolrServiceName                          = $SolrService
+    SolrUrl                                  = $SolrUrl
 
     # Azure Search
-    AzureSearchIndexPrefix                   = $prefix
+    AzureSearchIndexPrefix                   = $Prefix
     AzureSearchServiceName                   = ""
     AzureSearchAdminKey                      = ""
     AzureSearchQueryKey                      = ""
 
     # CM instance and XConnect settings
-    SiteName                                 = $siteName
+    SiteName                                 = $SiteName
     SiteHostHeader                           = $siteHostHeader
-    SiteInstallDir                           = "$($Env:SYSTEMDRIVE)\inetpub\wwwroot\$prefix.local"
-    XConnectInstallDir                       = "$($Env:SYSTEMDRIVE)\inetpub\wwwroot\$prefix.xconnect"
+    SiteInstallDir                           = "$($Drive)\inetpub\wwwroot\$Prefix.local"
+    XConnectInstallDir                       = "$($Drive)\inetpub\wwwroot\$Prefix.xconnect"
 
     # SQL
-    SqlCommerceServicesDbName                = "$($prefix)_SharedEnvironments"
-    SqlCommerceServicesDbServer              = $sqlServer    #OR "SQLServerName\SQLInstanceName"
-    SqlCommerceServicesGlobalDbName          = "$($prefix)_Global"
-    SqlSitecoreCoreDbName                    = "$($prefix)_Core"
-    SqlSitecoreDbServer                      = $sqlServer            #OR "SQLServerName\SQLInstanceName"
+    SqlCommerceServicesDbName                = "$($Prefix)_SitecoreCommerce_SharedEnvironments"
+    SqlCommerceServicesDbServer              = $SqlServer    #OR "SQLServerName\SQLInstanceName"
+    SqlCommerceServicesGlobalDbName          = "$($Prefix)_SitecoreCommerce_Global"
+    SqlSitecoreCoreDbName                    = "$($Prefix)_Core"
+    SqlSitecoreDbServer                      = $SqlServer    #OR "SQLServerName\SQLInstanceName"
 
     # Commerce Services
-    CommerceAuthoring                        = "$commerceSiteName-authoring"
-    CommerceAuthoringCertificateDnsName      = "*.sc9.local"
-    CommerceAuthoringCertificateName         = "all.sc9.local"
-    CommerceAuthoringDir                     = "$($Env:SYSTEMDRIVE)\inetpub\wwwroot\$commerceSiteName-authoring"
-    CommerceAuthoringHostHeader              = "commerce-authoring.$siteName"
+    CommerceAuthoring                        = "$CommerceSiteName-authoring"
+    CommerceAuthoringCertificateDnsName      = "*.$Prefix.local"
+    CommerceAuthoringCertificateName         = "all.$Prefix.local"
+    CommerceAuthoringDir                     = "$($Env:SYSTEMDRIVE)\inetpub\wwwroot\$CommerceSiteName-authoring"
+    CommerceAuthoringHostHeader              = "commerce-authoring.$SiteName"
     CommerceAuthoringServicesPort            = "443"
 
-    CommerceMinions                          = "$commerceSiteName-minions"
-    CommerceMinionsCertificateDnsName        = "*.sc9.local"
-    CommerceMinionsCertificateName           = "all.sc9.local"
-    CommerceMinionsDir                       = "$($Env:SYSTEMDRIVE)\inetpub\wwwroot\$commerceSiteName-minions"
-    CommerceMinionsHostHeader                = "commerce-minions.$siteName"
+    CommerceMinions                          = "$CommerceSiteName-minions"
+    CommerceMinionsCertificateDnsName        = "*.$Prefix.local"
+    CommerceMinionsCertificateName           = "all.$Prefix.local"
+    CommerceMinionsDir                       = "$($Env:SYSTEMDRIVE)\inetpub\wwwroot\$CommerceSiteName-minions"
+    CommerceMinionsHostHeader                = "commerce-minions.$SiteName"
     CommerceMinionsServicesPort              = "443"
 
-    CommerceOps                              = "$commerceSiteName-ops"
-    CommerceOpsCertificateDnsName            = "*.sc9.local"
-    CommerceOpsCertificateName               = "all.sc9.local"
-    CommerceOpsDir                           = "$($Env:SYSTEMDRIVE)\inetpub\wwwroot\$commerceSiteName-ops"
-    CommerceOpsHostHeader                    = "commerce-ops.$siteName"
+    CommerceOps                              = "$CommerceSiteName-ops"
+    CommerceOpsCertificateDnsName            = "*.$Prefix.local"
+    CommerceOpsCertificateName               = "all.$Prefix.local"
+    CommerceOpsDir                           = "$($Env:SYSTEMDRIVE)\inetpub\wwwroot\$CommerceSiteName-ops"
+    CommerceOpsHostHeader                    = "commerce-ops.$SiteName"
     CommerceOpsServicesPort                  = "443"
 
-    CommerceShops                            = "$commerceSiteName-shops"
-    CommerceShopsCertificateDnsName          = "*.sc9.local"
-    CommerceShopsCertificateName             = "all.sc9.local"
-    CommerceShopsDir                         = "$($Env:SYSTEMDRIVE)\inetpub\wwwroot\$commerceSiteName-shops"
-    CommerceShopsHostHeader                  = "commerce-shops.$siteName"
+    CommerceShops                            = "$CommerceSiteName-shops"
+    CommerceShopsCertificateDnsName          = "*.$Prefix.local"
+    CommerceShopsCertificateName             = "all.$Prefix.local"
+    CommerceShopsDir                         = "$($Env:SYSTEMDRIVE)\inetpub\wwwroot\$CommerceSiteName-shops"
+    CommerceShopsHostHeader                  = "commerce-shops.$SiteName"
     CommerceShopsServicesPort                = "443"
 
-    SitecoreIdentityServer                   = "$commerceSiteName-identity"
-    SitecoreIdentityServerCertificateDnsName = "*.sc9.local"
-    SitecoreIdentityServerCertificateName    = "all.sc9.local"
-    SitecoreIdentityServerDir                = "$($Env:SYSTEMDRIVE)\inetpub\wwwroot\$commerceSiteName-identity"
-    SitecoreIdentityServerHostHeader         = "identity.$siteName"
+    SitecoreIdentityServer                   = "$CommerceSiteName-identity"
+    SitecoreIdentityServerCertificateDnsName = "*.$Prefix.local"
+    SitecoreIdentityServerCertificateName    = "all.$Prefix.local"
+    SitecoreIdentityServerDir                = "$($Env:SYSTEMDRIVE)\inetpub\wwwroot\$CommerceSiteName-identity"
+    SitecoreIdentityServerHostHeader         = "identity.$SiteName"
     SitecoreIdentityServerServicesPort       = "443"
 
-    SitecoreBizFx                            = "$commerceSiteName-bizfx"
-    SitecoreBizFxCertificateDnsName          = "*.sc9.local"
-    SitecoreBizFxCertificateName             = "all.sc9.local"
-    SitecoreBizFxDir                         = "$($Env:SYSTEMDRIVE)\inetpub\wwwroot\$commerceSiteName-bizfx"
-    SitecoreBizFxHostHeader                  = "bizfx.$siteName"
+    SitecoreBizFx                            = "$CommerceSiteName-bizfx"
+    SitecoreBizFxCertificateDnsName          = "*.$Prefix.local"
+    SitecoreBizFxCertificateName             = "all.$Prefix.local"
+    SitecoreBizFxDir                         = "$($Env:SYSTEMDRIVE)\inetpub\wwwroot\$CommerceSiteName-bizfx"
+    SitecoreBizFxHostHeader                  = "bizfx.$SiteName"
     SitecoreBizFxServicesPort                = "443"
 
-    CommerceServicesPrefix                   = $prefix
-    CommerceEngineCertificatePath            = "c:\certificates\$commerceSiteName.crt"
-    CommerceEngineCertificateName            = $commerceSiteName
+    CommerceServicesPrefix                   = $Prefix
+    CommerceEngineCertificatePath            = "c:\certificates\$CommerceSiteName.crt"
+    CommerceEngineCertificateName            = $CommerceSiteName
 
     # Packages
     PackageAdventureWorksImagesPath          = Resolve-Path -Path "..\Adventure Works Images.zip"
     PackageCEConnectPath                     = Resolve-Path -Path "..\Sitecore.Commerce.Engine.Connect*.update"
     PackageCommerceConnectPath               = Resolve-Path -Path "..\Sitecore Commerce Connect*.zip"
-    PackageCommerceEngineDacPacPath          = "$engineSdkPath\Sitecore.Commerce.Engine.DB.dacpac"
+    PackageCommerceEngineDacPacPath          = Resolve-Path -Path "<%= @sitecore['package_sdk_path'] %>\Sitecore.Commerce.Engine.DB.dacpac"
     PackageHabitatImagesPath                 = Resolve-Path -Path "..\Sitecore.Commerce.Habitat.Images-*.zip"
-    PackagePowerShellExtensionsPath          = $speZipPath
-    PackageSitecoreBizFxServicesContentDir   = Resolve-Path -Path "..\bizfx"
+    PackagePowerShellExtensionsPath          = Resolve-Path -Path "<%= @sitecore['package_spe_zip_path'] %>"
+    PackageSitecoreBizFxServicesContentDir   = Resolve-Path -Path "<%= @sitecore['package_bizfx_path'] %>"
     PackageSitecoreCommerceEnginePath        = Resolve-Path -Path "..\Sitecore.Commerce.Engine.2.*.zip"
     PackageSitecoreIdentityServerPath        = Resolve-Path -Path "..\Sitecore.IdentityServer.1.*.zip"
     PackageSXACommercePath                   = Resolve-Path -Path "..\Sitecore Commerce Experience Accelerator 1.*.zip"
-    PackageSXAPath                           = $sxaZipPath
+    PackageSXAPath                           = Resolve-Path -Path "<%= @sitecore['package_sxa_zip_path'] %>"
     PackageSXAStorefrontCatalogPath          = Resolve-Path -Path "..\Sitecore Commerce Experience Accelerator Habitat Catalog*.zip"
     PackageSXAStorefrontPath                 = Resolve-Path -Path "..\Sitecore Commerce Experience Accelerator Storefront 1.*.zip"
     PackageSXAStorefrontThemePath            = Resolve-Path -Path "..\Sitecore Commerce Experience Accelerator Storefront Themes*.zip"
 
     # Tools
     ToolsSiteUtilitiesDir                    = ( Join-Path -Path $DEPLOYMENT_DIRECTORY -ChildPath "SiteUtilityPages" )
-    ToolsMergeToolPath                       = "$nugetPath\tools\VSToolsPath\Web\Microsoft.Web.XmlTransform.dll"
+    ToolsMergeToolPath                       = Resolve-Path -Path "<%= @sitecore['package_nuget_path'] %>\tools\VSToolsPath\Web\Microsoft.Web.XmlTransform.dll"
 
     # Accounts
-    SitecoreUsername                         = "sitecore\admin"
-    SitecoreUserPassword                     = "b"
+    SitecoreUsername                         = $SitecoreUsername
+    SitecoreUserPassword                     = $SitecoreUserPassword
 
     UserAccount                              = @{
         Domain   = $Env:COMPUTERNAME
-        UserName = $user
-        Password = $password
+        UserName = $CommerceServerUserName
+        Password = $CommerceServerUserPassword
     }
 
     BraintreeAccount                         = @{
@@ -145,6 +162,46 @@ $params = @{
         PrivateKey = ''
     }
 }
+
+### --------- HACK IGNORE UNTRUSTED CERT IN PS -----------------------------------------------------
+# if (-not ([System.Management.Automation.PSTypeName]'ServerCertificateValidationCallback').Type) {
+#     $certCallback = @"
+#     using System;
+#     using System.Net;
+#     using System.Net.Security;
+#     using System.Security.Cryptography.X509Certificates;
+#     public class ServerCertificateValidationCallback
+#     {
+#         public static void Ignore()
+#         {
+#             if(ServicePointManager.ServerCertificateValidationCallback ==null)
+#             {
+#                 ServicePointManager.ServerCertificateValidationCallback +=
+#                     delegate
+#                     (
+#                         Object obj,
+#                         X509Certificate certificate,
+#                         X509Chain chain,
+#                         SslPolicyErrors errors
+#                     )
+#                     {
+#                         return true;
+#                     };
+#             }
+#         }
+#     }
+# "@
+#     Add-Type $certCallback
+# }
+# [ServerCertificateValidationCallback]::Ignore()
+### --------------------------------------------------------------
+
+### --------- HACK DISABLE PASSWORD COMPLEXITY -------------------
+secedit /export /cfg c:\secpol.cfg
+(gc C:\secpol.cfg).replace("PasswordComplexity = 1", "PasswordComplexity = 0") | Out-File C:\secpol.cfg
+secedit /configure /db c:\windows\security\local.sdb /cfg c:\secpol.cfg /areas SECURITYPOLICY
+rm -force c:\secpol.cfg -confirm:$false
+### --------------------------------------------------------------
 
 if ($commerceSearchProvider -eq "SOLR") {
     Install-SitecoreConfiguration @params

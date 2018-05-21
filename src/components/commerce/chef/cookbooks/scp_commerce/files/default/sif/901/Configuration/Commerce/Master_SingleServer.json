@@ -222,6 +222,8 @@
         "SitecoreBizFxServicesPort": "[parameter('SitecoreBizFxServicesPort')]",
 
         "SiteHostHeader": "[parameter('SiteHostHeader')]",
+        "SitecoreUsername": "[parameter('SitecoreUsername')]",
+        "SitecoreUserPassword": "[parameter('SitecoreUserPassword')]",
 
         "SolrCorePrefix": "[parameter('SolrCorePrefix')]",
         "SolrUrl": "[parameter('SolrUrl')]",
