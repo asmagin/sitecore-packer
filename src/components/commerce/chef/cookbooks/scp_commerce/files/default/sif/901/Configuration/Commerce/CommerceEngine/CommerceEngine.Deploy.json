@@ -373,7 +373,7 @@
         "PhysicalPath": "[parameter('CommerceShopsDir')]",
         "Hostname": "[parameter('CommerceShopsHostHeader')]",
         "Port": "[parameter('CommerceShopsServicesPort')]",
-        "CertificateThumbprint": "[variable('Security.CommerceOps.CertificateThumbprint')]"
+        "CertificateThumbprint": "[variable('Security.CommerceShops.CertificateThumbprint')]"
       }
     },
     "CreateHostHeaderCommerceShops": {
@@ -431,7 +431,7 @@
         "PhysicalPath": "[parameter('CommerceAuthoringDir')]",
         "Hostname": "[parameter('CommerceAuthoringHostHeader')]",
         "Port": "[parameter('CommerceAuthoringServicesPort')]",
-        "CertificateThumbprint": "[variable('Security.CommerceOps.CertificateThumbprint')]"
+        "CertificateThumbprint": "[variable('Security.CommerceAuthoring.CertificateThumbprint')]"
       }
     },
     "CreateHostHeaderCommerceAuthoring": {
@@ -488,7 +488,7 @@
         "PhysicalPath": "[parameter('CommerceMinionsDir')]",
         "Hostname": "[parameter('CommerceMinionsHostHeader')]",
         "Port": "[parameter('CommerceMinionsServicesPort')]",
-        "CertificateThumbprint": "[variable('Security.CommerceOps.CertificateThumbprint')]"
+        "CertificateThumbprint": "[variable('Security.CommerceMinions.CertificateThumbprint')]"
       }
     },
     "CreateHostHeaderCommerceMinions": {

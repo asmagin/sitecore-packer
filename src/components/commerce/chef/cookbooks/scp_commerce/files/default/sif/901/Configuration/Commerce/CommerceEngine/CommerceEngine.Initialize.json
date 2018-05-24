@@ -13,18 +13,20 @@
     "CommerceOpsDir": { "Type": "string" },
     "CommerceShopsDir": { "Type": "string" },
     "CommerceShopsHostHeader": { "Type": "string" },
+    "CommerceShopsServicesPort": { "Type": "string", "Description": "Commerce Shops Services port" },
     "SitecoreIdentityServerHostHeader": { "Type": "string", "DefaultValue": "SitecoreIdentityServer", "Description": "Sitecore Identity Server name" },
+    "SitecoreIdentityServerServicesPort": { "Type": "string", "DefaultValue": "5050" },
 
     "SitecoreAdminAccount": { "Type": "psobject", "Description": "Sitecore Admin account." }
   },
   "Variables": {
     "EnsureSyncDefaultContentPathsParam": "/commerceops/EnsureSyncDefaultContentPaths(environment='envNameValue',shopName='CommerceEngineDefaultStorefront')",
     "InitializeParam": "/commerceops/InitializeEnvironment(environment='envNameValue')",
-    "UrlCheckCommandStatus": "[concat('https://', concat(parameter('CommerceShopsHostHeader'), '/commerceops/CheckCommandStatus(taskId=taskIdValue)'))]",
-    "UrlCommerceShopsServicesBootstrap": "[concat('https://', concat(parameter('CommerceShopsHostHeader'), '/commerceops/Bootstrap()'))]",
-    "UrlEnsureSyncDefaultContentPaths": "[concat('https://', concat(parameter('CommerceShopsHostHeader'), variable('EnsureSyncDefaultContentPathsParam')))]",
-    "UrlInitializeEnvironment": "[concat('https://', concat(parameter('CommerceShopsHostHeader'), variable('InitializeParam')))]",
-    "UrlIdentityServerGetToken": "[concat('https://', concat(parameter('SitecoreIdentityServerHostHeader'), '/connect/token'))]"
+    "UrlCheckCommandStatus": "[concat('https://', parameter('CommerceShopsHostHeader'), ':', parameter('CommerceShopsServicesPort'), '/commerceops/CheckCommandStatus(taskId=taskIdValue)')]",
+    "UrlCommerceShopsServicesBootstrap": "[concat('https://', parameter('CommerceShopsHostHeader'), ':', parameter('CommerceShopsServicesPort'), '/commerceops/Bootstrap()')]",
+    "UrlEnsureSyncDefaultContentPaths": "[concat('https://', parameter('CommerceShopsHostHeader'), ':', parameter('CommerceShopsServicesPort'), variable('EnsureSyncDefaultContentPathsParam'))]",
+    "UrlInitializeEnvironment": "[concat('https://', parameter('CommerceShopsHostHeader'), ':', parameter('CommerceShopsServicesPort'), variable('InitializeParam'))]",
+    "UrlIdentityServerGetToken": "[concat('https://', parameter('SitecoreIdentityServerHostHeader'), ':', parameter('SitecoreIdentityServerServicesPort'), '/connect/token')]"
   },
   "Modules": ["InitializeCommerce"],
   "Tasks": {
