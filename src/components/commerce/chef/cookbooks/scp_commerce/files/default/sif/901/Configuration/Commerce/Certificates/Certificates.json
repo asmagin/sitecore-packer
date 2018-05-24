@@ -26,69 +26,82 @@
 
     "UserAccount": { "Type": "psobject" }
   },
-  "Modules": ["InstallSitecoreConfiguration", "ManageCommerceService"],
+  "Modules": ["InstallSitecoreConfiguration", "ManageCommerceService", "WindowsLocalUser"],
   "Tasks": {
     "CommerceEngineCertificate": {
       "Type": "InstallSitecoreConfiguration",
       "Params": {
         "Path": ".\\Configuration\\Commerce\\Certificates\\createcert.json",
-
         "CertificateDnsName": "[parameter('CommerceEngineCertificateDnsName')]",
-        "CertificateName": "[parameter('CommerceEngineCertificateName')]"
+        "CertificateName": "[parameter('CommerceEngineCertificateName')]",
+        "RootCertFileName": "[parameter('RootCertFileName')]",
+        "CertPath": "[parameter('CertPath')]"
       }
     },
     "GenerateCommerceAuthoringCertificate": {
       "Type": "InstallSitecoreConfiguration",
       "Params": {
         "Path": ".\\Configuration\\Commerce\\Certificates\\createcert.json",
-
         "CertificateDnsName": "[parameter('CommerceAuthoringCertificateDnsName')]",
-        "CertificateName": "[parameter('CommerceAuthoringCertificateName')]"
+        "CertificateName": "[parameter('CommerceAuthoringCertificateName')]",
+        "RootCertFileName": "[parameter('RootCertFileName')]",
+        "CertPath": "[parameter('CertPath')]"
       }
     },
     "GenerateCommerceMinionsCertificate": {
       "Type": "InstallSitecoreConfiguration",
       "Params": {
         "Path": ".\\Configuration\\Commerce\\Certificates\\createcert.json",
-
         "CertificateDnsName": "[parameter('CommerceMinionsCertificateDnsName')]",
-        "CertificateName": "[parameter('CommerceMinionsCertificateName')]"
+        "CertificateName": "[parameter('CommerceMinionsCertificateName')]",
+        "RootCertFileName": "[parameter('RootCertFileName')]",
+        "CertPath": "[parameter('CertPath')]"
       }
     },
     "GenerateCommerceOpsCertificate": {
       "Type": "InstallSitecoreConfiguration",
       "Params": {
         "Path": ".\\Configuration\\Commerce\\Certificates\\createcert.json",
-
         "CertificateDnsName": "[parameter('CommerceOpsCertificateDnsName')]",
-        "CertificateName": "[parameter('CommerceOpsCertificateName')]"
+        "CertificateName": "[parameter('CommerceOpsCertificateName')]",
+        "RootCertFileName": "[parameter('RootCertFileName')]",
+        "CertPath": "[parameter('CertPath')]"
       }
     },
     "GenerateCommerceShopsCertificate": {
       "Type": "InstallSitecoreConfiguration",
       "Params": {
         "Path": ".\\Configuration\\Commerce\\Certificates\\createcert.json",
-
         "CertificateDnsName": "[parameter('CommerceShopsCertificateDnsName')]",
-        "CertificateName": "[parameter('CommerceShopsCertificateName')]"
+        "CertificateName": "[parameter('CommerceShopsCertificateName')]",
+        "RootCertFileName": "[parameter('RootCertFileName')]",
+        "CertPath": "[parameter('CertPath')]"
       }
     },
     "GenerateSitecoreBizFxCertificate": {
       "Type": "InstallSitecoreConfiguration",
       "Params": {
         "Path": ".\\Configuration\\Commerce\\Certificates\\createcert.json",
-
         "CertificateDnsName": "[parameter('SitecoreBizFxCertificateDnsName')]",
-        "CertificateName": "[parameter('SitecoreBizFxCertificateName')]"
+        "CertificateName": "[parameter('SitecoreBizFxCertificateName')]",
+        "RootCertFileName": "[parameter('RootCertFileName')]",
+        "CertPath": "[parameter('CertPath')]"
       }
     },
     "GenerateSitecoreIdentityServerCertificate": {
       "Type": "InstallSitecoreConfiguration",
       "Params": {
         "Path": ".\\Configuration\\Commerce\\Certificates\\createcert.json",
-
         "CertificateDnsName": "[parameter('SitecoreIdentityServerCertificateDnsName')]",
-        "CertificateName": "[parameter('SitecoreIdentityServerCertificateName')]"
+        "CertificateName": "[parameter('SitecoreIdentityServerCertificateName')]",
+        "RootCertFileName": "[parameter('RootCertFileName')]",
+        "CertPath": "[parameter('CertPath')]"
+      }
+    },
+    "EnsureLocalUser": {
+      "Type": "EnsureLocalUser",
+      "Params": {
+        "UserAccount": "[parameter('UserAccount')]"
       }
     },
     "SetCertStorePermissions": {
@@ -98,8 +111,7 @@
         "Rights": [
           {
             "User": "[parameter('UserAccount'))]",
-            "FileSystemRights": ["Read"],
-            "InheritanceFlags": ["None"]
+            "FileSystemRights": ["Read"]
           }
         ]
       }

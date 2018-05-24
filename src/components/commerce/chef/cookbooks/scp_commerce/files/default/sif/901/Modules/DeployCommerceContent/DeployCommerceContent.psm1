@@ -8,25 +8,36 @@ Function Invoke-DeployCommerceContentTask {
         [Parameter(Mandatory = $true)]  [psobject[]]$UserAccount = @(),
         [Parameter(Mandatory = $false)] [psobject[]]$BraintreeAccount = @(),
 
-        [Parameter(Mandatory = $false)] [string]$AzureSearchAdminKey,		
-        [Parameter(Mandatory = $false)] [string]$AzureSearchIndexPrefix,		
-        [Parameter(Mandatory = $false)] [string]$AzureSearchQueryKey,		
-        [Parameter(Mandatory = $false)] [string]$AzureSearchServiceName,	
+        [Parameter(Mandatory = $false)] [string]$AzureSearchAdminKey,
+        [Parameter(Mandatory = $false)] [string]$AzureSearchIndexPrefix,
+        [Parameter(Mandatory = $false)] [string]$AzureSearchQueryKey,
+        [Parameter(Mandatory = $false)] [string]$AzureSearchServiceName,
 
-        [Parameter(Mandatory = $false)] [string]$CommerceAuthoringHostHeader = "localhost", 
+        [Parameter(Mandatory = $false)] [string]$CommerceAuthoringHostHeader = "localhost",
         [Parameter(Mandatory = $false)] [string]$CommerceAuthoringServicesPort = "5000",
+
+        [Parameter(Mandatory = $false)] [string]$CommerceMinionsHostHeader = "localhost",
+        [Parameter(Mandatory = $false)] [string]$CommerceMinionsServicesPort = "5010",
+
+        [Parameter(Mandatory = $false)] [string]$CommerceOpsHostHeader = "localhost",
+        [Parameter(Mandatory = $false)] [string]$CommerceOpsServicesPort = "5015",
+
+        [Parameter(Mandatory = $false)] [string]$CommerceShopsHostHeader = "localhost",
+        [Parameter(Mandatory = $false)] [string]$CommerceShopsServicesPort = "5005",
 
         [Parameter(Mandatory = $false)] [string]$CommerceSearchProvider,
 
-        [Parameter(Mandatory = $false)] [string]$SitecoreBizFxHostHeader = "localhost", 
+        [Parameter(Mandatory = $false)] [string]$SitecoreBizFxHostHeader = "localhost",
         [Parameter(Mandatory = $false)] [string]$SitecoreBizFxServicesPort = "4200",
 
-        [Parameter(Mandatory = $false)] [string]$SitecoreIdentityServerHostHeader = "localhost", 
+        [Parameter(Mandatory = $false)] [string]$SitecoreIdentityServerHostHeader = "localhost",
         [Parameter(Mandatory = $false)] [string]$SitecoreIdentityServerServicesPort = "5050",
 
         [Parameter(Mandatory = $false)] [string]$SiteHostHeader,
+        [Parameter(Mandatory = $false)] [string]$SitecoreUsername,
+        [Parameter(Mandatory = $false)] [string]$SitecoreUserPassword,
 
-        [Parameter(Mandatory = $false)] [string]$SolrCorePrefix,			
+        [Parameter(Mandatory = $false)] [string]$SolrCorePrefix,
         [Parameter(Mandatory = $false)] [string]$SolrUrl,
 
         [Parameter(Mandatory = $false)] [string]$SqlCommerceServicesDbName,
@@ -46,33 +57,34 @@ Function Invoke-DeployCommerceContentTask {
     $SitecoreBizFxBaseUri = GetHttpsUrl -Hostname $SitecoreBizFxHostHeader -Port $SitecoreBizFxServicesPort
     $SitecoreIdentityServerBaseUri = GetHttpsUrl -Hostname $SitecoreIdentityServerHostHeader -Port $SitecoreIdentityServerServicesPort
 
-    try {       
+    try {
         switch ($Name) {
-            {($_ -match "CommerceOps")} {                    
+            {($_ -match "CommerceOps")} {
                 Write-Host
-                $global:opsServicePath = $PhysicalPath	
+                $global:opsServicePath = $PhysicalPath
                 $commerceServicesZip = Get-Item $ServicesContentPath | select-object -first 1
                 #Extracting the CommerceServices zip file Commerce Shops Services
                 Write-Host "Extracting CommerceServices from $commerceServicesZip to $PhysicalPath" -ForegroundColor Yellow ;
                 Expand-Archive $commerceServicesZip -DestinationPath $PhysicalPath -Force
                 Write-Host "Commerce OpsApi Services extraction completed" -ForegroundColor Green ;
 
-                $commerceServicesLogDir = $(Join-Path -Path $PhysicalPath -ChildPath "wwwroot\logs")                
-                if (-not (Test-Path -Path $commerceServicesLogDir)) {                      
+                $commerceServicesLogDir = $(Join-Path -Path $PhysicalPath -ChildPath "wwwroot\logs")
+                if (-not (Test-Path -Path $commerceServicesLogDir)) {
                     Write-Host "Creating Commerce Services logs directory at: $commerceServicesLogDir"
                     New-Item -Path $PhysicalPath -Name "wwwroot\logs" -ItemType "directory"
                 }
 
                 Write-Host "Granting full access to '$($UserAccount.Domain)\$($UserAccount.UserName)' to logs directory: $commerceServicesLogDir"
-                GrantFullReadWriteAccessToFile -Path $commerceServicesLogDir  -UserName "$($UserAccount.Domain)\$($UserAccount.UserName)"							
+                GrantFullReadWriteAccessToFile -Path $commerceServicesLogDir  -UserName "$($UserAccount.Domain)\$($UserAccount.UserName)"
 
-                # Set the proper environment name                
+                # Set the proper environment name
                 $pathToJson = $(Join-Path -Path $PhysicalPath -ChildPath "wwwroot\config.json")
                 $originalJson = Get-Content $pathToJson -Raw  | ConvertFrom-Json
                 $originalJson.AppSettings.EnvironmentName = "AdventureWorksOpsApi"
 
-                $allowedOrigins = @($CommerceAuthoringBaseUri, $SiteBaseUri)
+                $allowedOrigins = @($SitecoreBizFxBaseUri, $SiteBaseUri)
                 $originalJson.AppSettings.AllowedOrigins = $allowedOrigins
+                $originalJson.AppSettings.SslPort = $CommerceOpsServicesPort
                 $originalJson.AppSettings.SitecoreIdentityServerUrl = $SitecoreIdentityServerBaseUri
                 $originalJson | ConvertTo-Json -Depth 100 -Compress | set-content $pathToJson
 
@@ -80,7 +92,7 @@ Function Invoke-DeployCommerceContentTask {
                 $pathToGlobalJson = $(Join-Path -Path $PhysicalPath -ChildPath "wwwroot\bootstrap\Global.json")
                 $originalJson = Get-Content $pathToGlobalJson -Raw  | ConvertFrom-Json
                 foreach ($p in $originalJson.Policies.'$values') {
-                    if ($p.'$type' -eq 'Sitecore.Commerce.Plugin.SQL.EntityStoreSqlPolicy, Sitecore.Commerce.Plugin.SQL') {						
+                    if ($p.'$type' -eq 'Sitecore.Commerce.Plugin.SQL.EntityStoreSqlPolicy, Sitecore.Commerce.Plugin.SQL') {
                         $oldServer = $p.Server
                         $oldDatabase = $p.Database
                         $p.Server = $SqlCommerceServicesDbServer
@@ -89,7 +101,7 @@ Function Invoke-DeployCommerceContentTask {
                     }
                 }
                 $originalJson | ConvertTo-Json -Depth 100 -Compress | set-content $pathToGlobalJson
-				
+
                 $pathToEnvironmentFiles = $(Join-Path -Path $PhysicalPath -ChildPath "wwwroot\data\Environments")
 
                 # if setting up Azure search provider we need to rename the azure and solr files
@@ -122,10 +134,15 @@ Function Invoke-DeployCommerceContentTask {
                             Write-Host "Replacing EntityStoreSqlPolicy $oldServer to $p.Server and $oldDatabase to $p.Database"
                         }
                         elseif ($p.'$type' -eq 'Sitecore.Commerce.Plugin.Management.SitecoreConnectionPolicy, Sitecore.Commerce.Plugin.Management') {
-                            $oldHost = $p.Host;
                             $Writejson = $true
+                            Write-Host "Replacing SiteHostHeader $($p.Host) to $SiteHostHeader"
                             $p.Host = $SiteHostHeader
-                            Write-Host "Replacing SiteHostHeader $oldHost to " $p.Host
+
+                            Write-Host "Replacing Credentials $($p.Domain)\\$($p.UserName):$($p.Password) with $($SitecoreUsername):$($SitecoreUserPassword)"
+                            $account = $SitecoreUsername -split "\\"
+                            $p.UserName = $account[1]
+                            $p.Domain = $account[0]
+                            $p.Password = $SitecoreUserPassword
                         }
                         elseif ($p.'$type' -eq 'Sitecore.Commerce.Plugin.Search.Solr.SolrSearchPolicy, Sitecore.Commerce.Plugin.Search.Solr') {
                             $p.SolrUrl = $SolrUrl;
@@ -152,24 +169,41 @@ Function Invoke-DeployCommerceContentTask {
                                 $Writejson = $true
                             }
                         }
+                        elseif ($p.'$type' -eq 'Sitecore.Commerce.Plugin.BusinessUsers.EnvironmentBusinessToolsPolicy,Sitecore.Commerce.Plugin.BusinessUsers') {
+                            if($p.ServiceUrl) # Check in Service url exists
+                            {
+                                $p.ServiceUrl = $CommerceAuthoringBaseUri
+                                $Writejson = $true
+                            }
+                        }
                     }
                     if ($Writejson) {
-                        $json = ConvertTo-Json $json -Depth 100
+                        $json = ConvertTo-Json $json -Depth 100 -Compress
                         Set-Content $jsonFile.FullName -Value $json -Encoding UTF8
                         $Writejson = $false
                     }
                 }
-								
+
                 if ([string]::IsNullOrEmpty($SearchIndexPrefix) -eq $false) {
                     #modify the search policy set
                     $jsonFile = Get-ChildItem "$pathToEnvironmentFiles\PlugIn.Search.PolicySet*.json"
                     $json = Get-Content $jsonFile.FullName -Raw | ConvertFrom-Json
                     $indexes = @()
+                    
                     # Generically update the different search scope policies so it will be updated for any index that exists or is created in the future
                     Foreach ($p in $json.Policies.'$values') {
                         if ($p.'$type' -eq 'Sitecore.Commerce.Plugin.Search.SearchViewPolicy, Sitecore.Commerce.Plugin.Search') {
                             $oldSearchScopeName = $p.SearchScopeName
-                            $searchScopeName = "$SearchIndexPrefix$oldSearchScopeName"
+                            if ($p.SearchScopeName -eq "OrdersScope") {
+                                $searchScopeName = "$($SearchIndexPrefix)_orders_scope"
+                            }
+                            elseif ($p.SearchScopeName -eq "CustomersScope") {
+                                $searchScopeName = "$($SearchIndexPrefix)_customers_scope"
+                            }
+                            elseif ($p.SearchScopeName -eq "CatalogItemsScope") {
+                                $searchScopeName = "$($SearchIndexPrefix)_catalog_items_scope"
+                            }
+                            
                             $p.SearchScopeName = $searchScopeName;
                             $Writejson = $true;
 
@@ -181,7 +215,15 @@ Function Invoke-DeployCommerceContentTask {
 
                         if ($p.'$type' -eq 'Sitecore.Commerce.Plugin.Search.SearchScopePolicy, Sitecore.Commerce.Plugin.Search') {
                             $oldName = $p.Name
-                            $name = "$SearchIndexPrefix$oldName"
+                            if ($p.Name -eq "OrdersScope") {
+                                $name = "$($SearchIndexPrefix)_orders_scope"
+                            }
+                            elseif ($p.Name -eq "CustomersScope") {
+                                $name = "$($SearchIndexPrefix)_customers_scope"
+                            }
+                            elseif ($p.Name -eq "CatalogItemsScope") {
+                                $name = "$($SearchIndexPrefix)_catalog_items_scope"
+                            }
                             $p.Name = $name;
                             $Writejson = $true;
 
@@ -190,16 +232,25 @@ Function Invoke-DeployCommerceContentTask {
 
                         if ($p.'$type' -eq 'Sitecore.Commerce.Plugin.Search.IndexablePolicy, Sitecore.Commerce.Plugin.Search') {
                             $oldSearchScopeName = $p.SearchScopeName
-                            $searchScopeName = "$SearchIndexPrefix$oldSearchScopeName"
+
+                            if ($p.SearchScopeName -eq "OrdersScope") {
+                                $searchScopeName = "$($SearchIndexPrefix)_orders_scope"
+                            }
+                            elseif ($p.SearchScopeName -eq "CustomersScope") {
+                                $searchScopeName = "$($SearchIndexPrefix)_customers_scope"
+                            }
+                            elseif ($p.SearchScopeName -eq "CatalogItemsScope") {
+                                $searchScopeName = "$($SearchIndexPrefix)_catalog_items_scope"
+                            }
                             $p.SearchScopeName = $searchScopeName;
                             $Writejson = $true;
 
                             Write-Host "Replacing IndexablePolicy SearchScopeName $oldSearchScopeName to $searchScopeName"
                         }
                     }
-					
+
                     if ($Writejson) {
-                        $json = ConvertTo-Json $json -Depth 100
+                        $json = ConvertTo-Json $json -Depth 100 -Compress
                         Set-Content $jsonFile.FullName -Value $json -Encoding UTF8
                         $Writejson = $false
                     }
@@ -212,20 +263,30 @@ Function Invoke-DeployCommerceContentTask {
                 Write-Host "Commerce Shops Services extraction completed" -ForegroundColor Green ;
 
                 $commerceServicesLogDir = $(Join-Path -Path $PhysicalPath -ChildPath "wwwroot\logs")
-                if (-not (Test-Path -Path $commerceServicesLogDir)) {                      
+                if (-not (Test-Path -Path $commerceServicesLogDir)) {
                     Write-Host "Creating Commerce Services logs directory at: $commerceServicesLogDir"
                     New-Item -Path $PhysicalPath -Name "wwwroot\logs" -ItemType "directory"
                 }
-				
+
                 Write-Host "Granting full access to '$($UserAccount.Domain)\$($UserAccount.UserName)' to logs directory: $commerceServicesLogDir"
                 GrantFullReadWriteAccessToFile -Path $commerceServicesLogDir  -UserName "$($UserAccount.Domain)\$($UserAccount.UserName)"
 
                 # Set the proper environment name
                 $pathToJson = $(Join-Path -Path $PhysicalPath -ChildPath "wwwroot\config.json")
                 $originalJson = Get-Content $pathToJson -Raw | ConvertFrom-Json
-                
-                $allowedOrigins = @($SitecoreBizFxBaseUri)
+
+                $allowedOrigins = @($SitecoreBizFxBaseUri, $SiteBaseUri)
                 $originalJson.AppSettings.AllowedOrigins = $allowedOrigins
+                if ($_ -match "CommerceShops") {
+                    $originalJson.AppSettings.SslPort = $CommerceShopsServicesPort
+                }
+                elseif ($_ -match "CommerceAuthoring") {
+                    $originalJson.AppSettings.SslPort = $CommerceAuthoringServicesPort
+                }
+                elseif ($_ -match "CommerceMinions") {
+                    $originalJson.AppSettings.SslPort = $CommerceMinionsServicesPort
+                }
+
                 $originalJson.AppSettings.SitecoreIdentityServerUrl = $SitecoreIdentityServerBaseUri
 
                 $environment = "HabitatShops"
@@ -234,10 +295,44 @@ Function Invoke-DeployCommerceContentTask {
                 }
                 elseif ($Name -match "CommerceMinions") {
                     $environment = "HabitatMinions"
-                }		
+                }
                 $originalJson.AppSettings.EnvironmentName = $environment
                 $originalJson | ConvertTo-Json -Depth 100 -Compress | set-content $pathToJson
-            }               
+
+                $pathToEnvironmentFiles = $(Join-Path -Path $PhysicalPath -ChildPath "wwwroot\data\Environments")
+
+                #Replace values in environment files
+                $Writejson = $false
+                $environmentFiles = Get-ChildItem $pathToEnvironmentFiles -Filter *.json
+                foreach ($jsonFile in $environmentFiles) {
+                    $json = Get-Content $jsonFile.FullName -Raw | ConvertFrom-Json
+                    foreach ($p in $json.Policies.'$values') {
+                        if ($p.'$type' -eq 'Sitecore.Commerce.Plugin.BusinessUsers.EnvironmentBusinessToolsPolicy,Sitecore.Commerce.Plugin.BusinessUsers') {
+                            if($p.ServiceUrl) # Check in Service url exists
+                            {
+                                $p.ServiceUrl = $CommerceAuthoringBaseUri
+                                $Writejson = $false
+                            }
+                        }
+                        elseif ($p.'$type' -eq 'Sitecore.Commerce.Plugin.Management.SitecoreConnectionPolicy, Sitecore.Commerce.Plugin.Management') {
+                            $Writejson = $true
+                            Write-Host "Replacing SiteHostHeader $($p.Host) to $SiteHostHeader"
+                            $p.Host = $SiteHostHeader
+
+                            Write-Host "Replacing Credentials $($p.Domain)\\$($p.UserName):$($p.Password) with $($SitecoreUsername):$($SitecoreUserPassword)"
+                            $account = $SitecoreUsername -split "\\"
+                            $p.UserName = $account[1]
+                            $p.Domain = $account[0]
+                            $p.Password = $SitecoreUserPassword
+                        }
+                    }
+                    if ($Writejson) {
+                        $json = ConvertTo-Json $json -Depth 100 -Compress
+                        Set-Content $jsonFile.FullName -Value $json -Encoding UTF8
+                        $Writejson = $false
+                    }
+                }
+            }
             'SitecoreIdentityServer' {
                 Write-Host
                 # Extracting Sitecore.IdentityServer zip file
@@ -247,14 +342,14 @@ Function Invoke-DeployCommerceContentTask {
                 Write-Host "Sitecore.IdentityServer extraction completed" -ForegroundColor Green ;
 
                 $commerceServicesLogDir = $(Join-Path -Path $PhysicalPath -ChildPath "wwwroot\logs")
-                if (-not (Test-Path -Path $commerceServicesLogDir)) {                      
+                if (-not (Test-Path -Path $commerceServicesLogDir)) {
                     Write-Host "Creating Commerce Services logs directory at: $commerceServicesLogDir"
                     New-Item -Path $PhysicalPath -Name "wwwroot\logs" -ItemType "directory"
                 }
-				
+
                 Write-Host "Granting full access to '$($UserAccount.Domain)\$($UserAccount.UserName)' to logs directory: $commerceServicesLogDir"
                 GrantFullReadWriteAccessToFile -Path $commerceServicesLogDir  -UserName "$($UserAccount.Domain)\$($UserAccount.UserName)"
-				
+
                 $appSettingsPath = $(Join-Path -Path $PhysicalPath -ChildPath "wwwroot\appsettings.json")
                 $originalJson = Get-Content $appSettingsPath -Raw | ConvertFrom-Json
                 $connectionString = $originalJson.AppSettings.SitecoreMembershipOptions.ConnectionString
@@ -266,14 +361,14 @@ Function Invoke-DeployCommerceContentTask {
                 $originalJson.AppSettings.Clients[0].PostLogoutRedirectUris = @($SitecoreBizFxBaseUri, "$SitecoreBizFxBaseUri/?")
                 $originalJson.AppSettings.Clients[0].AllowedCorsOrigins = @($SitecoreBizFxBaseUri, "$SitecoreBizFxBaseUri/?")
 
-                $originalJson | ConvertTo-Json -Depth 100 -Compress | set-content $appSettingsPath						
+                $originalJson | ConvertTo-Json -Depth 100 -Compress | set-content $appSettingsPath
             }
             'SitecoreBizFx' {
                 Write-Host
                 # Copying the BizFx content
                 Write-Host "Copying the BizFx content $ServicesContentPath to $PhysicalPath" -ForegroundColor Yellow ;
                 Copy-Item -Path $ServicesContentPath -Destination $PhysicalPath -Force -Recurse
-                Write-Host "BizFx copy completed" -ForegroundColor Green ;	
+                Write-Host "BizFx copy completed" -ForegroundColor Green ;
 
                 $pathToJson = $(Join-Path -Path $PhysicalPath -ChildPath "assets\config.json")
                 $originalJson = Get-Content $pathToJson -Raw  | ConvertFrom-Json
@@ -292,11 +387,11 @@ Function Invoke-DeployCommerceContentTask {
 }
 
 
-Function Invoke-CreatePerformanceCountersTask {   
+Function Invoke-CreatePerformanceCountersTask {
 
     try {
         $countersVersion = "1.0.2"
-        $ccdTypeName = "System.Diagnostics.CounterCreationData"       
+        $ccdTypeName = "System.Diagnostics.CounterCreationData"
         $perfCounterCategoryName = "SitecoreCommerceEngine-$countersVersion"
         $perfCounterInformation = "Performance Counters for Sitecore Commerce Engine"
         $commandCountersName = "SitecoreCommerceCommands-$countersVersion"
@@ -312,7 +407,7 @@ Function Invoke-CreatePerformanceCountersTask {
             $categoryExists = [System.Diagnostics.PerformanceCounterCategory]::Exists($counter)
             If ($categoryExists) {
                 Write-Host "Deleting performance counters $counter" -ForegroundColor Green
-                [System.Diagnostics.PerformanceCounterCategory]::Delete($counter); 
+                [System.Diagnostics.PerformanceCounterCategory]::Delete($counter);
             }
             Else {
                 Write-Warning "$counter does not exist, no need to delete"
@@ -349,7 +444,7 @@ Function Invoke-CreatePerformanceCountersTask {
         $CounterCollection = New-Object System.Diagnostics.CounterCreationDataCollection
         $CounterCollection.Add( (New-Object $ccdTypeName "ListItemProcess", "Average of time (ms) for List Item to Process", AverageCount64) )
         $CounterCollection.Add( (New-Object $ccdTypeName "ListItemProcessBase", "Average of time (ms) for a List Item to Process Base", AverageBase) )
-        [System.Diagnostics.PerformanceCounterCategory]::Create($counterCollectionName, $perfCounterInformation, [Diagnostics.PerformanceCounterCategoryType]::MultiInstance, $CounterCollection) | out-null          
+        [System.Diagnostics.PerformanceCounterCategory]::Create($counterCollectionName, $perfCounterInformation, [Diagnostics.PerformanceCounterCategoryType]::MultiInstance, $CounterCollection) | out-null
     }
     catch {
         Write-Error $_
@@ -371,7 +466,7 @@ function RenameMessage([string] $oldFile, [string] $newFile) {
 function GetHttpsUrl([string] $Hostname, [string] $Port = "443") {
     $url = "https://$Hostname"
     if ($Port -ne "80" -and $Port -ne "443") {
-        $url += ":$Port"; 
+        $url += ":$Port";
     }
 
     return $url
@@ -385,17 +480,17 @@ function GrantFullReadWriteAccessToFile {
         [String]$UserName = $(throw 'Parameter -UserName is missing!')
     )
     Trap {
-        Write-Host "Error: $($_.Exception.GetType().FullName)" -ForegroundColor Red ; 
-        Write-Host $_.Exception.Message; 
+        Write-Host "Error: $($_.Exception.GetType().FullName)" -ForegroundColor Red ;
+        Write-Host $_.Exception.Message;
         Write-Host $_.Exception.StackTrack;
         break;
     }
-  
+
     $colRights = [System.Security.AccessControl.FileSystemRights]::ReadAndExecute -bor [System.Security.AccessControl.FileSystemRights]::Modify;
     #$InheritanceFlag = [System.Security.AccessControl.InheritanceFlags]::ContainerInherit -bor [System.Security.AccessControl.InheritanceFlags]::ObjectInherit;
     #$PropagationFlag = [System.Security.AccessControl.PropagationFlags]::None;
     $objType = [System.Security.AccessControl.AccessControlType]::Allow;
-  
+
     $Acl = (Get-Item $Path).GetAccessControl("Access");
     $Ar = New-Object system.security.accesscontrol.filesystemaccessrule($UserName, $colRights, $objType);
 
@@ -407,10 +502,10 @@ function GrantFullReadWriteAccessToFile {
             break;
         }
         catch {
-            Write-Host "Attempt to set permissions failed. Error: $($_.Exception.GetType().FullName)" -ForegroundColor Yellow ; 
-            Write-Host $_.Exception.Message; 
+            Write-Host "Attempt to set permissions failed. Error: $($_.Exception.GetType().FullName)" -ForegroundColor Yellow ;
+            Write-Host $_.Exception.Message;
             Write-Host $_.Exception.StackTrack;
-    
+
             Write-Host "Retrying command in 10 seconds" -ForegroundColor Yellow ;
 
             Start-Sleep -Seconds 10

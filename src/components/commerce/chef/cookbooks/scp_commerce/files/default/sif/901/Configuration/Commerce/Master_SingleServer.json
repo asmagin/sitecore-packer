@@ -114,7 +114,7 @@
     // Variables are values calculated in a configuration.
     // They can reference Parameters, other Variables, and config functions.
     "CEMergeInputFile": "[concat(parameter('SiteInstallDir'), '\\MergeFiles\\Sitecore.Commerce.Engine.Connectors.Merge.Config')]",
-    "ConnectionString": "[concat('Data Source=.;Initial Catalog=', concat(parameter('SqlSitecoreCoreDbName'), ';Integrated Security=True'))]",
+    "ConnectionString": "[concat('Data Source=.;Initial Catalog=', parameter('SqlSitecoreCoreDbName'), ';Integrated Security=True')]",
     "ContentSearchConfig": "[concat(parameter('SiteInstallDir'), '\\App_Config\\Sitecore\\ContentSearch\\Sitecore.ContentSearch.config')]",
     "ContentSearchEnabledXPath": "//configuration/sitecore/settings/setting[@name='ContentSearch.Enabled']",
     "EngineConnectIncludeDir": "[concat(parameter('SiteInstallDir'), '\\App_Config\\Include\\Y.Commerce.Engine')]",
@@ -122,9 +122,9 @@
     "ProjectConfigIncludeDir": "[concat(parameter('SiteInstallDir'), '\\App_Config\\Include\\Project\\Commerce')]",
     "SitecoreAdminPackagesDir": "[concat(parameter('SiteInstallDir'), '\\sitecore\\admin\\Packages')]",
     "SitecoreAppDataPackagesDir": "[concat(parameter('SiteInstallDir'), '\\App_Data\\packages')]",
-    "SiteRootUrl": "[concat('http://', concat(parameter('SiteHostHeader')))]",
+    "SiteRootUrl": "[concat('http://', parameter('SiteHostHeader'))]",
     "SiteUtilitiesDir": "[concat(parameter('SiteInstallDir'), '\\SiteUtilityPages')]",
-    "UtilitiesBaseUrl": "[concat('http://', concat(parameter('SiteHostHeader'), '/SiteUtilityPages'))]",
+    "UtilitiesBaseUrl": "[concat('http://', parameter('SiteHostHeader'), '/SiteUtilityPages')]",
     "WebConfig": "[concat(parameter('SiteInstallDir'), '\\Web.Config')]"
   },
   "Modules": ["InstallSitecoreConfiguration", "ManageCommerceService", "SitecoreUtilityTasks"],
@@ -222,6 +222,8 @@
         "SitecoreBizFxServicesPort": "[parameter('SitecoreBizFxServicesPort')]",
 
         "SiteHostHeader": "[parameter('SiteHostHeader')]",
+        "SitecoreUsername": "[parameter('SitecoreUsername')]",
+        "SitecoreUserPassword": "[parameter('SitecoreUserPassword')]",
 
         "SolrCorePrefix": "[parameter('SolrCorePrefix')]",
         "SolrUrl": "[parameter('SolrUrl')]",
@@ -414,7 +416,9 @@
         "CommerceOpsDir": "[parameter('CommerceOpsDir')]",
         "CommerceShopsDir": "[parameter('CommerceShopsDir')]",
         "CommerceShopsHostHeader": "[parameter('CommerceShopsHostHeader')]",
+        "CommerceShopsServicesPort": "[parameter('CommerceShopsServicesPort')]",
         "SitecoreIdentityServerHostHeader": "[parameter('SitecoreIdentityServerHostHeader')]",
+        "SitecoreIdentityServerServicesPort": "[parameter('SitecoreIdentityServerServicesPort')]",
 
         "SitecoreAdminAccount": {
           "UserName": "[parameter('SitecoreUsername')]",

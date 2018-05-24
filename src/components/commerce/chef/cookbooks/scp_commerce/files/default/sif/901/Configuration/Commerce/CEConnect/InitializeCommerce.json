@@ -15,7 +15,7 @@
     "CommerceAuthoringHostHeader": { "Type": "string", "Description": "Commerce Authoring Services Host Header" },
     "CommerceAuthoringServicesPort": { "Type": "string", "Description": "Commerce Authoring Services port" },
 
-    "EngineConnectIncludeDir": { "Type": "string", "Description": "The path to the Engine Connect App_Confign directory" },
+    "EngineConnectIncludeDir": { "Type": "string", "Description": "The path to the Engine Connect App_Config directory" },
     "CertificatePath": { "Type": "string", "Description": "The full path to the Commerce Engine certificate file." }
   },
   "Variables": {},

@@ -35,7 +35,8 @@
     "Security.Root.CertificateStore": "cert:\\LocalMachine\\Root",
     "Security.CertificateStore": "cert:\\LocalMachine\\My",
     "Security.CertificateName": "identity.server",
-    "Security.SitecoreIdentityServer.CertificateThumbprint": "[GetCertificateThumbprint(parameter('SitecoreIdentityServerCertificateDnsName'), variable('Security.CertificateStore'))]"
+    "Security.SitecoreIdentityServer.CertificateThumbprint": "[GetCertificateThumbprint(parameter('SitecoreIdentityServerCertificateDnsName'), variable('Security.CertificateStore'))]",
+    "Security.SitecoreIdentityServer.CertificatePath": "[joinpath(variable('Security.CertificateStore'), variable('Security.SitecoreIdentityServer.CertificateThumbprint'))]"
   },
   "Modules": ["ManageCommerceService", "DeployCommerceContent", "WindowsLocalUser"],
   "Tasks": {
@@ -120,6 +121,34 @@
         "CertificateStore": "[variable('Security.CertificateStore')]",
         "CertificateFriendlyName": "[variable('Security.CertificateName')]",
         "IDServerPath": "[parameter('SitecoreIdentityServerDir')]"
+      }
+    },
+    "SetCertStorePermissionsCodeSign": {
+      // Set permissions for the services to access the client certificate.
+      "Type": "SetPermissions",
+      "Params": {
+        "Path": "[ResolveCertificatePath(joinpath(variable('Security.CertificateStore'), GetCertificateThumbprint(variable('Security.CertificateName'), variable('Security.CertificateStore'))))]",
+        "Rights": [
+          {
+            "User": "[parameter('UserAccount'))]",
+            "FileSystemRights": [ "Read" ],
+            "InheritanceFlags": [ "None" ]
+          }
+        ]
+      }
+    },
+    "SetCertStorePermissions": {
+      // Set permissions for the services to access the client certificate.
+      "Type": "SetPermissions",
+      "Params": {
+        "Path": "[ResolveCertificatePath(variable('Security.SitecoreIdentityServer.CertificatePath'))]",
+        "Rights": [
+          {
+            "User": "[parameter('UserAccount'))]",
+            "FileSystemRights": [ "Read" ],
+            "InheritanceFlags": [ "None" ]
+          }
+        ]
       }
     },
     "CreateWebsite": {
