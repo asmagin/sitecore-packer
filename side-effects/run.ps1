@@ -1,0 +1,1 @@
+c:/opscode/chef/bin/chef-solo.bat --no-color -c /tmp/packer-chef-solo/solo.rb -j /tmp/packer-chef-solo/node.json

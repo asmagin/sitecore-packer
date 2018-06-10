@@ -1,0 +1,12 @@
+{
+  "run_list": [
+    "recipe[scp_packer_dotnet::install]",
+    "recipe[scp_packer_iis::install]",
+    "recipe[scp_packer_sql16d::install]",
+    "recipe[scp_packer_solr::prepare]",
+    "recipe[scp_packer_solr::install]",
+    "recipe[scp_packer_sc901::prepare]",
+    "recipe[scp_packer_sc901::install]",
+    "recipe[scp_packer_xc901::install]"
+  ]
+}
