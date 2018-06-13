@@ -3,6 +3,7 @@ default['scp_sitecore']['install'] = {
     'prefix' => 'sc9',
     'root' => 'c:/tmp/sitecore',
     'site_path' => 'c:/inetpub/wwwroot/sc9.local',
+    'cert_path' => 'c:/certificates',
     'solr_root' => 'C:/tools/solr-6.6.2',
     'solr_service' => 'SOLR',
     'solr_url' => 'https://localhost:8983/solr',

@@ -370,23 +370,7 @@
         "SiteName": "[parameter('SiteName')]",
         "Add": [
           {
-            "HostHeader": "*.local",
-            "Protocol": "https",
-            "SSLFlags": 1,
-            "Thumbprint": "[variable('Security.SSL.CertificateThumbprint')]"
-          }
-        ]
-      },
-      "Skip": "[not(parameter('SSLCert'))]"
-    },
-    "CreateBindingsWithThumprintAzure": {
-      // Configures the site bindings for the website.
-      "Type": "WebBinding",
-      "Params": {
-        "SiteName": "[parameter('SiteName')]",
-        "Add": [
-          {
-            "HostHeader": "*.azurewebsites.net",
+            "HostHeader": "[parameter('SiteName')]",
             "Protocol": "https",
             "SSLFlags": 1,
             "Thumbprint": "[variable('Security.SSL.CertificateThumbprint')]"
