@@ -43,16 +43,16 @@ IEnumerable<PackerTemplate> PackerTemplates_Create(string type, bool amazon = fa
     new [] { PackerPostProcessor_Create("vagrant-virtualbox") },
     parents != null ? parents.First(item => item.IsMatching("virtualbox-core")) : null
   );
-  var virtualBoxSysprep = PackerTemplate_Create(
-    type,
-    "virtualbox-sysprep",
-    new [] { PackerBuilder_Create("virtualbox-ovf") },
-    new [] { PackerProvisioner_Create("sysprep") },
-    new [] { PackerPostProcessor_Create("vagrant-virtualbox") },
-    virtualBoxCore
-  );
+  // var virtualBoxSysprep = PackerTemplate_Create(
+  //   type,
+  //   "virtualbox-sysprep",
+  //   new [] { PackerBuilder_Create("virtualbox-ovf") },
+  //   new [] { PackerProvisioner_Create("sysprep") },
+  //   new [] { PackerPostProcessor_Create("vagrant-virtualbox") },
+  //   virtualBoxCore
+  // );
   items.Add(virtualBoxCore);
-  items.Add(virtualBoxSysprep);
+  // items.Add(virtualBoxSysprep);
 
   return items;
 }

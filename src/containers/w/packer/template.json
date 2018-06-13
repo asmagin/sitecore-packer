@@ -2,7 +2,7 @@
   "variables": {
     "name": "",
     "description": "",
-    "version": "0.7.0",
+    "version": "1.0.0",
     "author": "asmagin",
     "output_directory": "output"
   },

@@ -6,7 +6,7 @@
   "builders": [
     {
       "type": "virtualbox-ovf",
-      "vm_name": "{{user `author`}}-{{user `name`}}-{{user `version`}}-{{timestamp}}",
+      "vm_name": "{{user `author`}}-{{user `name`}}-{{user `version`}}-{{isotime \"200601020304\"}}",
       "source_path": "{{user `virtualbox_source_path`}}",
       "vboxmanage": [
         [
