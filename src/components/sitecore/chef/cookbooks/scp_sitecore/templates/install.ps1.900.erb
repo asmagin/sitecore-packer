@@ -1,34 +1,18 @@
 #define parameters
 $prefix = "<%= @sitecore['prefix'] %>"
 $PSScriptRoot = "<%= @sitecore['root'] %>"
-$XConnectCollectionService = "$prefix.xconnect"
-$sitecoreSiteName = "$prefix.local"
+$XConnectCollectionService = "$($prefix).xconnect"
+$sitecoreSiteName = "$($prefix).local"
 $SolrUrl = "<%= @sitecore['solr_url'] %>"
 $SolrRoot = "<%= @sitecore['solr_root'] %>"
-$SolrService = "SOLR"
+$SolrService = "<%= @sitecore['solr_service'] %>"
 $SqlServer = "<%= @sitecore['sql_server'] %>"
 $SqlAdminUser = "<%= @sitecore['sql_admin_user'] %>"
 $SqlAdminPassword = "<%= @sitecore['sql_admin_password'] %>"
 
-#install client certificate for xconnect
-$xConnectCertParams =
-@{
-    Path = "$PSScriptRoot\xconnect-createcert.json"
-    CertificateDnsName = "$prefix.xconnect"
-    CertificateName = "$prefix.xconnect_client"
-}
-Install-SitecoreConfiguration @xConnectCertParams -Verbose
+# client certificate for sitecore are installed outside of SIF
 
-#install client certificate for sitecore
-$sitecoreCertParams =
-@{
-    Path = "$PSScriptRoot\xconnect-createcert.json"
-    CertificateDnsName = "$prefix.local"
-    CertificateName = "$prefix.local_client"
-}
-Install-SitecoreConfiguration @sitecoreCertParams -Verbose
-
-#install solr cores for xdb
+# install solr cores for xdb
 $solrParams =
 @{
     Path = "$PSScriptRoot\xconnect-solr.json"
@@ -46,7 +30,7 @@ $xconnectParams =
     Package = "$PSScriptRoot\Sitecore 9.0.0 rev. 171002 (OnPrem)_xp0xconnect.scwdp.zip"
     LicenseFile = "$PSScriptRoot\license.xml"
     Sitename = $XConnectCollectionService
-    XConnectCert = $xConnectCertParams.CertificateDnsName
+    XConnectCert = $XConnectCollectionService
     SqlDbPrefix = $prefix
     SqlServer = $SqlServer
     SqlAdminUser = $SqlAdminUser
@@ -79,8 +63,8 @@ $sitecoreParams =
     SqlAdminPassword = $SqlAdminPassword
     SolrCorePrefix = $prefix
     SolrUrl = $SolrUrl
-    XConnectCert = $xConnectCertParams.CertificateDnsName
-    SSLCert = $sitecoreCertParams.CertificateDnsName
+    XConnectCert = $XConnectCollectionService
+    SSLCert = $sitecoreSiteName
     Sitename = $sitecoreSiteName
     XConnectCollectionService = "https://$XConnectCollectionService"
 }
