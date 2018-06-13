@@ -57,4 +57,12 @@ action :install do
     cookbook 'scp_solr'
     action :create
   end
+
+  # Enable HTTPS for SOLR ports
+  scp_windows_powershell_script_elevated 'Enable Firewall' do
+    code <<-EOH
+      netsh advfirewall firewall add rule name="SOLR (HTTPS)" dir=in localport=8983 protocol=TCP action=allow
+    EOH
+    action :run
+  end
 end
