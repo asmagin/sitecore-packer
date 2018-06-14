@@ -1,6 +1,6 @@
 default['scp_commerce']['install'] = {
   'sitecore' => {
-    'user' => 'vagrant',
+    'cert_path' => 'c:/certificates',
     'password' => 'vagrant',
     'port_biz' => '4200',
     'port_ops' => '5015',
@@ -14,5 +14,6 @@ default['scp_commerce']['install'] = {
     'sql_admin_user' => 'sa',
     'sql_server' => 'localhost',
     'tmp' => 'c:/tmp',
+    'user' => 'vagrant',
   },
 }

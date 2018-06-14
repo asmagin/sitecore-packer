@@ -102,6 +102,24 @@ action :install do
     action :run
   end
 
+  # Copy certificates
+  remote_directory sitecore['cert_path'] do
+    source 'certificates'
+    action :create
+  end
+  
+  ## Install certificates for SSL
+  scp_windows_powershell_script_elevated 'Install certificates for SSL' do
+    code <<-EOH
+      $ProgressPreference='SilentlyContinue';
+
+      $pass = (ConvertTo-SecureString -String "#{sitecore['password']}" -Force -AsPlainText)
+
+      Import-PfxCertificate -CertStoreLocation cert:/LocalMachine/My   -Password $pass -FilePath #{sitecore['cert_path']}/sc9.commerce.pfx
+    EOH
+    action :run
+  end
+
   # Install Commerce
   ## Stop xConnect
   iis_pool "#{sitecore['prefix']}.xconnect" do

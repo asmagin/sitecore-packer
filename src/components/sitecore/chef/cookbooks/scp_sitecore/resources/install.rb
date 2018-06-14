@@ -52,27 +52,25 @@ action :install do
     action :create
   end
 
-  # Add sitecore root to trusted roots
-  scp_windows_powershell_script_elevated 'Add certificates to cert:\LocalMachine\Root' do
-    code <<-EOH
-      $ProgressPreference='SilentlyContinue';
-
-      Import-Certificate -CertStoreLocation cert:/LocalMachine/Root -FilePath #{sitecore['cert_path']}/SitecoreRootCert.cer
-      Import-Certificate -CertStoreLocation cert:/LocalMachine/Root -FilePath #{sitecore['cert_path']}/SitecoreFundamentalsCert.cer
-    EOH
-    action :run
-  end
-
   ## Install certificates for SSL
-  scp_windows_powershell_script_elevated 'Add certificates to cert:\LocalMachine\Root' do
+  scp_windows_powershell_script_elevated 'Install certificates for SSL' do
     code <<-EOH
       $ProgressPreference='SilentlyContinue';
-      $pwd = ConvertTo-SecureString -String 'vagrant' -AsPlainText -Force
 
-      Import-PfxCertificate -CertStoreLocation cert:/LocalMachine/My -FilePath #{sitecore['cert_path']}/all.local.pfx -Password $pwd
-      Import-PfxCertificate -CertStoreLocation cert:/LocalMachine/My -FilePath #{sitecore['cert_path']}/all.sc9.local.pfx -Password $pwd
-      Import-PfxCertificate -CertStoreLocation cert:/LocalMachine/My -FilePath #{sitecore['cert_path']}/sc9.local_client.pfx -Password $pwd
-      Import-PfxCertificate -CertStoreLocation cert:/LocalMachine/My -FilePath #{sitecore['cert_path']}/sc9.xconnect_client.pfx -Password $pwd
+      $pass = (ConvertTo-SecureString -String "#{sitecore['password']}" -Force -AsPlainText)
+
+      Import-PfxCertificate -CertStoreLocation cert:/LocalMachine/Root -Password $pass -FilePath #{sitecore['cert_path']}/SitecoreFundamentalsRoot.pfx
+      Import-PfxCertificate -CertStoreLocation cert:/LocalMachine/Root -Password $pass -FilePath #{sitecore['cert_path']}/SitecoreRootCert.pfx
+
+      Import-PfxCertificate -CertStoreLocation cert:/LocalMachine/CA   -Password $pass -FilePath #{sitecore['cert_path']}/SitecoreFundamentalsRoot.pfx
+      Import-PfxCertificate -CertStoreLocation cert:/LocalMachine/CA   -Password $pass -FilePath #{sitecore['cert_path']}/SitecoreRootCert.pfx
+
+      Import-PfxCertificate -CertStoreLocation cert:/LocalMachine/My   -Password $pass -FilePath #{sitecore['cert_path']}/SitecoreFundamentalsRoot.pfx
+      Import-PfxCertificate -CertStoreLocation cert:/LocalMachine/My   -Password $pass -FilePath #{sitecore['cert_path']}/SitecoreRootCert.pfx
+      Import-PfxCertificate -CertStoreLocation cert:/LocalMachine/My   -Password $pass -FilePath #{sitecore['cert_path']}/all.local.pfx
+      Import-PfxCertificate -CertStoreLocation cert:/LocalMachine/My   -Password $pass -FilePath #{sitecore['cert_path']}/sc9.xconnect.pfx
+      Import-PfxCertificate -CertStoreLocation cert:/LocalMachine/My   -Password $pass -FilePath #{sitecore['cert_path']}/all.sc9.local.pfx
+      Import-PfxCertificate -CertStoreLocation cert:/LocalMachine/My   -Password $pass -FilePath #{sitecore['cert_path']}/sc9.local.pfx
     EOH
     action :run
   end
