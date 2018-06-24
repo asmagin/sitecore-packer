@@ -19,6 +19,7 @@ def scp_packer_sources
   # Sitecore 9.0
   scp_packer_cookbook 'sc900'
   scp_packer_cookbook 'sc901'
+  scp_packer_cookbook 'sc902'
 
   # Sitecore Commerce 9.0
   scp_packer_cookbook 'xc901'

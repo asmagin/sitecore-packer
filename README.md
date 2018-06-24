@@ -80,9 +80,11 @@ They contain the respective hosting tools with the default configuration are bas
 * **SOLR 6.6.2**
   * **[w16s-solr]** with Solr 6.6.2
 * **Sitecore 9.0 Initial release**
-  * **[w16s-sc900]** with Sitecore 9.0 installed via SIF
+  * **[w16s-sc900]** with Sitecore 9.0.0 rev. 171002 installed via SIF
 * **Sitecore 9.0 Update 1**
   * **[w16s-sc901]** with Sitecore 9.0.1 rev. 171219 installed via SIF
+* **Sitecore 9.0 Update 2**
+  * **[w16s-sc902]** with Sitecore 9.0.2 rev. 180604 installed via SIF
 * **Sitecore Experience Commerce 9.0 Update-1**
   * **[w16s-xc901]** with Sitecore Experience Commerce 9.0 Update-1 rev. 2018.03-2.1.55 installed via SIF
 
@@ -142,6 +144,7 @@ w16s-sql16d-virtualbox-core: Info
 w16s-solr-virtualbox-core: Info
 w16s-sc900-virtualbox-core: Info
 w16s-sc901-virtualbox-core: Info
+w16s-sc902-virtualbox-core: Info
 w16s-xc901-virtualbox-core: Info
 ...
 ```
