@@ -31,7 +31,7 @@ class PackerVM < VM
   @@packer = {
     autostart: false,
     memory: 8192,
-    cpus: 4,
+    cpus: 2,
     linked_clone: false,
   }
 
