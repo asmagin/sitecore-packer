@@ -5,4 +5,5 @@ build
 
 # Sitecore Secrets
 /src/components/**/attributes/secrets.rb
+/src/components/**/attributes/secret.rb
 /src/components/**/files/license.xml

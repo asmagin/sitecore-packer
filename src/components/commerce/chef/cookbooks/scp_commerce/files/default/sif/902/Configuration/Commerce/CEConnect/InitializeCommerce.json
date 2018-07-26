@@ -1,0 +1,41 @@
+﻿// ------------------------------------------------------------------------------ //
+//         Sitecore Install Framework - Apply Commerce Engine certificate         //
+//                                                                                //
+//  Run this configuration to apply the Commerce Engine certificate.              //
+//                                                                                //
+//  NOTE: Only single line comments are accepted in configurations.               //
+// ------------------------------------------------------------------------------ //
+{
+  "Parameters": {
+    "CommerceAuthoringDir": { "Type": "string" },
+    "CommerceMinionsDir": { "Type": "string" },
+    "CommerceOpsDir": { "Type": "string" },
+    "CommerceShopsDir": { "Type": "string" },
+
+    "CommerceAuthoringHostHeader": { "Type": "string", "Description": "Commerce Authoring Services Host Header" },
+    "CommerceAuthoringServicesPort": { "Type": "string", "Description": "Commerce Authoring Services port" },
+
+    "EngineConnectIncludeDir": { "Type": "string", "Description": "The path to the Engine Connect App_Config directory" },
+    "CertificatePath": { "Type": "string", "Description": "The full path to the Commerce Engine certificate file." }
+  },
+  "Variables": {},
+  "Modules": ["InitializeCommerce"],
+  "Tasks": {
+    "ApplyCertificate": {
+      "Type": "ApplyCertificate",
+      "Params": {
+        "EngineConnectIncludeDir": "[parameter('EngineConnectIncludeDir')]",
+        "CertificatePath": "[parameter('CertificatePath')]",
+        "CommerceServicesPathCollection": ["[parameter('CommerceOpsDir')]", "[parameter('CommerceShopsDir')]", "[parameter('CommerceAuthoringDir')]", "[parameter('CommerceMinionsDir')]"]
+      }
+    },
+    "UpdateShopsPort": {
+      "Type": "UpdateShopsPort",
+      "Params": {
+        "EngineConnectIncludeDir": "[parameter('EngineConnectIncludeDir')]",
+        "CommerceAuthoringHostHeader": "[parameter('CommerceAuthoringHostHeader')]",
+        "CommerceAuthoringServicesPort": "[parameter('CommerceAuthoringServicesPort')]"
+      }
+    }
+  }
+}

@@ -4,3 +4,4 @@ vagrant box add w16s-sc900  D:\.projects\oss\sitecore\packer\build\w16s-sc900\vi
 vagrant box add w16s-sc901 D:\.projects\oss\sitecore\packer\build\w16s-sc901\virtualbox-core\output\vagrant.box --force
 vagrant box add w16s-sc902 D:\.projects\oss\sitecore\packer\build\w16s-sc902\virtualbox-core\output\vagrant.box --force
 vagrant box add w16s-xc901 D:\.projects\oss\sitecore\packer\build\w16s-xc901\virtualbox-core\output\vagrant.box --force
+vagrant box add w16s-xc902 D:\.projects\oss\sitecore\packer\build\w16s-xc902\virtualbox-core\output\vagrant.box --force

@@ -1,0 +1,124 @@
+﻿{
+  "Parameters": {
+    "CommerceAuthoringHostHeader": { "Type": "string" },
+    "CommerceAuthoringServicesPort": { "Type": "string", "Description": "Commerce Authoring Services port" },
+
+    "SitecoreIdentityServerHostHeader": { "Type": "string" },
+    "SitecoreIdentityServerServicesPort": { "Type": "string" },
+
+    "SitecoreBizFx": { "Type": "string" },
+    "SitecoreBizFxCertificateDnsName": { "Type": "string" },
+    "SitecoreBizFxDir": { "Type": "string" },
+    "SitecoreBizFxHostHeader": { "Type": "string", "DefaultValue": "SitecoreBizFx", "Description": "Sitecore Identity Server name" },
+    "SitecoreBizFxServicesPort": { "Type": "string", "DefaultValue": "4200" },
+    
+    "SiteHostHeader": { "Type": "string", "Description": "The host header name of the site to be deployed." },
+
+    "PackageSitecoreBizFxServicesContentDir": { "Type": "string", "Description": "SitecoreBizFx Services Content Path" },
+
+    "RootCertFileName": { "Type": "string", "DefaultValue": "SitecoreRootCert", "Description": "The file name of the root certificate to be created." },
+
+    "UserAccount": { "Type": "psobject", "DefaultValue": { "UserName": "", "Domain": "$env:COMPUTERNAME", "Password": "" } }
+  },
+  "Variables": {
+    "Security.Root.CertificateDnsName": "[concat('DO_NOT_TRUST_', parameter('RootCertFileName'))]",
+    "Security.Root.CertificateStore": "cert:\\LocalMachine\\Root",
+    "Security.CertificateStore": "cert:\\LocalMachine\\My",
+    "Security.SitecoreBizFx.CertificateThumbprint": "[GetCertificateThumbprint(parameter('SitecoreBizFxCertificateDnsName'), variable('Security.CertificateStore'))]"
+  },
+  "Modules": [
+    "ManageCommerceService",
+    "DeployCommerceContent",
+    "WindowsLocalUser"
+  ],
+  "Tasks": {
+    "StopSite": {
+      "Type": "ManageWebsite",
+      "Params": {
+        "Name": "[parameter('SitecoreBizFx')]",
+        "Action": "Stop",
+        "ErrorAction": "SilentlyContinue"
+      }
+    },
+    "RemoveSite": {
+      "Type": "ManageCommerceService",
+      "Params": {
+        "Name": "[parameter('SitecoreBizFx')]",
+        "Action": "Remove-Website"
+      }
+    },
+    "StopAppPool": {
+      "Type": "ManageAppPool",
+      "Params": {
+        "Name": "[parameter('SitecoreBizFx')]",
+        "Action": "Stop",
+        "ErrorAction": "SilentlyContinue"
+      }
+    },
+    "RemoveAppPool": {
+      "Type": "ManageCommerceService",
+      "Params": {
+        "Name": "[parameter('SitecoreBizFx')]",
+        "Action": "Remove-WebAppPool"
+      }
+    },
+    "RemoveSiteFolder": {
+      "Type": "ManageCommerceService",
+      "Params": {
+        "Name": "[parameter('SitecoreBizFx')]",
+        "PhysicalPath": "[parameter('SitecoreBizFxDir')]",
+        "Action": "Remove-Item"
+      }
+    },
+    "DeployCommerceContent": {
+      "Type": "DeployCommerceContent",
+      "Params": {
+        "Name": "SitecoreBizFx",
+        "CommerceAuthoringHostHeader": "[parameter('CommerceAuthoringHostHeader')]",
+        "CommerceAuthoringServicesPort": "[parameter('CommerceAuthoringServicesPort')]",
+        "ServicesContentPath": "[parameter('PackageSitecoreBizFxServicesContentDir')]",
+        "SitecoreBizFxHostHeader": "[parameter('SitecoreBizFxHostHeader')]",
+        "SitecoreBizFxServicesPort": "[parameter('SitecoreBizFxServicesPort')]",
+        "SitecoreIdentityServerHostHeader": "[parameter('SitecoreIdentityServerHostHeader')]",
+        "SitecoreIdentityServerServicesPort": "[parameter('SitecoreIdentityServerServicesPort')]",
+
+        "SiteHostHeader": "[parameter('SiteHostHeader')]",
+
+        "PhysicalPath": "[parameter('SitecoreBizFxDir')]",
+        "UserAccount": "[parameter('UserAccount')]"
+      }
+    },
+    "CreatePaths": {
+      "Type": "EnsurePath",
+      "Params": {
+        "Exists": ["[parameter('SitecoreBizFxDir')]"]
+      }
+    },
+    "CreateWebAppPool": {
+      "Type": "ManageCommerceService",
+      "Params": {
+        "Name": "[parameter('SitecoreBizFx')]",
+        "Action": "Create-WebAppPool",
+        "UserAccount": "[parameter('UserAccount')]"
+      }
+    },
+    "CreateWebsite": {
+      "Type": "ManageCommerceService",
+      "Params": {
+        "Name": "[parameter('SitecoreBizFx')]",
+        "Action": "Create-Website",
+        "AppPoolName": "[parameter('SitecoreBizFx')]",
+        "PhysicalPath": "[parameter('SitecoreBizFxDir')]",
+        "Hostname": "[parameter('SitecoreBizFxHostHeader')]",
+        "Port": "[parameter('SitecoreBizFxServicesPort')]",
+        "CertificateThumbprint": "[variable('Security.SitecoreBizFx.CertificateThumbprint')]"
+      }
+    },
+    "CreateHostHeader": {
+      "Type": "HostHeader",
+      "Params": {
+        "HostName": "[parameter('SitecoreBizFxHostHeader')]"
+      }
+    }
+  }
+}

@@ -1,0 +1,126 @@
+﻿// -------------------------------------------------------------------------- //
+//         Sitecore Install Framework - SXA Storefront                        //
+//                                                                            //
+//  Run this configuration to install a SXA Storefront module.                //
+//                                                                            //
+//  NOTE: Only single line comments are accepted in configurations.           //
+// -------------------------------------------------------------------------- //
+{
+  "Parameters": {
+    "PackageSXACommercePath": {
+      "Type": "string",
+      "Description": "The path to the SXA Commerce module zip."
+    },
+    "PackageSXAStorefrontPath": {
+      "Type": "string",
+      "Description": "The path to the SXA Commerce Storefront module zip."
+    },
+    "PackageSXAStorefrontThemePath": {
+      "Type": "string",
+      "Description": "The path to the SXA Commerce Storefront Theme module zip."
+    },
+    "PackageSXAStorefrontCatalogPath": {
+      "Type": "string",
+      "Description": "The path to the SXA Commerce Storefront Catalog module zip."
+    },
+    "SitecoreAppDataPackagesDir": {
+      "Type": "string",
+      "Description": "The path to modules directory."
+    },
+    "BaseUrl": {
+      "Type": "string",
+      "Description": "The utility pages base url."
+    },
+    "MergeTool": {
+      "Type": "string",
+      "Description": "The path to the Merge Tool."
+    },
+    "InputFile": {
+      "Type": "string",
+      "Description": "The path to input file to merge."
+    },
+    "WebConfig": {
+      "Type": "string",
+      "Description": "The path to the web config file."
+    }
+  },
+  "Modules": ["SitecoreUtilityTasks", "MergeWebConfig"],
+  "Tasks": {
+    "CheckSXAPaths": {
+      "Type": "EnsurePath",
+      "Params": {
+        "Exists": [
+          "[parameter('PackageSXACommercePath')]",
+          "[parameter('SitecoreAppDataPackagesDir')]"
+        ]
+      }
+    },
+    "InstallSXAModule": {
+      "Type": "InstallModule",
+      "Params": {
+        "ModuleFullPath": "[parameter('PackageSXACommercePath')]",
+        "SitecoreAppDataPackagesDir": "[parameter('SitecoreAppDataPackagesDir')]",
+        "BaseUrl": "[parameter('BaseUrl')]"
+      }
+    },
+    "CheckStorefrontPaths": {
+      "Type": "EnsurePath",
+      "Params": {
+        "Exists": [
+          "[parameter('PackageSXAStorefrontPath')]",
+          "[parameter('SitecoreAppDataPackagesDir')]"
+        ]
+      }
+    },
+    "InstallStorefrontModule": {
+      "Type": "InstallModule",
+      "Params": {
+        "ModuleFullPath": "[parameter('PackageSXAStorefrontPath')]",
+        "SitecoreAppDataPackagesDir": "[parameter('SitecoreAppDataPackagesDir')]",
+        "BaseUrl": "[parameter('BaseUrl')]"
+      }
+    },
+    "CheckThemesPaths": {
+      "Type": "EnsurePath",
+      "Params": {
+        "Exists": [
+          "[parameter('PackageSXAStorefrontThemePath')]",
+          "[parameter('SitecoreAppDataPackagesDir')]"
+        ]
+      }
+    },
+    "InstallThemesModule": {
+      "Type": "InstallModule",
+      "Params": {
+        "ModuleFullPath": "[parameter('PackageSXAStorefrontThemePath')]",
+        "SitecoreAppDataPackagesDir": "[parameter('SitecoreAppDataPackagesDir')]",
+        "BaseUrl": "[parameter('BaseUrl')]"
+      }
+    },
+    "CheckCatalogPaths": {
+      "Type": "EnsurePath",
+      "Params": {
+        "Exists": [
+          "[parameter('PackageSXAStorefrontCatalogPath')]",
+          "[parameter('SitecoreAppDataPackagesDir')]"
+        ]
+      }
+    },
+    "InstallCatalogModule": {
+      "Type": "InstallModule",
+      "Params": {
+        "ModuleFullPath": "[parameter('PackageSXAStorefrontCatalogPath')]",
+        "SitecoreAppDataPackagesDir": "[parameter('SitecoreAppDataPackagesDir')]",
+        "BaseUrl": "[parameter('BaseUrl')]"
+      }
+    },
+    "MergeWebConfig": {
+      "Type": "MergeWebConfig",
+      "Params": {
+        "MergeTool": "[parameter('MergeTool')]",
+        "InputFile": "[parameter('InputFile')]",
+        "WebConfig": "[parameter('WebConfig')]"
+      }
+    }
+  }
+}
