@@ -61,7 +61,7 @@ class VM
     autostart: true,
     primary: false,
     memory: 8192,
-    cpus: 4,
+    cpus: 2,
     linked_clone: true,
   }
 

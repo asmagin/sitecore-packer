@@ -1,3 +1,3 @@
 default['scp_sql']['2016_developer'] = {
-  'installer_iso_url' => 'https://download.my.visualstudio.com/pr/en_sql_server_2016_developer_with_service_pack_1_x64_dvd_9548071.iso?t=53e1e739-a48f-4564-ba70-7015c768fc99&e=1528946790&h=82f22bdbfd0a9640a931666a6326f153&su=1',
+  'installer_iso_url' => 'https://download.my.visualstudio.com/db/en_sql_server_2016_developer_with_service_pack_2_x64_dvd_12194995.iso?t=3d6adc68-59c5-4daf-99ef-12e1deef4c79&e=1532478394&h=9a3a3ba361ff8d8bd69176f7d1effc4f&su=1',
 }
