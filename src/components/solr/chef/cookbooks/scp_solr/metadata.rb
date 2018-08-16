@@ -7,5 +7,5 @@ long_description 'Installs/Configures SOLR Server'
 version '1.0.0'
 
 depends 'scp_windows'
-depends 'nssm', '~> 4.0.0'
+depends 'nssm', '~> 4.0.1'
 

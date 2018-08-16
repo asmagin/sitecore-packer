@@ -81,6 +81,9 @@ function MD5HashFile([string] $filePath)
     }
 }
 
+$timespamp = (Get-Date).tostring("yyyyMMddTHHmmss")
+$Env:PACKER_LOG_PATH = $Env:PACKER_LOG_PATH -replace ".txt", "$timespamp.txt"
+
 Write-Host "Preparing to run build script..."
 
 if(!$PSScriptRoot){
