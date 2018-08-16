@@ -87,6 +87,8 @@ They contain the respective hosting tools with the default configuration are bas
   * **[w16s-sc902]** with Sitecore 9.0.2 rev. 180604 installed via SIF
 * **Sitecore Experience Commerce 9.0 Update-1**
   * **[w16s-xc901]** with Sitecore Experience Commerce 9.0 Update-1 rev. 2018.03-2.1.55 installed via SIF
+* **Sitecore Experience Commerce 9.0 Update-2**
+  * **[w16s-xc901]** with Sitecore Experience Commerce 9.0 Update-2 installed via SIF
 
 ## Getting started
 
@@ -146,6 +148,7 @@ w16s-sc900-virtualbox-core: Info
 w16s-sc901-virtualbox-core: Info
 w16s-sc902-virtualbox-core: Info
 w16s-xc901-virtualbox-core: Info
+w16s-xc902-virtualbox-core: Info
 ...
 ```
 

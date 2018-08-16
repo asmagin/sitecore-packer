@@ -23,6 +23,7 @@ def scp_packer_sources
 
   # Sitecore Commerce 9.0
   scp_packer_cookbook 'xc901'
+  scp_packer_cookbook 'xc902'
 
   scp_cookbook 'components', 'windows'
   scp_cookbook 'components', 'virtualbox'

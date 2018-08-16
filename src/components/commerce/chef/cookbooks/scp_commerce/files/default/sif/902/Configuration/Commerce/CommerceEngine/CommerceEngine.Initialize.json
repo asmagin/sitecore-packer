@@ -1,0 +1,80 @@
+﻿// -------------------------------------------------------------------------- //
+//         Sitecore Install Framework - Initialize Commerce Services          //
+//                                                                            //
+//  Run this configuration to initialize Commerce Services.                   //
+//                                                                            //
+//  NOTE: Only single line comments are accepted in configurations.           //
+// -------------------------------------------------------------------------- //
+
+{
+  "Parameters": {
+    "CommerceAuthoringDir": { "Type": "string" },
+    "CommerceMinionsDir": { "Type": "string" },
+    "CommerceOpsDir": { "Type": "string" },
+    "CommerceShopsDir": { "Type": "string" },
+    "CommerceShopsHostHeader": { "Type": "string" },
+    "CommerceShopsServicesPort": { "Type": "string", "Description": "Commerce Shops Services port" },
+    "SitecoreIdentityServerHostHeader": { "Type": "string", "DefaultValue": "SitecoreIdentityServer", "Description": "Sitecore Identity Server name" },
+    "SitecoreIdentityServerServicesPort": { "Type": "string", "DefaultValue": "5050" },
+
+    "SitecoreAdminAccount": { "Type": "psobject", "Description": "Sitecore Admin account." }
+  },
+  "Variables": {
+    "EnsureSyncDefaultContentPathsParam": "/commerceops/EnsureSyncDefaultContentPaths(environment='envNameValue',shopName='CommerceEngineDefaultStorefront')",
+    "InitializeParam": "/commerceops/InitializeEnvironment(environment='envNameValue')",
+    "UrlCheckCommandStatus": "[concat('https://', parameter('CommerceShopsHostHeader'), ':', parameter('CommerceShopsServicesPort'), '/commerceops/CheckCommandStatus(taskId=taskIdValue)')]",
+    "UrlCommerceShopsServicesBootstrap": "[concat('https://', parameter('CommerceShopsHostHeader'), ':', parameter('CommerceShopsServicesPort'), '/commerceops/Bootstrap()')]",
+    "UrlEnsureSyncDefaultContentPaths": "[concat('https://', parameter('CommerceShopsHostHeader'), ':', parameter('CommerceShopsServicesPort'), variable('EnsureSyncDefaultContentPathsParam'))]",
+    "UrlInitializeEnvironment": "[concat('https://', parameter('CommerceShopsHostHeader'), ':', parameter('CommerceShopsServicesPort'), variable('InitializeParam'))]",
+    "UrlIdentityServerGetToken": "[concat('https://', parameter('SitecoreIdentityServerHostHeader'), ':', parameter('SitecoreIdentityServerServicesPort'), '/connect/token')]"
+  },
+  "Modules": ["InitializeCommerce"],
+  "Tasks": {
+    "DisableCsrfValidation": {
+      "Type": "DisableCsrfValidation",
+      "Params": {
+        "CommerceServicesPathCollection": [
+          "[parameter('CommerceOpsDir')]",
+          "[parameter('CommerceShopsDir')]",
+          "[parameter('CommerceAuthoringDir')]",
+          "[parameter('CommerceMinionsDir')]"
+        ]
+      }
+    },
+    "GetIdServerToken": {
+      "Type": "GetIdServerToken",
+      "Params": {
+        "SitecoreAdminAccount": "[parameter('SitecoreAdminAccount')]",
+        "UrlIdentityServerGetToken": "[variable('UrlIdentityServerGetToken')]"
+      }
+    },
+    "BootStrapCommerceServices": {
+      "Type": "BootStrapCommerceServices",
+      "Params": {
+        "UrlCommerceShopsServicesBootstrap": "[variable('UrlCommerceShopsServicesBootstrap')]"
+      }
+    },
+    "EnsureSyncDefaultContentPaths": {
+      "Type": "EnsureSyncDefaultContentPaths",
+      "Params": {
+        "UrlEnsureSyncDefaultContentPaths": "[variable('UrlEnsureSyncDefaultContentPaths')]",
+        "UrlCheckCommandStatus": "[variable('UrlCheckCommandStatus')]",
+        "Environments": [
+          "AdventureWorksAuthoring",
+          "HabitatAuthoring"
+        ]
+      }
+    },
+    "InitializeCommerceServices": {
+      "Type": "InitializeCommerceServices",
+      "Params": {
+        "UrlInitializeEnvironment": "[variable('UrlInitializeEnvironment')]",
+        "UrlCheckCommandStatus": "[variable('UrlCheckCommandStatus')]",
+        "Environments": [
+          "AdventureWorksAuthoring",
+          "HabitatAuthoring"
+        ]
+      }
+    }
+  }
+}
