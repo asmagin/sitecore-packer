@@ -22,6 +22,9 @@ wmic useraccount where "name='vagrant'" set PasswordExpires=FALSE
 Write-Host "Configuring security zones"
 reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Internet Settings\Zones\3" /v 1806 /d 0 /t REG_DWORD /f /reg:64
 
+Write-Host "Configuring CredSSP encryption oracle remediation registry flag"
+reg add "HKLM\Software\Microsoft\Windows\CurrentVersion\Policies\System\CredSSP\Parameters" /v AllowEncryptionOracle /t REG_DWORD /d 2
+
 Write-Host "Configuring WinRM"
 winrm quickconfig -q
 winrm quickconfig -transport:http
