@@ -39,7 +39,7 @@ a.out
 *.so
 *.com
 *.class
-*.dll
+#*.dll # We have few DLLs to upload
 *.exe
 */rdoc/
 

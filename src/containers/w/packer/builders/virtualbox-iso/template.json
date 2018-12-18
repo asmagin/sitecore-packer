@@ -1,7 +1,7 @@
 {
   "variables": {
     "virtualbox_guest_os_type": "",
-    "virtualbox_disk_size": "130048",
+    "virtualbox_disk_size": "61440",
     "virtualbox_floppy_files": "builders/virtualbox-iso/floppy"
   },
   "builders": [
@@ -24,6 +24,24 @@
           "{{.Name}}",
           "--cpus",
           "{{user `virtualbox_cpus`}}"
+        ],
+        [
+          "modifyvm",
+          "{{.Name}}",
+          "--vram",
+          "64"
+        ],
+        [
+          "modifyvm",
+          "{{.Name}}",
+          "--pae",
+          "off"
+        ],
+        [
+          "modifyvm",
+          "{{.Name}}",
+          "--paravirtprovider",
+          "hyperv"
         ]
       ],
       "disk_size": "{{user `virtualbox_disk_size`}}",
