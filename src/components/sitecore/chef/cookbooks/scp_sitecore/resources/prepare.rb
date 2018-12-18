@@ -55,8 +55,8 @@ action :install_and_update_sif do
     code <<-EOH
       $ProgressPreference='SilentlyContinue';
       Register-PSRepository -Name SitecoreGallery -SourceLocation https://sitecore.myget.org/F/sc-powershell/api/v2 -InstallationPolicy Trusted;
-      Install-Module SitecoreInstallFramework;
-      Update-Module SitecoreInstallFramework;
+      Install-Module SitecoreInstallFramework -RequiredVersion 1.2.1 -Repository SitecoreGallery;
+      Update-Module SitecoreInstallFramework -RequiredVersion 1.2.1;
     EOH
     action :run
   end

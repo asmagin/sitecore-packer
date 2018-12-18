@@ -2,7 +2,7 @@
   "variables": {
     "name": "xc902",
     "description": "Sitecore Commerce 9.0.2",
-    "virtualbox_cpus": "6",
+    "virtualbox_cpus": "4",
     "virtualbox_memory": "16384"
   }
 }

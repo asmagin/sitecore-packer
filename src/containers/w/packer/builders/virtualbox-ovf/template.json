@@ -20,6 +20,24 @@
           "{{.Name}}",
           "--cpus",
           "{{user `virtualbox_cpus`}}"
+        ],
+        [
+          "modifyvm",
+          "{{.Name}}",
+          "--vram",
+          "64"
+        ],
+        [
+          "modifyvm",
+          "{{.Name}}",
+          "--pae",
+          "off"
+        ],
+        [
+          "modifyvm",
+          "{{.Name}}",
+          "--paravirtprovider",
+          "hyperv"
         ]
       ],
       "floppy_files": "{{user `virtualbox_floppy_files`}}",
