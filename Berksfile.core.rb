@@ -21,6 +21,9 @@ def scp_packer_sources
   scp_packer_cookbook 'sc901'
   scp_packer_cookbook 'sc902'
 
+  # SPE SXA JSS
+  scp_packer_cookbook 'sc902m'
+
   # Sitecore Commerce 9.0
   scp_packer_cookbook 'xc901'
   scp_packer_cookbook 'xc902'
@@ -32,6 +35,7 @@ def scp_packer_sources
 
   scp_cookbook 'components', 'solr'
   scp_cookbook 'components', 'sitecore'
+  scp_cookbook 'components', 'sitecore_modules'
   scp_cookbook 'components', 'commerce'
   scp_cookbook 'components', 'develop'
 end
