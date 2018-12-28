@@ -2,7 +2,7 @@
 scp_windows_powershell_script_elevated 'Clearing temporary files' do
   code <<-EOH
   @(
-    "c:\\tmp\\sitecore",
+    "c:\\tmp\\sitecore_modules",
     "c:\\tmp\\*.*"
   ) | % {
       if(Test-Path $_) {
@@ -18,6 +18,6 @@ scp_windows_powershell_script_elevated 'Clearing temporary files' do
   action :run
 end
 
-include_recipe 'scp_sitecore::cleanup'
+include_recipe 'scp_sitecore_modules::cleanup'
 
 include_recipe 'scp_packer_w::cleanup'

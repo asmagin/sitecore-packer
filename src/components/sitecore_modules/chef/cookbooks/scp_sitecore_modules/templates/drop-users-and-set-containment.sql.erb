@@ -1,0 +1,38 @@
+:SETVAR DatabasePrefix <%= @config['prefix'] %>
+
+USE master;
+
+DECLARE @killSessions varchar(8000) = '';  
+SELECT @killSessions = @killSessions + 'kill ' + CONVERT(varchar(5), spid) + ';'  
+FROM master..sysprocesses  
+WHERE dbid = db_id('$(DatabasePrefix)_Core')
+EXEC(@killSessions); 
+
+SELECT @killSessions = ''
+SELECT @killSessions = @killSessions + 'kill ' + CONVERT(varchar(5), spid) + ';'  
+FROM master..sysprocesses  
+WHERE dbid = db_id('$(DatabasePrefix)_Master')
+EXEC(@killSessions); 
+
+USE [$(DatabasePrefix)_Core]
+GO
+
+DROP USER [coreuser]
+GO
+
+ALTER DATABASE [$(DatabasePrefix)_Core]
+    SET CONTAINMENT = NONE
+    WITH ROLLBACK IMMEDIATE;
+
+USE [$(DatabasePrefix)_Master]
+GO
+
+DROP USER [masteruser]
+GO
+
+ALTER DATABASE [$(DatabasePrefix)_Master]
+    SET CONTAINMENT = NONE
+    WITH ROLLBACK IMMEDIATE;
+
+USE [master]
+GO

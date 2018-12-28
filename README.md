@@ -26,7 +26,9 @@ Most of the components, including the core operating systems, share the followin
 
 * Put **license.xml** file to **/src/components/sitecore/chef/cookbooks/scp_sitecore/files/license.xml**
 * Put **dev.sitecore.net** credentials into **src/components/sitecore/chef/cookbooks/scp_sitecore/attributes/secret.rb**. You can find sample next to this file.
-* Put a link to **SQL Server 2016 Dev SP1** into **src/components/sql/chef/cookbooks/scp_sql/attributes/2016_developer.rb**
+* Put a link to **SQL Server 2016 Dev SP2** into **src/components/sql/chef/cookbooks/scp_sql/attributes/2016_developer.rb**
+
+* For boxes with Sitecore put **license.xml** file in the same folder with **Vagrantfile** that is used to up the box.
 
 ---
 
@@ -85,6 +87,8 @@ They contain the respective hosting tools with the default configuration are bas
   * **[w16s-sc901]** with Sitecore 9.0.1 rev. 171219 installed via SIF
 * **Sitecore 9.0 Update 2**
   * **[w16s-sc902]** with Sitecore 9.0.2 rev. 180604 installed via SIF
+* **Sitecore 9.0 Update 2 with SPE SXA JSS**
+  * **[w16s-sc902m]** with Sitecore 9.0.2 rev. 180604 installed via SIF and SPE SXA JSS
 * **Sitecore Experience Commerce 9.0 Update-1**
   * **[w16s-xc901]** with Sitecore Experience Commerce 9.0 Update-1 rev. 2018.03-2.1.55 installed via SIF
 * **Sitecore Experience Commerce 9.0 Update-2**

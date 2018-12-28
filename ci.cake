@@ -17,6 +17,8 @@ var w16s_sc900 = PackerTemplates_Create("w16s-sc900", parents: w16s_solr);
 var w16s_sc901 = PackerTemplates_Create("w16s-sc901", parents: w16s_solr);
 var w16s_sc902 = PackerTemplates_Create("w16s-sc902", parents: w16s_solr);
 
+var w16s_sc902m = PackerTemplates_Create("w16s-sc902m", parents: w16s_sc902);
+
 var w16s_xc901 = PackerTemplates_Create("w16s-xc901", parents: w16s_sc901);
 var w16s_xc902 = PackerTemplates_Create("w16s-xc902", parents: w16s_sc902);
 
@@ -29,6 +31,7 @@ packerTemplates = packerTemplates.
   Concat(w16s_sc900).
   Concat(w16s_sc901).
   Concat(w16s_sc902).
+  Concat(w16s_sc902m).
   Concat(w16s_xc901).
   Concat(w16s_xc902).
   ToList();
