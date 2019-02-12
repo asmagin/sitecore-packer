@@ -90,7 +90,7 @@ They contain the respective hosting tools with the default configuration are bas
 * **Sitecore 9.0 Update 2**
   * **[w16s-sc902]** with Sitecore 9.0.2 rev. 180604 installed via SIF 1.2.1 and SPE
 * **Sitecore 9.1 Initial release**
-  * **[w16s-sc902]** with Sitecore 9.1.0 rev. 001564 installed via SIF 1.2.1 and SPE
+  * **[w16s-sc902]** with Sitecore 9.1.0 rev. 001564 installed via SIF 2.0 and SPE
 * **Sitecore 9.0 Update 2 with SPE SXA JSS**
   * **[w16s-sc902_sxa171_jss1100]** with Sitecore 9.0.2 rev. 180604 installed via SIF 1.2.1 and SPE SXA 1.7.1 JSS
 * **Sitecore 9.0 Update 2 with SPE SXA JSS**
