@@ -107,7 +107,7 @@ action :install do
     source 'certificates'
     action :create
   end
-  
+
   ## Install certificates for SSL
   scp_windows_powershell_script_elevated 'Install certificates for SSL' do
     code <<-EOH

@@ -34,7 +34,7 @@ action :configure do
 end
 
 action :install do
-  if msu_source.to_s.empty?
+  if new_resource.msu_source.to_s.empty?
     scp_windows_powershell_script_elevated 'Install Updates' do
       code <<-EOH
         Get-WUInstall -MicrosoftUpdate -AcceptAll -IgnoreReboot

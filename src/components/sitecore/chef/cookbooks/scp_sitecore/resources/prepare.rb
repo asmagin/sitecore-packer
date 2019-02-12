@@ -39,7 +39,7 @@ action :enable_sa_login do
   template script_file_path do
     source "#{script_file_name}.erb"
     variables(
-      :password => new_resource.options['sql']['sa_password']
+      password: new_resource.options['sql']['sa_password']
     )
   end
 
@@ -55,8 +55,8 @@ action :install_and_update_sif do
     code <<-EOH
       $ProgressPreference='SilentlyContinue';
       Register-PSRepository -Name SitecoreGallery -SourceLocation https://sitecore.myget.org/F/sc-powershell/api/v2 -InstallationPolicy Trusted;
-      Install-Module SitecoreInstallFramework -RequiredVersion 1.2.1 -Repository SitecoreGallery;
-      Update-Module SitecoreInstallFramework -RequiredVersion 1.2.1;
+      Install-Module SitecoreInstallFramework -RequiredVersion #{new_resource.options['sitecore']['sif_version']} -Repository SitecoreGallery;
+      Update-Module SitecoreInstallFramework -RequiredVersion #{new_resource.options['sitecore']['sif_version']};
     EOH
     action :run
   end

@@ -15,11 +15,15 @@ action :install do
   end
 
   # Install Sitecore Experience Accelerator
-  scp_sitecore_modules_install_module 'Install Sitecore Experience Accelerator' do
+  scp_sitecore_modules_install_sitecore_module 'Install Sitecore Experience Accelerator' do
     options new_resource.options
     secrets new_resource.secrets
     action :install
   end
+end
+
+action :add_sxa_solr_cores do
+  config = new_resource.options['config']
 
   # Add SOLR cores for Sitecore Experience Accelerator
   sxa_master_index = "#{config['prefix']}_sxa_master_index"
@@ -40,7 +44,7 @@ action :install do
     action :run
   end
 
-  config_file = "#{config['site_path']}/App_Config/Modules/SXA/z.Foundation.Overrides/Sitecore.XA.Foundation.Search.Solr.config"
+  config_file = "#{config['site_path']}/#{config['foundation_overrides_path']}/Sitecore.XA.Foundation.Search.Solr.config"
   scp_sitecore_modules_set_xml_attribute 'Update Sitecore.XA.Foundation.Search.Solr.config for sitecore_sxa_master_index' do
     path config_file
     xpath '//index[@id="sitecore_sxa_master_index"]/param[@desc="core"]'
@@ -52,12 +56,12 @@ action :install do
     value sxa_web_index
   end
 
-  powershell_script 'PopulateSolrManagedSchema and Rebuild indexes' do
+  scp_windows_powershell_script_elevated 'PopulateSolrManagedSchema and Rebuild indexes' do
     code <<-EOH
 
         Import-Module -Name SPE
-        $session = New-ScriptSession -Username admin -Password b -ConnectionUri "#{config['site_url']}"
-        Invoke-RemoteScript -ScriptBlock {
+        $session = New-ScriptSession -Username admin -Password b -ConnectionUri "#{config['site_url']}" -Timeout 300000
+        $jobId = Invoke-RemoteScript -ScriptBlock {
             (Get-SearchIndex -Name *sxa*).ForEach({
                 Write-Output "Core: $($_.Core)"
                 Write-Output " - Populating solr managed schema...";
@@ -67,6 +71,8 @@ action :install do
                 Write-Output "";
             });
         } -Session $session
+        Wait-RemoteScriptSession -Session $session -Id $jobId -Delay 5 -Verbose
+        Stop-ScriptSession -Session $session
 
       EOH
     action :run

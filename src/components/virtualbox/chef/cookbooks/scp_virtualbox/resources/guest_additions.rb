@@ -11,6 +11,14 @@ action :install do
   end
 
   guest_additions_version = new_resource.guest_additions_options['version']
+  if guest_additions_version == 'latest'
+    guest_additions_version_script = <<-EOH
+      $Response = Invoke-WebRequest -Uri "https://download.virtualbox.org/virtualbox/LATEST.TXT" -UseBasicParsing;
+      $host.UI.Write(($Response.Content -split '\n')[0]);
+    EOH
+    guest_additions_version = powershell_out(guest_additions_version_script).stdout
+  end
+
   iso_file_name = "VBoxGuestAdditions_#{guest_additions_version}.iso"
   iso_file_path = "#{directory_path}/#{iso_file_name}"
   iso_file_source_url = "http://download.virtualbox.org/virtualbox/#{guest_additions_version}/#{iso_file_name}"

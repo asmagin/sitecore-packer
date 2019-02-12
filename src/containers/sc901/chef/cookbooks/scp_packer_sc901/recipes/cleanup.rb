@@ -3,6 +3,7 @@ scp_windows_powershell_script_elevated 'Clearing temporary files' do
   code <<-EOH
   @(
     "c:\\tmp\\sitecore",
+    "c:\\tmp\\sitecore_modules",
     "c:\\tmp\\*.*"
   ) | % {
       if(Test-Path $_) {

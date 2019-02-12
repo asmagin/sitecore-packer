@@ -11,13 +11,17 @@ var w16s_dotnet = PackerTemplates_Create("w16s-dotnet", parents: w16s);
 var w16s_iis = PackerTemplates_Create("w16s-iis", parents: w16s_dotnet);
 
 var w16s_sql16d = PackerTemplates_Create("w16s-sql16d", parents: w16s_iis);
-var w16s_solr = PackerTemplates_Create("w16s-solr", parents: w16s_sql16d);
+var w16s_solr662 = PackerTemplates_Create("w16s-solr662", parents: w16s_sql16d);
+var w16s_solr721 = PackerTemplates_Create("w16s-solr721", parents: w16s_sql16d);
 
-var w16s_sc900 = PackerTemplates_Create("w16s-sc900", parents: w16s_solr);
-var w16s_sc901 = PackerTemplates_Create("w16s-sc901", parents: w16s_solr);
-var w16s_sc902 = PackerTemplates_Create("w16s-sc902", parents: w16s_solr);
+var w16s_sc900 = PackerTemplates_Create("w16s-sc900", parents: w16s_solr662);
+var w16s_sc901 = PackerTemplates_Create("w16s-sc901", parents: w16s_solr662);
+var w16s_sc902 = PackerTemplates_Create("w16s-sc902", parents: w16s_solr662);
+var w16s_sc910 = PackerTemplates_Create("w16s-sc910", parents: w16s_solr721);
 
-var w16s_sc902m = PackerTemplates_Create("w16s-sc902m", parents: w16s_sc902);
+var w16s_sc902_sxa171_jss1100 = PackerTemplates_Create("w16s-sc902_sxa171_jss1100", parents: w16s_sc902);
+var w16s_sc902_sxa180_jss1100 = PackerTemplates_Create("w16s-sc902_sxa180_jss1100", parents: w16s_sc902);
+var w16s_sc910_sxa180_jss1100 = PackerTemplates_Create("w16s-sc910_sxa180_jss1100", parents: w16s_sc910);
 
 var w16s_xc901 = PackerTemplates_Create("w16s-xc901", parents: w16s_sc901);
 var w16s_xc902 = PackerTemplates_Create("w16s-xc902", parents: w16s_sc902);
@@ -27,11 +31,15 @@ packerTemplates = packerTemplates.
   Concat(w16s_dotnet).
   Concat(w16s_iis).
   Concat(w16s_sql16d).
-  Concat(w16s_solr).
+  Concat(w16s_solr662).
+  Concat(w16s_solr721).
   Concat(w16s_sc900).
   Concat(w16s_sc901).
   Concat(w16s_sc902).
-  Concat(w16s_sc902m).
+  Concat(w16s_sc902_sxa171_jss1100).
+  Concat(w16s_sc902_sxa180_jss1100).
+  Concat(w16s_sc910).
+  Concat(w16s_sc910_sxa180_jss1100).
   Concat(w16s_xc901).
   Concat(w16s_xc902).
   ToList();

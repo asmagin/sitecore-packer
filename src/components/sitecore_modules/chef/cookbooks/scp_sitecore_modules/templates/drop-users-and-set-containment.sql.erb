@@ -17,7 +17,15 @@ EXEC(@killSessions);
 USE [$(DatabasePrefix)_Core]
 GO
 
-DROP USER [coreuser]
+IF USER_ID('coreuser') IS NOT NULL
+    BEGIN
+        DROP USER [coreuser]
+    END
+GO
+IF USER_ID('securityuser') IS NOT NULL
+    BEGIN
+        DROP USER [securityuser]
+    END
 GO
 
 ALTER DATABASE [$(DatabasePrefix)_Core]
@@ -27,7 +35,10 @@ ALTER DATABASE [$(DatabasePrefix)_Core]
 USE [$(DatabasePrefix)_Master]
 GO
 
-DROP USER [masteruser]
+IF USER_ID('masteruser') IS NOT NULL
+    BEGIN
+        DROP USER [masteruser]
+    END
 GO
 
 ALTER DATABASE [$(DatabasePrefix)_Master]

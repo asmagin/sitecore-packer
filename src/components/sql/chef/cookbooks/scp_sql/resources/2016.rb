@@ -1,7 +1,7 @@
 property :edition, String, name_property: true
 
 action :install do
-  directory_path = "#{Chef::Config[:file_cache_path]}/scp_sql/2016_#{edition}"
+  directory_path = "#{Chef::Config[:file_cache_path]}/scp_sql/2016_#{new_resource.edition}"
 
   directory directory_path do
     recursive true
@@ -19,7 +19,7 @@ action :install do
 
   installer_iso_name = 'installer.iso'
   installer_iso_path = "#{directory_path}/#{installer_iso_name}"
-  installer_iso_source = node['scp_sql']["2016_#{edition}"]['installer_iso_url']
+  installer_iso_source = node['scp_sql']["2016_#{new_resource.edition}"]['installer_iso_url']
   remote_file installer_iso_path do
     source installer_iso_source
     action :create
@@ -33,7 +33,7 @@ action :install do
 
   extracted_installer_file_name = 'SETUP.EXE'
   extracted_installer_file_path = "#{extracted_directory_path}/#{extracted_installer_file_name}"
-  scp_windows_powershell_script_elevated "Install SQL Server 2016 #{edition}" do
+  scp_windows_powershell_script_elevated "Install SQL Server 2016 #{new_resource.edition}" do
     code <<-EOH
       Start-Process "#{extracted_installer_file_path.tr('/', '\\')}" "/CONFIGURATIONFILE=#{configuration_file_path.tr('/', '\\')} /IACCEPTSQLSERVERLICENSETERMS" -Wait
     EOH

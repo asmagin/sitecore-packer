@@ -24,7 +24,7 @@ scp_sitecore_prepare '' do
 end
 
 scp_sitecore_prepare '' do
-  options node['scp_sitecore']['prepare']
+  options Chef::Mixin::DeepMerge.deep_merge(node['scp_sitecore']['prepare'], node['scp_sitecore']['902xp'])
   action :install_and_update_sif
 end
 

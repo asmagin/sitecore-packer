@@ -127,33 +127,25 @@ action :install do
     action :create
   end
 
-  # copy Sitecore PowerShell
-  remote_directory sitecore['site_path'] do
-    source 'spe'
-    action :create
-  end
-
   # Fix permissions
-  directory "c:/inetpub/wwwroot/sc9.local" do
+  directory sitecore['site_path'] do
     rights :modify, 'BUILTIN\IIS_IUSRS'
   end
-
-  directory "c:/inetpub/wwwroot/sc9.xconnect" do
+  directory sitecore['xconnect_path'] do
     rights :modify, 'BUILTIN\IIS_IUSRS'
   end
-
-  directory "C:/ProgramData/Microsoft/Crypto" do
+  directory 'C:/ProgramData/Microsoft/Crypto' do
     rights :modify, 'BUILTIN\IIS_IUSRS'
   end
 
   # Fix counters
   group 'Performance Monitor Users' do
-    members ['IIS APPPOOL\sc9.local', 'IIS APPPOOL\sc9.xconnect', ]
+    members ["IIS APPPOOL\\#{sitecore['prefix']}.local", "IIS APPPOOL\\#{sitecore['prefix']}.xconnect"]
     append true
     action :modify
   end
 
-  # Confgure SSL certificate for sc90.local
+  # Confgure SSL certificate for sc9.local
   scp_windows_powershell_script_elevated 'Add bindings for wildcard subdomains' do
     code <<-EOH
       $subject = "#{sitecore['prefix']}.local"
@@ -163,7 +155,7 @@ action :install do
 
       $guid = [guid]::NewGuid().ToString("B")
 
-      # Add *.sc9.local bindings
+      # Add *.#{sitecore['prefix']}.local bindings
       $cert = Get-ChildItem Cert:/LocalMachine/My | Where-Object { $_.Subject -eq "CN=*.$subject" }
       netsh http add sslcert hostnameport="*.$($subject):443" certhash="$($cert.Thumbprint)" certstorename=MY appid="$guid"
       New-WebBinding -name $subject -Protocol https  -HostHeader "*.$($subject)" -Port 443 -SslFlags 1

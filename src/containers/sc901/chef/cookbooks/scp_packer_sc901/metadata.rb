@@ -8,4 +8,5 @@ version '1.0.0'
 
 depends 'scp_packer_w'
 depends 'scp_sitecore'
+depends 'scp_sitecore_modules'
 depends 'scp_develop'

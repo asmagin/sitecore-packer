@@ -6,8 +6,7 @@ default['scp_sitecore']['prepare'] = {
     'webpi' => {
       'elevated' => true,
     },
-    'nodejs.install' => {
-      'version' => '8.9.4',
+    'nodejs-lts' => {
       'elevated' => true,
     },
   },
