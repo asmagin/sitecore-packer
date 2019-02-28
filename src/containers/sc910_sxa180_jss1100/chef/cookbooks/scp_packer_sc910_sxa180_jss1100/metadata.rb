@@ -1,0 +1,10 @@
+name 'scp_packer_sc910_sxa180_jss1100'
+maintainer 'Alex Smagin'
+maintainer_email 'me@asmagin.com'
+license 'MIT'
+description 'Installs/Configures Sitecore SPE SXA JSS'
+long_description 'Installs/Configures SPE SXA JSS'
+version '1.0.0'
+
+depends 'scp_packer_w'
+depends 'scp_sitecore_modules'

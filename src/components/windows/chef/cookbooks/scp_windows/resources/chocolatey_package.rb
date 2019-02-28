@@ -4,15 +4,15 @@ property :chocolatey_package_options, Hash, required: true
 default_action :install
 
 action :install do
-  chocolatey_package_list = powershell_out("choco list --local-only --exact #{chocolatey_package_name}").stdout
-  return if chocolatey_package_list.downcase.include?(chocolatey_package_name.downcase)
+  chocolatey_package_list = powershell_out("choco list --local-only --exact #{new_resource.chocolatey_package_name}").stdout
+  return if chocolatey_package_list.downcase.include?(new_resource.chocolatey_package_name.downcase)
 
-  chocolatey_package_version = chocolatey_package_options['version']
-  chocolatey_package_install = chocolatey_package_options['install'].nil? ? {} : chocolatey_package_options['install']
-  chocolatey_package_elevated = chocolatey_package_options['elevated']
+  chocolatey_package_version = new_resource.chocolatey_package_options['version']
+  chocolatey_package_install = new_resource.chocolatey_package_options['install'].nil? ? {} : new_resource.chocolatey_package_options['install']
+  chocolatey_package_elevated = new_resource.chocolatey_package_options['elevated']
 
-  chocolatey_package_script_name = "Install Chocolatey package '#{chocolatey_package_name}'"
-  chocolatey_package_script_code = "choco install #{chocolatey_package_name} --confirm"
+  chocolatey_package_script_name = "Install Chocolatey package '#{new_resource.chocolatey_package_name}'"
+  chocolatey_package_script_code = "choco install #{new_resource.chocolatey_package_name} --confirm"
   chocolatey_package_script_code = "#{chocolatey_package_script_code} --version #{chocolatey_package_version}" unless chocolatey_package_version.to_s.empty?
   chocolatey_package_install.each do |chocolatey_package_install_name, chocolatey_package_install_value|
     chocolatey_package_script_code = "#{chocolatey_package_script_code} --#{chocolatey_package_install_name}"

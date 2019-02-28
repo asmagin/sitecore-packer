@@ -8,34 +8,46 @@ ALTER DATABASE [$(DatabasePrefix)_Core]
     SET CONTAINMENT = PARTIAL
     WITH ROLLBACK IMMEDIATE;
 
-CREATE USER [coreuser] WITH PASSWORD=N'$(Password)', DEFAULT_SCHEMA=[dbo]
-GO
-ALTER ROLE [aspnet_Membership_BasicAccess] ADD MEMBER [coreuser]
-GO
-ALTER ROLE [aspnet_Membership_FullAccess] ADD MEMBER [coreuser]
-GO
-ALTER ROLE [aspnet_Membership_ReportingAccess] ADD MEMBER [coreuser]
-GO
-ALTER ROLE [aspnet_Profile_BasicAccess] ADD MEMBER [coreuser]
-GO
-ALTER ROLE [aspnet_Profile_FullAccess] ADD MEMBER [coreuser]
-GO
-ALTER ROLE [aspnet_Profile_ReportingAccess] ADD MEMBER [coreuser]
-GO
-ALTER ROLE [aspnet_Roles_BasicAccess] ADD MEMBER [coreuser]
-GO
-ALTER ROLE [aspnet_Roles_FullAccess] ADD MEMBER [coreuser]
-GO
-ALTER ROLE [aspnet_Roles_ReportingAccess] ADD MEMBER [coreuser]
-GO
-ALTER ROLE [db_datareader] ADD MEMBER [coreuser]
-GO
-ALTER ROLE [db_datawriter] ADD MEMBER [coreuser]
+IF USER_ID('coreuser') IS NULL
+    BEGIN
+        CREATE USER [coreuser] WITH PASSWORD=N'$(Password)', DEFAULT_SCHEMA=[dbo]
+
+        ALTER ROLE [aspnet_Membership_BasicAccess] ADD MEMBER [coreuser]
+        ALTER ROLE [aspnet_Membership_FullAccess] ADD MEMBER [coreuser]
+        ALTER ROLE [aspnet_Membership_ReportingAccess] ADD MEMBER [coreuser]
+        ALTER ROLE [aspnet_Profile_BasicAccess] ADD MEMBER [coreuser]
+        ALTER ROLE [aspnet_Profile_FullAccess] ADD MEMBER [coreuser]
+        ALTER ROLE [aspnet_Profile_ReportingAccess] ADD MEMBER [coreuser]
+        ALTER ROLE [aspnet_Roles_BasicAccess] ADD MEMBER [coreuser]
+        ALTER ROLE [aspnet_Roles_FullAccess] ADD MEMBER [coreuser]
+        ALTER ROLE [aspnet_Roles_ReportingAccess] ADD MEMBER [coreuser]
+        ALTER ROLE [db_datareader] ADD MEMBER [coreuser]
+        ALTER ROLE [db_datawriter] ADD MEMBER [coreuser]
+
+        GRANT CONNECT TO [coreuser] AS [dbo]
+        GRANT EXECUTE TO [coreuser] AS [dbo]
+    END
 GO
 
-GRANT CONNECT TO [coreuser] AS [dbo]
-GO
-GRANT EXECUTE TO [coreuser] AS [dbo]
+IF USER_ID('securityuser') IS NULL
+    BEGIN
+        CREATE USER [securityuser] WITH PASSWORD=N'$(Password)', DEFAULT_SCHEMA=[dbo]
+
+        ALTER ROLE [aspnet_Membership_BasicAccess] ADD MEMBER [securityuser]
+        ALTER ROLE [aspnet_Membership_FullAccess] ADD MEMBER [securityuser]
+        ALTER ROLE [aspnet_Membership_ReportingAccess] ADD MEMBER [securityuser]
+        ALTER ROLE [aspnet_Profile_BasicAccess] ADD MEMBER [securityuser]
+        ALTER ROLE [aspnet_Profile_FullAccess] ADD MEMBER [securityuser]
+        ALTER ROLE [aspnet_Profile_ReportingAccess] ADD MEMBER [securityuser]
+        ALTER ROLE [aspnet_Roles_BasicAccess] ADD MEMBER [securityuser]
+        ALTER ROLE [aspnet_Roles_FullAccess] ADD MEMBER [securityuser]
+        ALTER ROLE [aspnet_Roles_ReportingAccess] ADD MEMBER [securityuser]
+        ALTER ROLE [db_datareader] ADD MEMBER [securityuser]
+        ALTER ROLE [db_datawriter] ADD MEMBER [securityuser]
+
+        GRANT CONNECT TO [securityuser] AS [dbo]
+        GRANT EXECUTE TO [securityuser] AS [dbo]
+    END
 GO
 
 -------------------------------------------------------------------------------
@@ -47,15 +59,16 @@ ALTER DATABASE [$(DatabasePrefix)_Master]
     SET CONTAINMENT = PARTIAL
     WITH ROLLBACK IMMEDIATE;
 
-CREATE USER [masteruser] WITH PASSWORD=N'$(Password)', DEFAULT_SCHEMA=[dbo]
-GO
-ALTER ROLE [db_datareader] ADD MEMBER [masteruser]
-GO
-ALTER ROLE [db_datawriter] ADD MEMBER [masteruser]
-GO
-GRANT CONNECT TO [masteruser] AS [dbo]
-GO
-GRANT EXECUTE TO [masteruser] AS [dbo]
+IF USER_ID('masteruser') IS NULL
+    BEGIN
+        CREATE USER [masteruser] WITH PASSWORD=N'$(Password)', DEFAULT_SCHEMA=[dbo]
+
+        ALTER ROLE [db_datareader] ADD MEMBER [masteruser]
+        ALTER ROLE [db_datawriter] ADD MEMBER [masteruser]
+
+        GRANT CONNECT TO [masteruser] AS [dbo]
+        GRANT EXECUTE TO [masteruser] AS [dbo]
+    END
 GO
 
 -------------------------------------------------------------------------------

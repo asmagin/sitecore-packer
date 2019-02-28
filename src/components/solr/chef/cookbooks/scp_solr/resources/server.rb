@@ -20,12 +20,12 @@ end
 action :install do
   # install SOLR prerequisites
   scp_windows_chocolatey_packages '' do
-    chocolatey_packages_options server_options['chocolatey_packages_options']
+    chocolatey_packages_options new_resource.server_options['chocolatey_packages_options']
   end
 
   # install solr service
   scp_solr_nssms '' do
-    services_options server_options['services_options']
+    services_options new_resource.server_options['services_options']
   end
 
   # setup HTTPS for SOLR
@@ -45,14 +45,14 @@ action :install do
   end
 
   # Generate SSL cert
-  scp_windows_powershell_script_elevated "Generate SSL cert" do
-    code "& '#{script_file_path}' -KeystoreFile '#{server_options['solr_path']}/server/etc/solr-ssl.keystore.jks' -Clobber"
+  scp_windows_powershell_script_elevated 'Generate SSL cert' do
+    code "& '#{script_file_path}' -KeystoreFile '#{new_resource.server_options['solr_path']}/server/etc/solr-ssl.keystore.jks' -Clobber"
     cwd 'c:/tmp'
     action :run
   end
 
   # Enable HTTPS for SOLR
-  cookbook_file "#{server_options['solr_path']}/bin/solr.in.cmd" do
+  cookbook_file "#{new_resource.server_options['solr_path']}/bin/solr.in.cmd" do
     source 'solr.in.cmd'
     cookbook 'scp_solr'
     action :create

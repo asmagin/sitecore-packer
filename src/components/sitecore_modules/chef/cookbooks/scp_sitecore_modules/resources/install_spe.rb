@@ -15,9 +15,15 @@ action :install do
   end
 
   # Install Sitecore Powershell Extentions
-  scp_sitecore_modules_install_module 'Install Sitecore Powershell Extentions' do
+  scp_sitecore_modules_install_sitecore_module 'Install Sitecore Powershell Extentions' do
     options new_resource.options
     secrets new_resource.secrets
     action :install
+  end
+
+  # copy Sitecore PowerShell configuration to enable remoting
+  remote_directory config['site_path'] do
+    source 'spe'
+    action :create
   end
 end

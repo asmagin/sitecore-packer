@@ -1,6 +1,7 @@
 default['scp_sitecore_modules']['common'] = {
   'config' => {
     'root' => 'C:/tmp/sitecore_modules',
+    'tools_path' => 'C:/tools',
     'password' => 'vagrant',
     'prefix' => 'sc9',
     'site_url' => 'http://sc9.local',

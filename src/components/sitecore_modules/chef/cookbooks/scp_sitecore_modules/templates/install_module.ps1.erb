@@ -3,9 +3,6 @@ $PSScriptRoot = "<%= @config['root'] %>"
 $packageFullPath = "<%= @config['package_full_path'] %>"
 $prefix = "<%= @config['prefix'] %>"
 $site = "$($prefix).local"
-$sqlServer = "<%= @config['sql_server'] %>"
-$sqlUserId = "<%= @config['sql_admin_user'] %>"
-$sqlUserPassword = "<%= @config['sql_admin_password'] %>"
 
 $msdeploy = "C:/Program Files/IIS/Microsoft Web Deploy V3/msdeploy.exe"
 $msdeployArgs = 
@@ -13,8 +10,6 @@ $msdeployArgs =
     "-allowUntrusted",
     "-dest:auto",
     "-setParam:name=`"Application Path`",value=`"$site`"",
-    "-setParam:name=`"Core Admin Connection String`",value=`"Data Source=$sqlServer;Initial Catalog=$($prefix)_Core;User ID=$sqlUserId;Password=$sqlUserPassword`"",
-    "-setParam:name=`"Master Admin Connection String`",value=`"Data Source=$sqlServer;Initial Catalog=$($prefix)_Master;User ID=$sqlUserId;Password=$sqlUserPassword`"",
     "-verb:sync",
     "-retryAttempts=2",
     "-enableRule:DoNotDeleteRule",

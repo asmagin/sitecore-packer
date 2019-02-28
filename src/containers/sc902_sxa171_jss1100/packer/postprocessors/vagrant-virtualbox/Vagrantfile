@@ -1,0 +1,21 @@
+Vagrant.configure(2) do |config|
+  config.vm.hostname = "#{ENV['COMPUTERNAME']}-TSC902_SXA171_JSS1100"
+
+  config.vm.guest = :windows
+  config.vm.communicator = 'winrm'
+
+  config.vm.provider 'virtualbox' do |vb|
+    vb.memory = 8192
+    vb.cpus = 2
+  end
+
+  config.vm.network :forwarded_port, guest: 3389, host: 33389, auto_correct: true
+
+  config.vm.network :forwarded_port, guest: 80,   host: 30080, auto_correct: true # http
+  config.vm.network :forwarded_port, guest: 443,  host: 30443, auto_correct: true # https
+  config.vm.network :forwarded_port, guest: 1433, host: 31433, auto_correct: true # MS SQL
+  config.vm.network :forwarded_port, guest: 8983, host: 38983, auto_correct: true # SOLR
+  config.vm.network :forwarded_port, guest: 8172, host: 38172, auto_correct: true # webdeploy
+  config.vm.network :forwarded_port, guest: 8983, host: 38983, auto_correct: true # solr
+  config.vm.network :forwarded_port, guest: 4020, host: 34020, auto_correct: true # VS remote debug
+end

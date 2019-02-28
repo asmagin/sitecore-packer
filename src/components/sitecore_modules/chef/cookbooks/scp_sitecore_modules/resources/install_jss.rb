@@ -14,7 +14,7 @@ action :install do
     action :create
   end
 
-  scp_sitecore_modules_install_module 'Install Sitecore JavaScript Services' do
+  scp_sitecore_modules_install_sitecore_module 'Install Sitecore JavaScript Services' do
     options new_resource.options
     secrets new_resource.secrets
     action :install

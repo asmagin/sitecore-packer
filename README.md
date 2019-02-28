@@ -80,15 +80,23 @@ They contain the respective hosting tools with the default configuration are bas
 * **SQL Server 2016 SP1**
   * **w16s-sql16d]** with Windows Server 2016 Standard
 * **SOLR 6.6.2**
-  * **[w16s-solr]** with Solr 6.6.2
+  * **[w16s-solr662]** with Solr 6.6.2
+* **SOLR 7.2.1**
+  * **[w16s-solr721]** with Solr 7.2.1
 * **Sitecore 9.0 Initial release**
-  * **[w16s-sc900]** with Sitecore 9.0.0 rev. 171002 installed via SIF
+  * **[w16s-sc900]** with Sitecore 9.0.0 rev. 171002 installed via SIF 1.2.1 and SPE
 * **Sitecore 9.0 Update 1**
-  * **[w16s-sc901]** with Sitecore 9.0.1 rev. 171219 installed via SIF
+  * **[w16s-sc901]** with Sitecore 9.0.1 rev. 171219 installed via SIF 1.2.1 and SPE
 * **Sitecore 9.0 Update 2**
-  * **[w16s-sc902]** with Sitecore 9.0.2 rev. 180604 installed via SIF
+  * **[w16s-sc902]** with Sitecore 9.0.2 rev. 180604 installed via SIF 1.2.1 and SPE
+* **Sitecore 9.1 Initial release**
+  * **[w16s-sc902]** with Sitecore 9.1.0 rev. 001564 installed via SIF 2.0 and SPE
 * **Sitecore 9.0 Update 2 with SPE SXA JSS**
-  * **[w16s-sc902m]** with Sitecore 9.0.2 rev. 180604 installed via SIF and SPE SXA JSS
+  * **[w16s-sc902_sxa171_jss1100]** with Sitecore 9.0.2 rev. 180604 installed via SIF 1.2.1 and SPE SXA 1.7.1 JSS
+* **Sitecore 9.0 Update 2 with SPE SXA JSS**
+  * **[w16s-sc902_sxa180_jss1100]** with Sitecore 9.0.2 rev. 180604 installed via SIF 1.2.1 and SPE SXA 1.8 JSS
+* **Sitecore 9.0 Update 2 with SPE SXA JSS**
+  * **[w16s-sc910_sxa180_jss1100]** with Sitecore 9.1.0 rev. 001564 installed via SIF 2.0 and SPE SXA 1.8 JSS
 * **Sitecore Experience Commerce 9.0 Update-1**
   * **[w16s-xc901]** with Sitecore Experience Commerce 9.0 Update-1 rev. 2018.03-2.1.55 installed via SIF
 * **Sitecore Experience Commerce 9.0 Update-2**
