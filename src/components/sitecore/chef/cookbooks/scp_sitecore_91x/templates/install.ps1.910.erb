@@ -24,6 +24,8 @@ $SqlServer = "<%= @sitecore['sql_server'] %>"
 $SqlAdminUser = "<%= @sitecore['sql_admin_user'] %>"
 # The password for $SQLAdminUser.
 $SqlAdminPassword = "<%= @sitecore['sql_admin_password'] %>"
+# The password for sitecore to access DBs.
+$SqlCollectionUserPassword = "<%= @sitecore['sql_collectionuser_password'] %>"
 # The path to the XConnect Package to Deploy.
 $XConnectPackage = (Get-ChildItem "$SCInstallRoot\Sitecore 9.1.0 rev. * (OnPrem)_xp0xconnect.scwdp.zip").FullName
 # The path to the Sitecore Package to Deploy.
@@ -44,29 +46,43 @@ $AllowedCorsOrigins = "http://$SitecoreSiteName"
 
 # Install XP0 via combined partials file.
 $singleDeveloperParams = @{
+    AllowedCorsOrigins = $AllowedCorsOrigins
+    ClientSecret = $ClientSecret
+    LicenseFile = $LicenseFile
+    PasswordRecoveryUrl = $PasswordRecoveryUrl
     Path = "$SCInstallRoot\XP0-SingleDeveloper.json"
-    SqlServer = $SqlServer
-    SqlAdminUser = $SqlAdminUser
-    SqlAdminPassword = $SqlAdminPassword
+    Prefix = $Prefix
     SitecoreAdminPassword = $SitecoreAdminPassword
-    SolrUrl = $SolrUrl
+    SitecoreIdentityAuthority = $SitecoreIdentityAuthority
+    SitecorePackage = $SitecorePackage
+    SitecoreSitename = $SitecoreSiteName
     SolrRoot = $SolrRoot
     SolrService = $SolrService
-    Prefix = $Prefix
-    XConnectCertificateName = $XConnectSiteName
+    SolrUrl = $SolrUrl
+    SqlServer = $SqlServer
+    SqlAdminPassword = $SqlAdminPassword
+    SqlAdminUser = $SqlAdminUser
+    SqlCollectionPassword = $SqlCollectionUserPassword
+    SqlCorePassword = $SqlCollectionUserPassword
+    SqlExmMasterPassword = $SqlCollectionUserPassword
+    SqlFormsPassword = $SqlCollectionUserPassword
+    SqlMarketingAutomationPassword = $SqlCollectionUserPassword
+    SqlMasterPassword = $SqlCollectionUserPassword
+    SqlMessagingPassword = $SqlCollectionUserPassword
+    SqlProcessingEnginePassword = $SqlCollectionUserPassword
+    SqlProcessingPoolsPassword = $SqlCollectionUserPassword
+    SqlProcessingTasksPassword = $SqlCollectionUserPassword
+    SqlReferenceDataPassword = $SqlCollectionUserPassword
+    SqlReportingPassword = $SqlCollectionUserPassword
+    SqlSecurityPassword = $SqlCollectionUserPassword
+    SqlWebPassword = $SqlCollectionUserPassword  
     IdentityServerCertificateName = $IdentityServerSiteName
-    IdentityServerSiteName = $IdentityServerSiteName
-    LicenseFile = $LicenseFile
-    XConnectPackage = $XConnectPackage
-    SitecorePackage = $SitecorePackage
     IdentityServerPackage = $IdentityServerPackage
-    XConnectSiteName = $XConnectSiteName
-    SitecoreSitename = $SitecoreSiteName
-    PasswordRecoveryUrl = $PasswordRecoveryUrl
-    SitecoreIdentityAuthority = $SitecoreIdentityAuthority
+    IdentityServerSiteName = $IdentityServerSiteName
+    XConnectCertificateName = $XConnectSiteName
     XConnectCollectionService = $XConnectCollectionService
-    ClientSecret = $ClientSecret
-    AllowedCorsOrigins = $AllowedCorsOrigins
+    XConnectPackage = $XConnectPackage
+    XConnectSiteName = $XConnectSiteName
 }
 
 Push-Location $SCInstallRoot
