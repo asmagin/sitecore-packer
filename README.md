@@ -24,8 +24,13 @@ Most of the components, including the core operating systems, share the followin
 
 **IMPORTANT! Required licenses and distributions (not included)**
 
-* Put **license.xml** file to **/src/components/sitecore/chef/cookbooks/scp_sitecore/files/license.xml**
-* Put **dev.sitecore.net** credentials into **src/components/sitecore/chef/cookbooks/scp_sitecore/attributes/secret.rb**. You can find sample next to this file.
+* Put **license.xml** file to **/src/components/sitecore/chef/cookbooks/scp_sitecore_90x/files/license.xml**
+* Put **license.xml** file to **/src/components/sitecore/chef/cookbooks/scp_sitecore_91x/files/license.xml**
+* Put **license.xml** file to **/src/components/sitecore_modules/chef/cookbooks/scp_sitecore_modules/files/license.xml**
+
+* Put **dev.sitecore.net** credentials into **src/components/sitecore/chef/cookbooks/scp_sitecore_90x/attributes/secret.rb**. You can find sample next to this file.
+* Put **dev.sitecore.net** credentials into **src/components/sitecore/chef/cookbooks/scp_sitecore_91x/attributes/secret.rb**. You can find sample next to this file.
+
 * Put a link to **SQL Server 2016 Dev SP2** into **src/components/sql/chef/cookbooks/scp_sql/attributes/2016_developer.rb**
 
 * For boxes with Sitecore put **license.xml** file in the same folder with **Vagrantfile** that is used to up the box.
@@ -78,7 +83,7 @@ They contain the respective hosting tools with the default configuration are bas
 * **IIS 10**
   * **[w16s-iis]** with Windows Server 2016 Standard
 * **SQL Server 2016 SP1**
-  * **w16s-sql16d]** with Windows Server 2016 Standard
+  * **[w16s-sql16d]** with Windows Server 2016 Standard
 * **SOLR 6.6.2**
   * **[w16s-solr662]** with Solr 6.6.2
 * **SOLR 7.2.1**
@@ -90,13 +95,17 @@ They contain the respective hosting tools with the default configuration are bas
 * **Sitecore 9.0 Update 2**
   * **[w16s-sc902]** with Sitecore 9.0.2 rev. 180604 installed via SIF 1.2.1 and SPE
 * **Sitecore 9.1 Initial release**
-  * **[w16s-sc902]** with Sitecore 9.1.0 rev. 001564 installed via SIF 2.0 and SPE
+  * **[w16s-sc910]** with Sitecore 9.1.0 rev. 001564 installed via SIF 2.0 and SPE
 * **Sitecore 9.0 Update 2 with SPE SXA JSS**
-  * **[w16s-sc902_sxa171_jss1100]** with Sitecore 9.0.2 rev. 180604 installed via SIF 1.2.1 and SPE SXA 1.7.1 JSS
+  * **[w16s-sc902_sxa171_jss1100]** with Sitecore 9.0.2 rev. 180604 installed via SIF 1.2.1 and SPE, SXA 1.7.1, JSS 11.0.0
 * **Sitecore 9.0 Update 2 with SPE SXA JSS**
-  * **[w16s-sc902_sxa180_jss1100]** with Sitecore 9.0.2 rev. 180604 installed via SIF 1.2.1 and SPE SXA 1.8 JSS
-* **Sitecore 9.0 Update 2 with SPE SXA JSS**
-  * **[w16s-sc910_sxa180_jss1100]** with Sitecore 9.1.0 rev. 001564 installed via SIF 2.0 and SPE SXA 1.8 JSS
+  * **[w16s-sc902_sxa180_jss1100]** with Sitecore 9.0.2 rev. 180604 installed via SIF 1.2.1 and SPE, SXA 1.8, JSS 11.0.0
+* **Sitecore 9.1 with SPE JSS**
+  * **[w16s-sc910_jss1100]** with Sitecore 9.1.0 rev. 001564 installed via SIF 2.0 and SPE, JSS 11.0.0
+* **Sitecore 9.1 with SPE SXA**
+  * **[w16s-sc910_sxa180]** with Sitecore 9.1.0 rev. 001564 installed via SIF 2.0 and SPE, SXA 1.8
+* **Sitecore 9.1 with SPE SXA JSS**
+  * **[w16s-sc910_sxa180_jss1100]** with Sitecore 9.1.0 rev. 001564 installed via SIF 2.0 and SPE, SXA 1.8, JSS 11.0.0
 * **Sitecore Experience Commerce 9.0 Update-1**
   * **[w16s-xc901]** with Sitecore Experience Commerce 9.0 Update-1 rev. 2018.03-2.1.55 installed via SIF
 * **Sitecore Experience Commerce 9.0 Update-2**

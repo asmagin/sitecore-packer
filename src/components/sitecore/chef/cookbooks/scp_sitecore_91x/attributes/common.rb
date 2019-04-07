@@ -1,5 +1,6 @@
 default['scp_sitecore_91x']['common'] = {
   'sitecore' => {
+    'cert_path' => 'c:/certificates',
     'password' => 'vagrant',
     'prefix' => 'sc9',
     'root' => 'c:/tmp/sitecore',

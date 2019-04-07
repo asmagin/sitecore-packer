@@ -19,6 +19,6 @@ scp_windows_powershell_script_elevated 'Clearing temporary files' do
   action :run
 end
 
-include_recipe 'scp_sitecore::cleanup'
+include_recipe 'scp_sitecore_90x::cleanup'
 
 include_recipe 'scp_packer_w::cleanup'

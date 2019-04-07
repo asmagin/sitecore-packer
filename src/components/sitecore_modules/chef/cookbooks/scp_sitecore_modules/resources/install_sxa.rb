@@ -37,8 +37,20 @@ action :add_sxa_solr_cores do
         Copy-Item "#{source}" -Destination "#{solr_idexes_folder}/#{sxa_master_index}/conf" -Recurse -Force
         Copy-Item "#{source}" -Destination "#{solr_idexes_folder}/#{sxa_web_index}/conf" -Recurse -Force
 
-        Invoke-ManageSolrCoreTask -Action "Create" -Address "#{config['solr_url']}" -Arguments @{ Name = "#{sxa_master_index}" }
-        Invoke-ManageSolrCoreTask -Action "Create" -Address "#{config['solr_url']}" -Arguments @{ Name = "#{sxa_web_index}" }
+        switch ("#{config['solr_version']}")
+        {
+            "6.6.2"
+            {
+              Invoke-ManageSolrCoreTask -Action "Create" -Address "#{config['solr_url']}" -Arguments @{ Name = "#{sxa_master_index}" }
+              Invoke-ManageSolrCoreTask -Action "Create" -Address "#{config['solr_url']}" -Arguments @{ Name = "#{sxa_web_index}" }
+            }
+            # "7.2.1" and higher
+            default
+            {
+              Invoke-ManageSolrCoreTask -Action "Create" -Address "#{config['solr_url']}" -Arguments @{ name = "#{sxa_master_index}" }
+              Invoke-ManageSolrCoreTask -Action "Create" -Address "#{config['solr_url']}" -Arguments @{ name = "#{sxa_web_index}" }
+            }
+        }
 
       EOH
     action :run
@@ -61,7 +73,7 @@ action :add_sxa_solr_cores do
 
         Import-Module -Name SPE
         $session = New-ScriptSession -Username admin -Password b -ConnectionUri "#{config['site_url']}" -Timeout 300000
-        $jobId = Invoke-RemoteScript -ScriptBlock {
+        $jobId = Invoke-RemoteScript -Session $session -AsJob -ScriptBlock {
             (Get-SearchIndex -Name *sxa*).ForEach({
                 Write-Output "Core: $($_.Core)"
                 Write-Output " - Populating solr managed schema...";
@@ -70,8 +82,8 @@ action :add_sxa_solr_cores do
                 $_.Rebuild();
                 Write-Output "";
             });
-        } -Session $session
-        Wait-RemoteScriptSession -Session $session -Id $jobId -Delay 5 -Verbose
+        }
+        Wait-RemoteScriptSession -Session $session -Id $jobId -Delay 5
         Stop-ScriptSession -Session $session
 
       EOH
