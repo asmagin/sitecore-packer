@@ -1,20 +1,45 @@
 property :options, Hash, required: true
 
-default_action :install
-
 action :install do
   scp_windows_chocolatey_packages '' do
     chocolatey_packages_options new_resource.options['chocolatey_packages_options']
   end
+end
 
-  powershell_script 'Enable Firewall' do
+action :configure_firewall do
+  # Open ports for remote debugging.
+  # UDP 3702 - default port for discovery, can not be changed. https://docs.microsoft.com/en-us/visualstudio/debugger/remote-debugger-port-assignments?view=vs-2017#the-discovery-port
+  powershell_script 'Configure Firewall for VS Remote Debugging' do
     code <<-EOH
-     netsh advfirewall firewall add rule name="VS Remote Debugger" dir=in localport=#{new_resource.options['port']} protocol=TCP action=allow
+      netsh advfirewall firewall add rule name="VS Remote Debugging TCP Inbound" dir=in action=allow protocol=TCP localport=#{new_resource.options['port_x64']}
+      netsh advfirewall firewall add rule name="VS Remote Debugging TCP Inbound" dir=in action=allow protocol=TCP localport=#{new_resource.options['port_x86']}
+      netsh advfirewall firewall add rule name="VS Remote Debugging UDP Inbound" dir=in action=allow protocol=UDP localport=3702
+    EOH
+    action :run
+  end
+end
+
+action :configure_service_startuptype do
+  powershell_script 'Run VS Remote Debugging /prepcomputer' do
+    code <<-EOH
+      Set-Service -Name msvsmon150 -StartupType Automatic
+      Set-Service -Name VSStandardCollectorService150 -StartupType Automatic
+    EOH
+    action :run
+  end
+end
+
+action :configure_msvsmon_logon_startup do
+  # Setup autostart for remote debugger
+
+  # Run VS Remote Debugging /prepcomputer
+  powershell_script 'Run VS Remote Debugging /prepcomputer' do
+    code <<-EOH
+      Start-Process -FilePath '#{new_resource.options['msvsmon_path']}\\msvsmon.exe' -ArgumentList '/prepcomputer' -Verb runAs
     EOH
     action :run
   end
 
-  # Setup autostart for debugger
   scripts_directory_path = 'c:/startup'
   startup_directory_path = 'c:/Users/vagrant/AppData/Roaming/Microsoft/Windows/Start Menu/Programs/Startup'
 
@@ -28,7 +53,8 @@ action :install do
   template script_file_path do
     source "#{script_file_name}.erb"
     variables(
-      'port' => new_resource.options['port']
+      'port' => new_resource.options['port_x64'],
+      'msvsmon_path' => new_resource.options['msvsmon_path']
     )
   end
 

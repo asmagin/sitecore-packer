@@ -41,7 +41,7 @@ $XConnectCollectionService = "https://$XConnectSiteName"
 # The random string key used for establishing connection with IdentityService. This will be regenerated if left on the default.
 $ClientSecret = "SIF-Default"
 # Pipe-separated list of instances (URIs) that are allowed to login via Sitecore Identity.
-$AllowedCorsOrigins = "http://$SitecoreSiteName"
+$AllowedCorsOrigins = "https://$SitecoreSiteName|http://$SitecoreSiteName"
 
 
 # Install XP0 via combined partials file.
@@ -88,6 +88,18 @@ $singleDeveloperParams = @{
 Push-Location $SCInstallRoot
 
 Install-SitecoreConfiguration @singleDeveloperParams *>&1 | Tee-Object XP0-SingleDeveloper.log
+
+# Create certificate and add SSL binding to sitecore site
+$pass = (ConvertTo-SecureString -String "<%= @sitecore['password'] %>" -AsPlainText -Force)
+Invoke-AddWebFeatureSSLTask `
+    -Hostname $SitecoreSiteName `
+    -SiteName $SitecoreSiteName `
+    -Port 443 `
+    -ClientCertLocation LocalMachine `
+    -OutputDirectory "<%= @sitecore['cert_path'] %>" `
+    -RootDnsName "DO_NOT_TRUST_SitecoreRootCert" `
+    -RootCertName "root-authority" `
+    -Password $pass
 
 # Uncomment the below line and comment out the above if you want to remove the XP0 SingleDeveloper Config
 #Uninstall-SitecoreConfiguration @singleDeveloperParams *>&1 | Tee-Object XP0-SingleDeveloper-Uninstall.log

@@ -1,1 +1,1 @@
-Start-Process -FilePath .\msvsmon.exe -ArgumentList '/nosecuritywarn /port:<%= @port%> /silent' -Verb runAs
+Start-Process -FilePath '<%= @msvsmon_path %>\msvsmon.exe' -ArgumentList '/nosecuritywarn /port:<%= @port %> /silent' -Verb runAs

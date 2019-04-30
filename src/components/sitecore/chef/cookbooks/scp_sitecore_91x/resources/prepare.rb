@@ -115,6 +115,7 @@ action :install_sitecore_prerequisites do
   cookbook_file license_file_path do
     source license_file_name
     cookbook 'scp_sitecore_91x'
+    sensitive true
     action :create
   end
 

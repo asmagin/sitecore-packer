@@ -10,7 +10,7 @@ action :install do
   password = new_resource.secrets['password']
 
   # Download Sitecore
-  powershell_script 'Download Sitecore installation zip' do
+  scp_windows_powershell_script_elevated 'Download Sitecore installation zip' do
     code <<-EOH
       $ProgressPreference='SilentlyContinue';
 
@@ -23,7 +23,7 @@ action :install do
   end
 
   # Extract archive
-  powershell_script 'Unpack Sitecore' do
+  scp_windows_powershell_script_elevated 'Unpack Sitecore' do
     code <<-EOH
       & 7z x "#{sitecore['package_full_path']}" -o"#{sitecore['root']}" -aoa
     EOH
@@ -31,24 +31,31 @@ action :install do
   end
 
   # Extract config files
-  powershell_script 'Unpack config files' do
+  scp_windows_powershell_script_elevated 'Unpack config files' do
     code <<-EOH
       & 7z x "#{sitecore['package_config_path']}" -o"#{sitecore['root']}" -aoa
     EOH
     action :run
   end
 
-  ## Install certificates for SSL
+  # Override config files
+  remote_directory sitecore['root'] do
+    source "configs/#{sitecore['version']}"
+    action :create
+  end
+
+  # Copy certificates
+  remote_directory sitecore['cert_path'] do
+    source 'certificates'
+    action :create
+  end
+
+  # Install root certificate for SSL. Sitecore will create certificates for identity server and xconnect using it. 
   scp_windows_powershell_script_elevated 'Install certificates for SSL' do
     code <<-EOH
-      $ProgressPreference='SilentlyContinue';
-
-      $pass = (ConvertTo-SecureString -String "#{sitecore['password']}" -Force -AsPlainText)
-
-      Import-PfxCertificate -CertStoreLocation cert:/LocalMachine/My   -Password $pass -FilePath #{sitecore['cert_path']}/all.local.pfx
-      Import-PfxCertificate -CertStoreLocation cert:/LocalMachine/My   -Password $pass -FilePath #{sitecore['cert_path']}/all.sc9.local.pfx
-      Import-PfxCertificate -CertStoreLocation cert:/LocalMachine/My   -Password $pass -FilePath #{sitecore['cert_path']}/sc9.local.pfx
-
+      $ProgressPreference='SilentlyContinue'
+      $pass = (ConvertTo-SecureString -String "#{sitecore['password']}" -AsPlainText -Force)
+      Import-PfxCertificate -CertStoreLocation cert:/LocalMachine/Root -Password $pass -FilePath #{sitecore['cert_path']}/SitecoreRootCert.pfx -Exportable
     EOH
     action :run
   end
@@ -59,6 +66,7 @@ action :install do
   cookbook_file license_file_path do
     source license_file_name
     cookbook 'scp_sitecore_91x'
+    sensitive true
     action :create
   end
 
@@ -96,7 +104,7 @@ action :install do
   directory sitecore['identityserver_path'] do
     rights :modify, 'BUILTIN\IIS_IUSRS'
   end
-  #directory 'C:\Windows\temp' do # Installation Guide -> Page 13
+  #directory 'C:\Windows\Temp' do # Installation Guide -> Page 13
   #  rights :modify, 'BUILTIN\IIS_IUSRS'
   #end
   #directory 'C:\Windows\Globalization' do # Installation Guide -> Page 13
@@ -114,30 +122,30 @@ action :install do
   end
 
   # Confgure SSL certificate for sc9.local
-  scp_windows_powershell_script_elevated 'Add bindings for wildcard subdomains' do
-    code <<-EOH
-      $subject = "#{sitecore['prefix']}.local"
+  # scp_windows_powershell_script_elevated 'Add bindings for wildcard subdomains' do
+  #   code <<-EOH
+  #     $subject = "#{sitecore['prefix']}.local"
 
-      New-WebBinding -name $subject -Protocol http -HostHeader "*.local" -Port 80
-      New-WebBinding -name $subject -Protocol http -HostHeader "*.$($subject)" -Port 80
+  #     New-WebBinding -name $subject -Protocol http -HostHeader "*.local" -Port 80
+  #     New-WebBinding -name $subject -Protocol http -HostHeader "*.$($subject)" -Port 80
 
-      $guid = [guid]::NewGuid().ToString("B")
+  #     $guid = [guid]::NewGuid().ToString("B")
 
-      # Add *.#{sitecore['prefix']}.local bindings
-      $cert = Get-ChildItem Cert:/LocalMachine/My | Where-Object { $_.Subject -eq "CN=*.$subject" }
-      netsh http add sslcert hostnameport="*.$($subject):443" certhash="$($cert.Thumbprint)" certstorename=MY appid="$guid"
-      New-WebBinding -name $subject -Protocol https  -HostHeader "*.$($subject)" -Port 443 -SslFlags 1
+  #     # Add *.#{sitecore['prefix']}.local bindings
+  #     $cert = Get-ChildItem Cert:/LocalMachine/My | Where-Object { $_.Subject -eq "CN=*.$subject" }
+  #     netsh http add sslcert hostnameport="*.$($subject):443" certhash="$($cert.Thumbprint)" certstorename=MY appid="$guid"
+  #     New-WebBinding -name $subject -Protocol https  -HostHeader "*.$($subject)" -Port 443 -SslFlags 1
 
-      # Add *.local bindings
-      $cert = Get-ChildItem Cert:/LocalMachine/My | Where-Object { $_.Subject -eq "CN=*.local" }
-      netsh http add sslcert hostnameport="*.local:443" certhash="$($cert.Thumbprint)" certstorename=MY appid="$guid"
-      New-WebBinding -name $subject -Protocol https  -HostHeader "*.local" -Port 443 -SslFlags 1
+  #     # Add *.local bindings
+  #     $cert = Get-ChildItem Cert:/LocalMachine/My | Where-Object { $_.Subject -eq "CN=*.local" }
+  #     netsh http add sslcert hostnameport="*.local:443" certhash="$($cert.Thumbprint)" certstorename=MY appid="$guid"
+  #     New-WebBinding -name $subject -Protocol https  -HostHeader "*.local" -Port 443 -SslFlags 1
 
-      # Add *.azurewebsites.net bindings
-      $cert = Get-ChildItem Cert:/LocalMachine/My | Where-Object { $_.Subject -eq "CN=*.local" }
-      netsh http add sslcert hostnameport="*.azurewebsites.net:443" certhash="$($cert.Thumbprint)" certstorename=MY appid="$guid"
-      New-WebBinding -name $subject -Protocol https  -HostHeader "*.azurewebsites.net" -Port 443 -SslFlags 1
-      EOH
-    action :run
-  end
+  #     # Add *.azurewebsites.net bindings
+  #     $cert = Get-ChildItem Cert:/LocalMachine/My | Where-Object { $_.Subject -eq "CN=*.local" }
+  #     netsh http add sslcert hostnameport="*.azurewebsites.net:443" certhash="$($cert.Thumbprint)" certstorename=MY appid="$guid"
+  #     New-WebBinding -name $subject -Protocol https  -HostHeader "*.azurewebsites.net" -Port 443 -SslFlags 1
+  #     EOH
+  #   action :run
+  # end
 end

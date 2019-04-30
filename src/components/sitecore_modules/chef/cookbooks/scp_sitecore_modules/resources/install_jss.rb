@@ -19,6 +19,10 @@ action :install do
     secrets new_resource.secrets
     action :install
   end
+end
+
+action :fix_web_config_for_90 do
+  config = new_resource.options['config']
 
   # Fix web.config Newtonsoft.Json oldVersion attribute. Applicable only for 9.0.X Sitecore versions (no need for 9.1)
   scp_sitecore_modules_set_xml_attribute 'Fix web.config Newtonsoft.Json oldVersion attribute' do
