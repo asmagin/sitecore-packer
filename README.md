@@ -28,8 +28,9 @@ Most of the components, including the core operating systems, share the followin
 * Put **license.xml** file to **/src/components/sitecore/chef/cookbooks/scp_sitecore_91x/files/license.xml**
 * Put **license.xml** file to **/src/components/sitecore_modules/chef/cookbooks/scp_sitecore_modules/files/license.xml**
 
-* Put **dev.sitecore.net** credentials into **src/components/sitecore/chef/cookbooks/scp_sitecore_90x/attributes/secret.rb**. You can find sample next to this file.
-* Put **dev.sitecore.net** credentials into **src/components/sitecore/chef/cookbooks/scp_sitecore_91x/attributes/secret.rb**. You can find sample next to this file.
+* Put **dev.sitecore.net** credentials into **src/components/sitecore/chef/cookbooks/scp_sitecore_90x/attributes/secret.rb**. Check **secrets.md** for a sample.
+* Put **dev.sitecore.net** credentials into **src/components/sitecore/chef/cookbooks/scp_sitecore_91x/attributes/secret.rb**. Check **secrets.md** for a sample.
+* Put **dev.sitecore.net** credentials into **src/components/sitecore/chef/cookbooks/scp_sitecore_modules/attributes/secret.rb**. Check **secrets.md** for a sample.
 
 * Put a link to **SQL Server 2016 Dev SP2** into **src/components/sql/chef/cookbooks/scp_sql/attributes/2016_developer.rb**
 
@@ -101,11 +102,17 @@ They contain the respective hosting tools with the default configuration are bas
 * **Sitecore 9.0 Update 2 with SPE SXA JSS**
   * **[w16s-sc902_sxa180_jss1100]** with Sitecore 9.0.2 rev. 180604 installed via SIF 1.2.1 and SPE, SXA 1.8, JSS 11.0.0
 * **Sitecore 9.1 with SPE JSS**
-  * **[w16s-sc910_jss1100]** with Sitecore 9.1.0 rev. 001564 installed via SIF 2.0 and SPE, JSS 11.0.0
+  * **[w16s-sc910_jss1100]** with Sitecore 9.1.0 rev. 001564 installed via SIF 2.1 and SPE, JSS 11.0.0
 * **Sitecore 9.1 with SPE SXA**
-  * **[w16s-sc910_sxa180]** with Sitecore 9.1.0 rev. 001564 installed via SIF 2.0 and SPE, SXA 1.8
+  * **[w16s-sc910_sxa180]** with Sitecore 9.1.0 rev. 001564 installed via SIF 2.1 and SPE, SXA 1.8
 * **Sitecore 9.1 with SPE SXA JSS**
-  * **[w16s-sc910_sxa180_jss1100]** with Sitecore 9.1.0 rev. 001564 installed via SIF 2.0 and SPE, SXA 1.8, JSS 11.0.0
+  * **[w16s-sc910_sxa180_jss1100]** with Sitecore 9.1.0 rev. 001564 installed via SIF 2.1 and SPE, SXA 1.8, JSS 11.0.0
+* **Sitecore 9.1 Update 1 with SPE JSS**
+  * **[w16s-sc911_jss1101]** with Sitecore 9.1.1 rev. 002459 installed via SIF 2.1 and SPE, JSS 11.0.1
+* **Sitecore 9.1 Update 1 with SPE SXA**
+  * **[w16s-sc911_sxa181]** with Sitecore 9.1.1 rev. 002459 installed via SIF 2.1 and SPE, SXA 1.8.1
+* **Sitecore 9.1 Update 1 with SPE SXA JSS**
+  * **[w16s-sc911_sxa181_jss1101]** with Sitecore 9.1.1 rev. 002459 installed via SIF 2.1 and SPE, SXA 1.8.1, JSS 11.0.1
 * **Sitecore Experience Commerce 9.0 Update-1**
   * **[w16s-xc901]** with Sitecore Experience Commerce 9.0 Update-1 rev. 2018.03-2.1.55 installed via SIF
 * **Sitecore Experience Commerce 9.0 Update-2**
