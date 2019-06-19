@@ -56,20 +56,11 @@ action :install do
   scp_windows_powershell_script_elevated 'Install certificates for SSL' do
     code <<-EOH
       $ProgressPreference='SilentlyContinue';
-
       $pass = (ConvertTo-SecureString -String "#{sitecore['password']}" -Force -AsPlainText)
-
-      Import-PfxCertificate -CertStoreLocation cert:/LocalMachine/Root -Password $pass -FilePath #{sitecore['cert_path']}/SitecoreFundamentalsRoot.pfx
       Import-PfxCertificate -CertStoreLocation cert:/LocalMachine/Root -Password $pass -FilePath #{sitecore['cert_path']}/SitecoreRootCert.pfx
-
-      Import-PfxCertificate -CertStoreLocation cert:/LocalMachine/CA   -Password $pass -FilePath #{sitecore['cert_path']}/SitecoreFundamentalsRoot.pfx
       Import-PfxCertificate -CertStoreLocation cert:/LocalMachine/CA   -Password $pass -FilePath #{sitecore['cert_path']}/SitecoreRootCert.pfx
-
-      Import-PfxCertificate -CertStoreLocation cert:/LocalMachine/My   -Password $pass -FilePath #{sitecore['cert_path']}/SitecoreFundamentalsRoot.pfx
       Import-PfxCertificate -CertStoreLocation cert:/LocalMachine/My   -Password $pass -FilePath #{sitecore['cert_path']}/SitecoreRootCert.pfx
-      Import-PfxCertificate -CertStoreLocation cert:/LocalMachine/My   -Password $pass -FilePath #{sitecore['cert_path']}/all.local.pfx
       Import-PfxCertificate -CertStoreLocation cert:/LocalMachine/My   -Password $pass -FilePath #{sitecore['cert_path']}/sc9.xconnect.pfx
-      Import-PfxCertificate -CertStoreLocation cert:/LocalMachine/My   -Password $pass -FilePath #{sitecore['cert_path']}/all.sc9.local.pfx
       Import-PfxCertificate -CertStoreLocation cert:/LocalMachine/My   -Password $pass -FilePath #{sitecore['cert_path']}/sc9.local.pfx
     EOH
     action :run
