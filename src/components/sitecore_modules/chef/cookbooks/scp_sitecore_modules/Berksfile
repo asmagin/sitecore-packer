@@ -1,6 +1,0 @@
-require "#{File.dirname(__FILE__)}/../../../../core/chef/Berksfile.core"
-
-scp_sources
-
-scp_cookbook 'components', 'sitecore_modules'
-scp_cookbook 'components', 'windows'

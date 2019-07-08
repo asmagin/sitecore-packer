@@ -86,7 +86,7 @@ void PackerTemplate_Build(PackerTemplate template) {
     return;
   }
 
-  PackerTemplate_Packer(template, "build -on-error=ask template.json");
+  PackerTemplate_Packer(template, "build -on-error=ask template.json"); // -debug
 }
 
 void PackerTemplate_Rebuild(PackerTemplate template) {

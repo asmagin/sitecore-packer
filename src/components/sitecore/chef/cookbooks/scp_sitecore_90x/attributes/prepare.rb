@@ -6,9 +6,6 @@ default['scp_sitecore_90x']['prepare'] = {
     'webpi' => {
       'elevated' => true,
     },
-    'nodejs-lts' => {
-      'elevated' => true,
-    },
   },
   'webpi_packages' => {
     'WDeploy36' => {

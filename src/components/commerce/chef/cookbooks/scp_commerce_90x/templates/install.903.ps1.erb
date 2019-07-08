@@ -1,0 +1,100 @@
+#Requires -Version 3
+param(
+  [string]$Prefix = "<%= @sitecore['prefix'] %>",
+  [string]$SiteName = "<%= @sitecore['site_hostname'] %>",
+  [string]$StorefrontSiteName = "<%= @commerce['storefront_hostname'] %>",
+  [string]$XConnectSiteName = "<%= @sitecore['xconnect_hostname'] %>",
+  [string]$IdentityServerSiteName = "<%= @sitecore['identityserver_hostname'] %>",
+  [string]$CommerceSearchProvider = "SOLR",
+  [string]$SolrUrl = "<%= @solr['url'] %>",
+  [string]$SolrRoot = "<%= @solr['root'] %>",
+  [string]$SolrService = "<%= @solr['service'] %>",
+  [string]$SqlServer = "<%= @sql['server_name'] %>",
+  [string]$WindowsUserName = "<%= @install['windows_user_name'] %>",
+  [string]$WindowsUserPassword = "<%= @install['windows_user_password'] %>"
+)
+
+# Hide progress bar to speed up installation
+$global:ProgressPreference = 'silentlyContinue'
+Clear-Host
+
+# Import additional modules
+$global:DEPLOYMENT_DIRECTORY = Split-Path $MyInvocation.MyCommand.Path
+$modulesPath = ( Join-Path -Path $DEPLOYMENT_DIRECTORY -ChildPath "Modules" )
+if ($env:PSModulePath -notlike "*$modulesPath*") {
+  $p = $env:PSModulePath + ";" + $modulesPath
+  [Environment]::SetEnvironmentVariable("PSModulePath", $p)
+}
+
+$params = @{
+		Path                                        = Resolve-Path '.\Configuration\Commerce\Master_SingleServer.json'
+		SiteName                                    = $SiteName
+		SiteHostHeaderName                          = $StorefrontSiteName
+		InstallDir                                  = "c:\inetpub\wwwroot\$($SiteName)"
+		XConnectInstallDir                          = "c:\inetpub\wwwroot\$($XConnectSiteName)"
+		CertificateName                             = $StorefrontSiteName
+		CommerceServicesDbServer                    = $SqlServer  #OR "SQLServerName\SQLInstanceName"
+		CommerceServicesDbName                      = "$($Prefix)_SharedEnvironments"
+		CommerceServicesGlobalDbName                = "$($Prefix)_Global"
+		SitecoreDbServer                            = $SqlServer  #OR "SQLServerName\SQLInstanceName"
+		SitecoreCoreDbName                          = "$($Prefix)_Core"
+		SitecoreUsername                            = "sitecore\admin"
+		SitecoreUserPassword                        = "b"
+		CommerceSearchProvider                      = $CommerceSearchProvider
+		SolrUrl                                     = $SolrUrl
+		SolrRoot                                    = $SolrRoot
+		SolrService                                 = $SolrService
+		SolrSchemas                                 = ( Join-Path -Path $DEPLOYMENT_DIRECTORY -ChildPath "SolrSchemas" )
+		SearchIndexPrefix                           = "$($Prefix)_"
+		AzureSearchServiceName                      = ""
+		AzureSearchAdminKey                         = ""
+		AzureSearchQueryKey                         = ""
+		CommerceEngineDacPac                        = Resolve-Path -Path "..\Sitecore.Commerce.Engine.SDK.*\Sitecore.Commerce.Engine.DB.dacpac"
+		CommerceOpsServicesPort                     = "5015"
+		CommerceShopsServicesPort                   = "5005"
+		CommerceAuthoringServicesPort               = "5000"
+		CommerceMinionsServicesPort                 = "5010"
+		SitecoreCommerceEngineZipPath               = Resolve-Path -Path "..\Sitecore.Commerce.Engine.*.zip"
+		SitecoreBizFxServicesContentPath            = (Resolve-Path -Path "..\Sitecore.BizFX.*")[0]
+		SitecoreIdentityServerZipPath               = Resolve-Path -Path "..\Sitecore.IdentityServer.1.*.zip"
+		CommerceEngineCertificatePath               = "c:\certificates\$StorefrontSiteName.cer"
+		SiteUtilitiesSrc                            = ( Join-Path -Path $DEPLOYMENT_DIRECTORY -ChildPath "SiteUtilityPages" )
+		HabitatImagesModuleFullPath                 = Resolve-Path -Path "..\Sitecore.Commerce.Habitat.Images-*.zip"
+		AdvImagesModuleFullPath                     = Resolve-Path -Path "..\Adventure Works Images.zip"
+		CommerceConnectModuleFullPath               = Resolve-Path -Path "..\Sitecore Commerce Connect*.zip"
+		CommercexProfilesModuleFullPath             = Resolve-Path -Path "..\Sitecore Commerce ExperienceProfile Core *.zip"
+		CommercexAnalyticsModuleFullPath            = Resolve-Path -Path "..\Sitecore Commerce ExperienceAnalytics Core *.zip"
+		CommerceMAModuleFullPath                    = Resolve-Path -Path "..\Sitecore Commerce Marketing Automation Core *.zip"
+		CommerceMAForAutomationEngineModuleFullPath = Resolve-Path -Path "..\Sitecore Commerce Marketing Automation for AutomationEngine *.zip"
+		CEConnectPackageFullPath                    = Resolve-Path -Path "..\Sitecore.Commerce.Engine.Connect*.update"
+		PowerShellExtensionsModuleFullPath          = "not_needed" #Resolve-Path -Path "..\Sitecore.PowerShell.Extensions.*\content\Sitecore PowerShell Extensions*.zip"
+		SXAModuleFullPath                           = "not_needed" #Resolve-Path -Path "..\Sitecore Experience Accelerator*.zip"
+		SXACommerceModuleFullPath                   = Resolve-Path -Path "..\Sitecore Commerce Experience Accelerator 1.*.zip"
+		SXAStorefrontModuleFullPath                 = Resolve-Path -Path "..\Sitecore Commerce Experience Accelerator Storefront 1.*.zip"
+		SXAStorefrontThemeModuleFullPath            = Resolve-Path -Path "..\Sitecore Commerce Experience Accelerator Storefront Themes*.zip"
+		SXAStorefrontCatalogModuleFullPath          = Resolve-Path -Path "..\Sitecore Commerce Experience Accelerator Habitat Catalog*.zip"
+		MergeToolFullPath                           = Resolve-Path -Path "..\MSBuild.Microsoft.VisualStudio.Web.targets.14.0.0.3\tools\VSToolsPath\Web\Microsoft.Web.XmlTransform.dll"
+		UserAccount                                 = @{
+			Domain   = $Env:COMPUTERNAME
+			UserName = $WindowsUserName
+			Password = $WindowsUserPassword
+		}
+		BraintreeAccount                            = @{
+			MerchantId = ''
+			PublicKey  = ''
+			PrivateKey = ''
+		}
+		SitecoreIdentityServerName                  = $IdentityServerSiteName
+}
+
+if ($CommerceSearchProvider -eq "SOLR") {
+<% if @install_storefront %>
+  Install-SitecoreConfiguration @params -Skip InstallPowershellExtensions, InstallSXAFrameworkModule -Verbose
+<% else %>
+  Install-SitecoreConfiguration @params -Skip InstallPowershellExtensions, InstallSXAFrameworkModule, InstallSXAStorefrontModule, CreateDefaultTenantAndSite -Verbose
+<% end %>
+}
+elseif ($CommerceSearchProvider -eq "AZURE") {
+  # Installation with AzureSearch not supported right now!
+  Install-SitecoreConfiguration @params -Skip InstallSolrCores
+}

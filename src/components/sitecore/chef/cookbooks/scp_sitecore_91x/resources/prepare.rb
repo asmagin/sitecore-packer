@@ -1,5 +1,5 @@
 property :options, Hash, required: true
-property :secrets, Hash, required: true
+property :secrets, Hash
 
 action :enable_contained_db_auth do
   # Enabled contained database authentication
@@ -110,13 +110,10 @@ action :install_sitecore_prerequisites do
   end
 
   # Copy license
-  license_file_name = 'license.xml'
-  license_file_path = "#{sitecore['root']}/#{license_file_name}"
-  cookbook_file license_file_path do
-    source license_file_name
-    cookbook 'scp_sitecore_91x'
-    sensitive true
-    action :create
+  scp_sitecore_common_license '' do
+    license_dir_path sitecore['root']
+    license_filename 'license.xml'
+    action :copy_license
   end
 
   # Install Sitecore Prerequisites

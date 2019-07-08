@@ -6,7 +6,9 @@ mkdir C:\tmp\packer-chef-solo -ErrorAction Continue
 mkdir C:\tmp\packer-chef-solo\cache -ErrorAction Continue
 
 Write-Host "Installing Chef Client"
-choco install chef-client -y --version 13.4.24
+# We might want to bump it later. Testing required
+choco install chef-client -y --version 13.4.24 #--version 15.0.300 --force
+[Environment]::SetEnvironmentVariable("CHEF_LICENSE", "accept-silent", "Machine")
 
 Write-Host "Installing 7zip"
 choco install 7zip.portable -y
