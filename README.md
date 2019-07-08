@@ -121,6 +121,10 @@ They contain the respective hosting tools with the default configuration are bas
   * **[w16s-xc903]** with Sitecore Experience Commerce 9.0 Update-3 installed via SIF 1.2.1 and SPE
 * **Sitecore Experience Commerce 9.0 Update-3 with SXA and Storefront**
   * **[w16s-xc903_sxa180_storefront]** with Sitecore Experience Commerce 9.0 Update-3 installed via SIF 1.2.1 and SPE, SXA 1.8.0, Storefront
+* **Sitecore Experience Commerce 9.1 Initial release**
+  * **[w16s-xc910]** with Sitecore Experience Commerce 9.1 Initial release installed via SIF 2.1 and SPE
+* **Sitecore Experience Commerce 9.1 Initial release with SXA and Storefront**
+  * **[w16s-xc910_sxa181_storefront]** with Sitecore Experience Commerce 9.1 Initial release installed via SIF 2.1 and SPE, SXA 1.8.1, Storefront
 
 ## Getting started
 
