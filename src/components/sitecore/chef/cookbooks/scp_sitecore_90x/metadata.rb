@@ -7,4 +7,5 @@ long_description 'Installs/Configures Sitecore'
 version '1.0.0'
 
 depends 'scp_windows'
+depends 'scp_sitecore_common'
 depends 'iis', '~> 6.8.0'

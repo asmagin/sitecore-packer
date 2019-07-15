@@ -1,0 +1,10 @@
+name 'scp_sitecore_common'
+maintainer 'Alex Smagin'
+maintainer_email 'me@asmagin.com'
+license 'MIT'
+description 'Common resources for Sitecore scripts'
+long_description 'Common resources for Sitecore scripts'
+version '1.0.0'
+
+depends 'scp_windows'
+depends 'iis', '~> 6.8.0'

@@ -1,0 +1,10 @@
+name 'scp_packer_xc903_sxa180_storefront'
+maintainer 'Alex Smagin'
+maintainer_email 'me@asmagin.com'
+license 'MIT'
+description 'Installs/Configures Packer Sitecore Commerce 9.0.3, SXA 1.8.0 and Storefront'
+long_description 'Installs/Configures Packer Sitecore Commerce 9.0.3, SXA 1.8.0 and Storefront'
+version '1.0.0'
+
+depends 'scp_packer_w'
+depends 'scp_commerce_90x'

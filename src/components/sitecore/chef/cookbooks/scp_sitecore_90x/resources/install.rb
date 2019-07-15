@@ -67,13 +67,10 @@ action :install do
   end
 
   # Copy license
-  license_file_name = 'license.xml'
-  license_file_path = "#{sitecore['root']}/#{license_file_name}"
-  cookbook_file license_file_path do
-    source license_file_name
-    cookbook 'scp_sitecore_90x'
-    sensitive true
-    action :create
+  scp_sitecore_common_license '' do
+    license_dir_path sitecore['root']
+    license_filename 'license.xml'
+    action :copy_license
   end
 
   # Generate install template
@@ -135,33 +132,5 @@ action :install do
     members ["IIS APPPOOL\\#{sitecore['prefix']}.local", "IIS APPPOOL\\#{sitecore['prefix']}.xconnect"]
     append true
     action :modify
-  end
-
-  # Confgure SSL certificate for sc9.local
-  scp_windows_powershell_script_elevated 'Add bindings for wildcard subdomains' do
-    code <<-EOH
-      $subject = "#{sitecore['prefix']}.local"
-
-      New-WebBinding -name $subject -Protocol http -HostHeader "*.local" -Port 80
-      New-WebBinding -name $subject -Protocol http -HostHeader "*.$($subject)" -Port 80
-
-      $guid = [guid]::NewGuid().ToString("B")
-
-      # Add *.#{sitecore['prefix']}.local bindings
-      $cert = Get-ChildItem Cert:/LocalMachine/My | Where-Object { $_.Subject -eq "CN=*.$subject" }
-      netsh http add sslcert hostnameport="*.$($subject):443" certhash="$($cert.Thumbprint)" certstorename=MY appid="$guid"
-      New-WebBinding -name $subject -Protocol https  -HostHeader "*.$($subject)" -Port 443 -SslFlags 1
-
-      # Add *.local bindings
-      $cert = Get-ChildItem Cert:/LocalMachine/My | Where-Object { $_.Subject -eq "CN=*.local" }
-      netsh http add sslcert hostnameport="*.local:443" certhash="$($cert.Thumbprint)" certstorename=MY appid="$guid"
-      New-WebBinding -name $subject -Protocol https  -HostHeader "*.local" -Port 443 -SslFlags 1
-
-      # Add *.azurewebsites.net bindings
-      $cert = Get-ChildItem Cert:/LocalMachine/My | Where-Object { $_.Subject -eq "CN=*.local" }
-      netsh http add sslcert hostnameport="*.azurewebsites.net:443" certhash="$($cert.Thumbprint)" certstorename=MY appid="$guid"
-      New-WebBinding -name $subject -Protocol https  -HostHeader "*.azurewebsites.net" -Port 443 -SslFlags 1
-      EOH
-    action :run
   end
 end

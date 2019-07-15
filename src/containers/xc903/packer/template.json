@@ -1,0 +1,8 @@
+{
+  "variables": {
+    "name": "xc903",
+    "description": "Sitecore Commerce 9.0.3, SPE 5.0",
+    "virtualbox_cpus": "4",
+    "virtualbox_memory": "16384"
+  }
+}

@@ -3,4 +3,5 @@ require "#{File.dirname(__FILE__)}/../../../../core/chef/Berksfile.core"
 scp_sources
 
 scp_cookbook 'components', 'sitecore', '91x'
+scp_cookbook 'components', 'sitecore', 'common'
 scp_cookbook 'components', 'windows'

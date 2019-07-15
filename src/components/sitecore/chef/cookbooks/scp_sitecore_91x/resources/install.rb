@@ -50,7 +50,7 @@ action :install do
     action :create
   end
 
-  # Install root certificate for SSL. Sitecore will create certificates for identity server and xconnect using it. 
+  # Install root certificate for SSL. Sitecore will create certificates for identity server and xconnect using it.
   scp_windows_powershell_script_elevated 'Install certificates for SSL' do
     code <<-EOH
       $ProgressPreference='SilentlyContinue'
@@ -61,13 +61,10 @@ action :install do
   end
 
   # Copy license
-  license_file_name = 'license.xml'
-  license_file_path = "#{sitecore['root']}/#{license_file_name}"
-  cookbook_file license_file_path do
-    source license_file_name
-    cookbook 'scp_sitecore_91x'
-    sensitive true
-    action :create
+  scp_sitecore_common_license '' do
+    license_dir_path sitecore['root']
+    license_filename 'license.xml'
+    action :copy_license
   end
 
   # Generate install template
