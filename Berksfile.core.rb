@@ -41,7 +41,9 @@ def scp_packer_sources
   scp_packer_cookbook 'sc910_sxa180_jss1100'
   scp_packer_cookbook 'sc911_sxa181'
   scp_packer_cookbook 'sc911_jss1101'
+  scp_packer_cookbook 'sc911_jss1110'
   scp_packer_cookbook 'sc911_sxa181_jss1101'
+  scp_packer_cookbook 'sc911_sxa181_jss1110'
 
   # Sitecore Commerce 9.0
   scp_packer_cookbook 'xc901'
