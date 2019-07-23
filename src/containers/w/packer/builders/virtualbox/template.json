@@ -8,7 +8,7 @@
     "virtualbox_winrm_username": "vagrant",
     "virtualbox_winrm_password": "vagrant",
     "virtualbox_winrm_timeout": "2h",
-    "virtualbox_guest_additions_mode": "disable",
+    "virtualbox_guest_additions_mode": "upload",
     "virtualbox_shutdown_command": "A:/shutdown.cmd",
     "virtualbox_post_shutdown_delay": "5s"
   }

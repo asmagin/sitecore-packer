@@ -19,6 +19,7 @@ def scp_packer_sources
   # SOLR
   scp_packer_cookbook 'solr662'
   scp_packer_cookbook 'solr721'
+  scp_packer_cookbook 'solr750'
 
   # Sitecore 9.0
   scp_packer_cookbook 'sc900'
@@ -43,6 +44,14 @@ def scp_packer_sources
   scp_packer_cookbook 'sc911_jss1101'
   scp_packer_cookbook 'sc911_sxa181_jss1101'
 
+  # Sitecore 9.2
+  scp_packer_cookbook 'sc920'
+
+  # Sitecore 9.2 SXA JSS
+  scp_packer_cookbook 'sc920_sxa190'
+  scp_packer_cookbook 'sc920_jss1200'
+  scp_packer_cookbook 'sc920_sxa190_jss1200'
+
   # Sitecore Commerce 9.0
   scp_packer_cookbook 'xc901'
   scp_packer_cookbook 'xc902'
@@ -62,6 +71,7 @@ def scp_packer_sources
   scp_cookbook 'components', 'sitecore', 'common'
   scp_cookbook 'components', 'sitecore', '90x'
   scp_cookbook 'components', 'sitecore', '91x'
+  scp_cookbook 'components', 'sitecore', '92x'
   scp_cookbook 'components', 'sitecore', 'modules'
   scp_cookbook 'components', 'commerce'
   #scp_cookbook 'components', 'commerce', 'common'
