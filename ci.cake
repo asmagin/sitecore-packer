@@ -34,7 +34,9 @@ var w16s_sc910_sxa180_jss1100 = PackerTemplates_Create("w16s-sc910_sxa180_jss110
 var w16s_sc911 = PackerTemplates_Create("w16s-sc911", parents: w16s_solr721);
 var w16s_sc911_sxa181 = PackerTemplates_Create("w16s-sc911_sxa181", parents: w16s_sc911);
 var w16s_sc911_jss1101 = PackerTemplates_Create("w16s-sc911_jss1101", parents: w16s_sc911);
+var w16s_sc911_jss1110 = PackerTemplates_Create("w16s-sc911_jss1110", parents: w16s_sc911);
 var w16s_sc911_sxa181_jss1101 = PackerTemplates_Create("w16s-sc911_sxa181_jss1101", parents: w16s_sc911);
+var w16s_sc911_sxa181_jss1110 = PackerTemplates_Create("w16s-sc911_sxa181_jss1110", parents: w16s_sc911);
 
 var w16s_sc920 = PackerTemplates_Create("w16s-sc920", parents: w16s_solr750);
 var w16s_sc920_sxa190 = PackerTemplates_Create("w16s-sc920_sxa190", parents: w16s_sc920);
@@ -73,11 +75,13 @@ packerTemplates = packerTemplates.
   Concat(w16s_sc911).
   Concat(w16s_sc911_sxa181).
   Concat(w16s_sc911_jss1101).
+  Concat(w16s_sc911_jss1110).
   Concat(w16s_sc911_sxa181_jss1101).
   Concat(w16s_sc920).
   Concat(w16s_sc920_sxa190).
   Concat(w16s_sc920_jss1200).
   Concat(w16s_sc920_sxa190_jss1200).
+  Concat(w16s_sc911_sxa181_jss1110).
   Concat(w16s_xc901).
   Concat(w16s_xc902).
   Concat(w16s_xc903).
