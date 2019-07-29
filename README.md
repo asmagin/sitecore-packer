@@ -28,6 +28,8 @@ Most of the components, including the core operating systems, share the followin
 
 * Put **dev.sitecore.net** credentials into **src/components/sitecore/chef/cookbooks/scp_sitecore_common/attributes/secret.rb**. Check **secrets.md** for a sample.
 
+* Put **dev.sitecore.net** credentials into **src/components/commerce/chef/cookbooks/scp_commerce/attributes/secret.rb**. Check **secrets.md** for a sample.
+
 * Put a link to **SQL Server 2016 Dev SP2** into **src/components/sql/chef/cookbooks/scp_sql/attributes/2016_developer.rb**
 
 * For boxes with Sitecore put **license.xml** file in the same folder with **Vagrantfile** that is used to up the box.
@@ -93,6 +95,8 @@ They contain the respective hosting tools with the default configuration are bas
   * **[w16s-sc902]** with Sitecore 9.0.2 rev. 180604 installed via SIF 1.2.1 and SPE
 * **Sitecore 9.1 Initial release**
   * **[w16s-sc910]** with Sitecore 9.1.0 rev. 001564 installed via SIF 2.0 and SPE
+* **Sitecore 9.2 Initial release**
+  * **[w16s-sc910]** with Sitecore 9.2.0 rev. 001564 installed via SIF 2.0 and SPE
 * **Sitecore 9.0 Update 2 with SPE SXA JSS**
   * **[w16s-sc902_jss1100]** with Sitecore 9.0.2 rev. 180604 installed via SIF 1.2.1 and SPE, JSS 11.0.0
 * **Sitecore 9.0 Update 2 with SPE SXA JSS**
@@ -113,6 +117,12 @@ They contain the respective hosting tools with the default configuration are bas
   * **[w16s-sc911_sxa181]** with Sitecore 9.1.1 rev. 002459 installed via SIF 2.1 and SPE, SXA 1.8.1
 * **Sitecore 9.1 Update 1 with SPE SXA JSS**
   * **[w16s-sc911_sxa181_jss1101]** with Sitecore 9.1.1 rev. 002459 installed via SIF 2.1 and SPE, SXA 1.8.1, JSS 11.0.1
+* **Sitecore 9.2 with SPE JSS**
+  * **[w16s-sc920_jss1200]** with Sitecore 9.2.0 rev. 001564 installed via SIF 2.1 and SPE, JSS 12.0.0
+* **Sitecore 9.2 with SPE SXA**
+  * **[w16s-sc920_sxa190]** with Sitecore 9.2.0 rev. 001564 installed via SIF 2.1 and SPE, SXA 1.9
+* **Sitecore 9.2 with SPE SXA JSS**
+  * **[w16s-sc920_sxa190_jss1200]** with Sitecore 9.2.0 rev. 001564 installed via SIF 2.1 and SPE, SXA 1.9, JSS 12.0.0
 * **Sitecore Experience Commerce 9.0 Update-1**
   * **[w16s-xc901]** with Sitecore Experience Commerce 9.0 Update-1 installed via SIF 1.2.1
 * **Sitecore Experience Commerce 9.0 Update-2**

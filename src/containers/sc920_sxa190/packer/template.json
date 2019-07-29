@@ -1,6 +1,6 @@
 {
   "variables": {
-    "name": "sc911_sxa181",
-    "description": "Sitecore 9.1.1, SPE 5.0, SXA 1.8.1"
+    "name": "sc920_sxa190",
+    "description": "Sitecore 9.2.0, SPE 5.0, SXA 1.9.0"
   }
 }

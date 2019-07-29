@@ -67,10 +67,10 @@ end
 action :cleanup do
   scp_windows_powershell_script_elevated 'Clean up Updates' do
     code <<-EOH
-      # DISM.exe /Online /Cleanup-Image /AnalyzeComponentStore
-      # DISM.exe /Online /Cleanup-Image /StartComponentCleanup
-      # DISM.exe /Online /Cleanup-Image /StartComponentCleanup /ResetBase
-      # DISM.exe /Online /Cleanup-Image /AnalyzeComponentStore
+      DISM.exe /Online /Cleanup-Image /AnalyzeComponentStore
+      DISM.exe /Online /Cleanup-Image /StartComponentCleanup
+      DISM.exe /Online /Cleanup-Image /StartComponentCleanup /ResetBase
+      DISM.exe /Online /Cleanup-Image /AnalyzeComponentStore
     EOH
     timeout 7_200
     action :run
