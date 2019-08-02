@@ -14,6 +14,7 @@ var w16s_sql16d = PackerTemplates_Create("w16s-sql16d", parents: w16s_iis);
 
 var w16s_solr662 = PackerTemplates_Create("w16s-solr662", parents: w16s_sql16d);
 var w16s_solr721 = PackerTemplates_Create("w16s-solr721", parents: w16s_sql16d);
+var w16s_solr750 = PackerTemplates_Create("w16s-solr750", parents: w16s_sql16d);
 
 var w16s_sc900 = PackerTemplates_Create("w16s-sc900", parents: w16s_solr662);
 
@@ -37,6 +38,11 @@ var w16s_sc911_jss1110 = PackerTemplates_Create("w16s-sc911_jss1110", parents: w
 var w16s_sc911_sxa181_jss1101 = PackerTemplates_Create("w16s-sc911_sxa181_jss1101", parents: w16s_sc911);
 var w16s_sc911_sxa181_jss1110 = PackerTemplates_Create("w16s-sc911_sxa181_jss1110", parents: w16s_sc911);
 
+var w16s_sc920 = PackerTemplates_Create("w16s-sc920", parents: w16s_solr750);
+var w16s_sc920_sxa190 = PackerTemplates_Create("w16s-sc920_sxa190", parents: w16s_sc920);
+var w16s_sc920_jss1200 = PackerTemplates_Create("w16s-sc920_jss1200", parents: w16s_sc920);
+var w16s_sc920_sxa190_jss1200 = PackerTemplates_Create("w16s-sc920_sxa190_jss1200", parents: w16s_sc920);
+
 var w16s_xc901 = PackerTemplates_Create("w16s-xc901", parents: w16s_sc901);
 
 var w16s_xc902 = PackerTemplates_Create("w16s-xc902", parents: w16s_sc902);
@@ -54,6 +60,7 @@ packerTemplates = packerTemplates.
   Concat(w16s_sql16d).
   Concat(w16s_solr662).
   Concat(w16s_solr721).
+  Concat(w16s_solr750).
   Concat(w16s_sc900).
   Concat(w16s_sc901).
   Concat(w16s_sc902).
@@ -70,6 +77,10 @@ packerTemplates = packerTemplates.
   Concat(w16s_sc911_jss1101).
   Concat(w16s_sc911_jss1110).
   Concat(w16s_sc911_sxa181_jss1101).
+  Concat(w16s_sc920).
+  Concat(w16s_sc920_sxa190).
+  Concat(w16s_sc920_jss1200).
+  Concat(w16s_sc920_sxa190_jss1200).
   Concat(w16s_sc911_sxa181_jss1110).
   Concat(w16s_xc901).
   Concat(w16s_xc902).

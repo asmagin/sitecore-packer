@@ -1,0 +1,107 @@
+# The Prefix that will be used on SOLR, Website and Database instances.
+$Prefix = "<%= @sitecore['prefix'] %>"
+# The Password for the Sitecore Admin User. This will be regenerated if left on the default.
+$SitecoreAdminPassword = "b"
+# The root folder with the license file and WDP files.
+$SCInstallRoot = "<%= @sitecore['root'] %>"
+# The name for the XConnect service.
+$XConnectSiteName = "$prefix.xconnect"
+# The Sitecore site instance name.
+$SitecoreSiteName = "$prefix.local"
+# Identity Server site name
+$IdentityServerSiteName = "$prefix.identityserver"
+# The Path to the license file
+$LicenseFile = "$SCInstallRoot\license.xml"
+# The URL of the Solr Server
+$SolrUrl = "<%= @sitecore['solr_url'] %>"
+# The Folder that Solr has been installed to.
+$SolrRoot = "<%= @sitecore['solr_root'] %>"
+# The Name of the Solr Service.
+$SolrService = "<%= @sitecore['solr_service'] %>"
+# The DNS name or IP of the SQL Instance.
+$SqlServer = "<%= @sitecore['sql_server'] %>"
+# A SQL user with sysadmin privileges.
+$SqlAdminUser = "<%= @sitecore['sql_admin_user'] %>"
+# The password for $SQLAdminUser.
+$SqlAdminPassword = "<%= @sitecore['sql_admin_password'] %>"
+# The password for sitecore to access DBs.
+$SqlCollectionUserPassword = "<%= @sitecore['sql_collectionuser_password'] %>"
+# The path to the XConnect Package to Deploy.
+$XConnectPackage = (Get-ChildItem "$SCInstallRoot\Sitecore 9* rev. * (OnPrem)_xp0xconnect.scwdp.zip").FullName
+# The path to the Sitecore Package to Deploy.
+$SitecorePackage = (Get-ChildItem "$SCInstallRoot\Sitecore 9* rev. * (OnPrem)_single.scwdp.zip").FullName
+# The path to the Identity Server Package to Deploy.
+$IdentityServerPackage = (Get-ChildItem "$SCInstallRoot\Sitecore.IdentityServer * rev. * (OnPrem)_identityserver.scwdp.zip").FullName
+# The Identity Server password recovery URL, this should be the URL of the CM Instance
+$PasswordRecoveryUrl = "http://$SitecoreSiteName"
+# The URL of the Identity Server
+$SitecoreIdentityAuthority = "https://$IdentityServerSiteName"
+# The URL of the XconnectService
+$XConnectCollectionService = "https://$XConnectSiteName"
+# The random string key used for establishing connection with IdentityService. This will be regenerated if left on the default.
+$ClientSecret = "SIF-Default"
+# Pipe-separated list of instances (URIs) that are allowed to login via Sitecore Identity.
+$AllowedCorsOrigins = "https://$SitecoreSiteName|http://$SitecoreSiteName"
+
+
+# Install XP0 via combined partials file.
+$singleDeveloperParams = @{
+    AllowedCorsOrigins = $AllowedCorsOrigins
+    ClientSecret = $ClientSecret
+    LicenseFile = $LicenseFile
+    PasswordRecoveryUrl = $PasswordRecoveryUrl
+    Path = "$SCInstallRoot\XP0-SingleDeveloper.json"
+    Prefix = $Prefix
+    SitecoreAdminPassword = $SitecoreAdminPassword
+    SitecoreIdentityAuthority = $SitecoreIdentityAuthority
+    SitecorePackage = $SitecorePackage
+    SitecoreSitename = $SitecoreSiteName
+    SolrRoot = $SolrRoot
+    SolrService = $SolrService
+    SolrUrl = $SolrUrl
+    SqlServer = $SqlServer
+    SqlAdminPassword = $SqlAdminPassword
+    SqlAdminUser = $SqlAdminUser
+    SqlCollectionPassword = $SqlCollectionUserPassword
+    SqlCorePassword = $SqlCollectionUserPassword
+    SqlExmMasterPassword = $SqlCollectionUserPassword
+    SqlFormsPassword = $SqlCollectionUserPassword
+    SqlMarketingAutomationPassword = $SqlCollectionUserPassword
+    SqlMasterPassword = $SqlCollectionUserPassword
+    SqlMessagingPassword = $SqlCollectionUserPassword
+    SqlProcessingEnginePassword = $SqlCollectionUserPassword
+    SqlProcessingPoolsPassword = $SqlCollectionUserPassword
+    SqlProcessingTasksPassword = $SqlCollectionUserPassword
+    SqlReferenceDataPassword = $SqlCollectionUserPassword
+    SqlReportingPassword = $SqlCollectionUserPassword
+    SqlSecurityPassword = $SqlCollectionUserPassword
+    SqlWebPassword = $SqlCollectionUserPassword  
+    IdentityServerCertificateName = $IdentityServerSiteName
+    IdentityServerPackage = $IdentityServerPackage
+    IdentityServerSiteName = $IdentityServerSiteName
+    XConnectCertificateName = $XConnectSiteName
+    XConnectCollectionService = $XConnectCollectionService
+    XConnectPackage = $XConnectPackage
+    XConnectSiteName = $XConnectSiteName
+}
+
+Push-Location $SCInstallRoot
+
+Install-SitecoreConfiguration @singleDeveloperParams *>&1 | Tee-Object XP0-SingleDeveloper.log
+
+# Create certificate and add SSL binding to sitecore site
+$pass = (ConvertTo-SecureString -String "<%= @sitecore['password'] %>" -AsPlainText -Force)
+Invoke-AddWebFeatureSSLTask `
+    -Hostname $SitecoreSiteName `
+    -SiteName $SitecoreSiteName `
+    -Port 443 `
+    -ClientCertLocation LocalMachine `
+    -OutputDirectory "<%= @sitecore['cert_path'] %>" `
+    -RootDnsName "DO_NOT_TRUST_SitecoreRootCert" `
+    -RootCertName "root-authority" `
+    -Password $pass
+
+# Uncomment the below line and comment out the above if you want to remove the XP0 SingleDeveloper Config
+#Uninstall-SitecoreConfiguration @singleDeveloperParams *>&1 | Tee-Object XP0-SingleDeveloper-Uninstall.log
+
+Pop-Location
