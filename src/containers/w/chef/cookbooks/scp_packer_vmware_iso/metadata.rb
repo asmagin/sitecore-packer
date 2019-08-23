@@ -1,0 +1,7 @@
+name 'scp_packer_vmware_iso'
+maintainer 'Alex Smagin'
+maintainer_email 'me@asmagin.com'
+license 'MIT'
+description 'Installs/Configures Packer Vmware ISO'
+long_description 'Installs/Configures Packer Vmware ISO'
+version '0.0.0'
