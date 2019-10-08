@@ -77,11 +77,11 @@ packerTemplates = packerTemplates.
   Concat(w16s_sc911_jss1101).
   Concat(w16s_sc911_jss1110).
   Concat(w16s_sc911_sxa181_jss1101).
+  Concat(w16s_sc911_sxa181_jss1110).
   Concat(w16s_sc920).
   Concat(w16s_sc920_sxa190).
   Concat(w16s_sc920_jss1200).
   Concat(w16s_sc920_sxa190_jss1200).
-  Concat(w16s_sc911_sxa181_jss1110).
   Concat(w16s_xc901).
   Concat(w16s_xc902).
   Concat(w16s_xc903).
