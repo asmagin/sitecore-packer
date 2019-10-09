@@ -11,6 +11,7 @@ action :cleanup_licenses do
       del /f C:\\inetpub\\wwwroot\\#{prefix}.xconnect\\App_Data\\license.xml
       del /f C:\\inetpub\\wwwroot\\#{prefix}.xconnect\\App_Data\\jobs\\continuous\\AutomationEngine\\App_Data\\license.xml
       del /f C:\\inetpub\\wwwroot\\#{prefix}.xconnect\\App_Data\\jobs\\continuous\\IndexWorker\\App_Data\\license.xml
+      del /f C:\\inetpub\\wwwroot\\#{prefix}.xconnect\\App_Data\\jobs\\continuous\\ProcessingEngine\\App_Data\\license.xml
       del /f C:\\inetpub\\wwwroot\\#{prefix}.identityserver\\sitecoreruntime\\license.xml
 
       EOH
@@ -28,6 +29,7 @@ action :create_license_symlinks do
       mklink C:\\inetpub\\wwwroot\\#{prefix}.xconnect\\App_Data\\license.xml C:\\vagrant\\license.xml
       mklink C:\\inetpub\\wwwroot\\#{prefix}.xconnect\\App_Data\\jobs\\continuous\\AutomationEngine\\App_Data\\license.xml C:\\vagrant\\license.xml
       mklink C:\\inetpub\\wwwroot\\#{prefix}.xconnect\\App_Data\\jobs\\continuous\\IndexWorker\\App_Data\\license.xml C:\\vagrant\\license.xml
+      mklink C:\\inetpub\\wwwroot\\#{prefix}.xconnect\\App_Data\\jobs\\continuous\\ProcessingEngine\\App_Data\\license.xml C:\\vagrant\\license.xml
       mklink C:\\inetpub\\wwwroot\\#{prefix}.identityserver\\sitecoreruntime\\license.xml C:\\vagrant\\license.xml
 
       EOH

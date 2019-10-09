@@ -1,4 +1,5 @@
 property :guest_additions_options, Hash, required: true
+property :security_protocol, String, default: 'Tls12'
 
 default_action :install
 
@@ -13,6 +14,7 @@ action :install do
   guest_additions_version = new_resource.guest_additions_options['version']
   if guest_additions_version == 'latest'
     guest_additions_version_script = <<-EOH
+      [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::#{new_resource.security_protocol}
       $Response = Invoke-WebRequest -Uri "https://download.virtualbox.org/virtualbox/LATEST.TXT" -UseBasicParsing;
       $host.UI.Write(($Response.Content -split '\n')[0]);
     EOH
