@@ -20,6 +20,7 @@ def scp_packer_sources
   scp_packer_cookbook 'solr662'
   scp_packer_cookbook 'solr721'
   scp_packer_cookbook 'solr750'
+  scp_packer_cookbook 'solr811'
 
   # Sitecore 9.0
   scp_packer_cookbook 'sc900'
