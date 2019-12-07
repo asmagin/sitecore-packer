@@ -1,0 +1,10 @@
+name 'scp_packer_solr811'
+maintainer 'xxxxxxx'
+maintainer_email 'xx@xxxxxxx.com'
+license 'MIT'
+description 'Installs/Configures SOLR 8.1.1'
+long_description 'Installs/Configures SOLR 8.1.1'
+version '1.0.0'
+
+depends 'scp_packer_w'
+depends 'scp_solr'
