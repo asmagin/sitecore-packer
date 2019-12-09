@@ -1,0 +1,12 @@
+name 'scp_packer_sc930'
+maintainer 'Alex Smagin'
+maintainer_email 'me@asmagin.com'
+license 'MIT'
+description 'Installs/Configures Sitecore 9.3.0, SPE 5.0'
+long_description 'Installs/Configures Sitecore 9.3.0, SPE 5.0'
+version '1.0.0'
+
+depends 'scp_packer_w'
+depends 'scp_sitecore_93x'
+depends 'scp_sitecore_modules'
+depends 'scp_develop'
