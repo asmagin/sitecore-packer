@@ -87,10 +87,6 @@ They contain the respective hosting tools with the default configuration are bas
   * **[w16s-solr662]** with Solr 6.6.2
 * **SOLR 7.2.1**
   * **[w16s-solr721]** with Solr 7.2.1
-* **SOLR 7.5.0**
-  * **[w16s-solr750]** with Solr 7.5.0
-* **SOLR 8.1.1**
-  * **[w16s-solr811]** with Solr 8.1.1
 * **Sitecore 9.0 Initial release**
   * **[w16s-sc900]** with Sitecore 9.0.0 rev. 171002 installed via SIF 1.2.1 and SPE
 * **Sitecore 9.0 Update 1**
