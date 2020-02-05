@@ -55,6 +55,9 @@ def scp_packer_sources
   scp_packer_cookbook 'sc920_jss1200'
   scp_packer_cookbook 'sc920_sxa190_jss1200'
 
+  # Sitecore 9.3
+  scp_packer_cookbook 'sc930'
+  
   # Sitecore Commerce 9.0
   scp_packer_cookbook 'xc901'
   scp_packer_cookbook 'xc902'
@@ -75,6 +78,7 @@ def scp_packer_sources
   scp_cookbook 'components', 'sitecore', '90x'
   scp_cookbook 'components', 'sitecore', '91x'
   scp_cookbook 'components', 'sitecore', '92x'
+  scp_cookbook 'components', 'sitecore', '93x'
   scp_cookbook 'components', 'sitecore', 'modules'
   scp_cookbook 'components', 'commerce'
   #scp_cookbook 'components', 'commerce', 'common'

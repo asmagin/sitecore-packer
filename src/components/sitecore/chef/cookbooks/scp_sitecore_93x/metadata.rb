@@ -1,0 +1,11 @@
+name 'scp_sitecore_93x'
+maintainer 'Alex Smagin'
+maintainer_email 'me@asmagin.com'
+license 'MIT'
+description 'Installs/Configures Sitecore'
+long_description 'Installs/Configures Sitecore'
+version '1.0.0'
+
+depends 'scp_windows'
+depends 'scp_sitecore_common'
+depends 'iis', '~> 6.8.0'
