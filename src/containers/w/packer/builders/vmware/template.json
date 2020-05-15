@@ -1,0 +1,17 @@
+{
+  "variables": {
+    "vmware_memory": "8192",
+    "vmware_cpus": "2",
+    "vmware_cores": "2",
+    "vmware_headless": "true",
+    "vmware_boot_wait": "1m",
+    "vmware_network": "nat",
+    "vmware_communicator": "winrm",
+    "vmware_winrm_username": "vagrant",
+    "vmware_winrm_password": "vagrant",
+    "vmware_winrm_timeout": "2h",
+    "vmware_guest_additions_mode": "disable",
+    "vmware_shutdown_command": "A:/shutdown.cmd",
+    "vmware_post_shutdown_delay": "5s"
+  }
+}

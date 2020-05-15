@@ -40,7 +40,10 @@ end
 
 powershell_script 'Optimizing volume' do
   code <<-EOH
-    Optimize-Volume -DriveLetter C
+    # For VmWare it fails, so we just skip it
+    if ( $env:SkipOptimization -ne "True"){
+      Optimize-Volume -DriveLetter C
+    }
   EOH
   action :run
 end
@@ -54,7 +57,6 @@ powershell_script 'Zeroing volume' do
     $SpaceToLeave= $Volume.Size * 0.001
     $FileSize= $Volume.FreeSpace - $SpacetoLeave
     $ZeroArray= new-object byte[]($ArraySize)
-
     $Stream= [io.File]::OpenWrite($FilePath)
     try {
       $CurFileSize = 0

@@ -7,6 +7,8 @@ def scp_packer_sources
   scp_packer_cookbook 'w'
   scp_packer_cookbook 'w', 'virtualbox_iso'
   scp_packer_cookbook 'w', 'virtualbox_ovf'
+  scp_packer_cookbook 'w', 'vmware_iso'
+  scp_packer_cookbook 'w', 'vmware_vmx'
   # scp_packer_cookbook 'w', 'amazon_ebs'
 
   scp_packer_cookbook 'w16s'

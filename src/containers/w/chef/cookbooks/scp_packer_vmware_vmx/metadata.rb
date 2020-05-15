@@ -1,0 +1,7 @@
+name 'scp_packer_vmware_vmx'
+maintainer 'Alex Smagin'
+maintainer_email 'me@asmagin.com'
+license 'MIT'
+description 'Installs/Configures Packer Vmware VMX'
+long_description 'Installs/Configures Packer Vmware VMX'
+version '0.0.0'

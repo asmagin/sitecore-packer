@@ -1,0 +1,39 @@
+{
+  "variables": {
+    "vmware_guest_os_type": "",
+    "vmware_disk_size": "61440",
+    "vmware_floppy_files": "builders/vmware-iso/floppy"
+  },
+  "builders": [
+    {
+      "type": "vmware-iso",
+      "vm_name": "{{user `author`}}-{{user `name`}}-{{user `version`}}-{{isotime \"200601020304\"}}",
+      "display_name": "{{user `author`}}-{{user `name`}}-{{user `version`}}-{{isotime \"200601020304\"}}",
+      "guest_os_type": "{{user `vmware_guest_os_type`}}",
+      "iso_url": "{{user `iso_url`}}",
+      "iso_checksum_type": "{{user `iso_checksum_type`}}",
+      "iso_checksum": "{{user `iso_checksum`}}",
+      "memory": "{{user `vmware_memory`}}",
+      "cpus":  "{{user `vmware_cpus`}}",
+      "cores":  "{{user `vmware_cores`}}",
+      "network": "{{user `vmware_network`}}",
+      "disk_size": "{{user `vmware_disk_size`}}",
+      "floppy_files": [
+        "builders/vmware-iso/floppy/shutdown.cmd",
+        "builders/vmware-iso/floppy/Autounattend.xml",
+        "builders/vmware-iso/floppy/Autounattend.ps1"
+      ],
+      "headless": "{{user `vmware_headless`}}",
+      "boot_wait": "{{user `vmware_boot_wait`}}",
+      "communicator": "{{user `vmware_communicator`}}",
+      "winrm_username": "{{user `vmware_winrm_username`}}",
+      "winrm_password": "{{user `vmware_winrm_password`}}",
+      "winrm_timeout": "{{user `vmware_winrm_timeout`}}",
+      "shutdown_command": "{{user `vmware_shutdown_command`}}",
+      "output_directory": "{{user `output_directory`}}",
+      "vmx_data": {
+        "scsi0.virtualDev": "lsisas1068"
+      }
+    }
+  ]
+}

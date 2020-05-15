@@ -189,6 +189,10 @@ void PackerTemplate_MergeJson(PackerTemplate template) {
         var parentBuildOutputFile = File(parentBuildDirectory + "/" + manifest["builds"][0]["files"][1]["name"].ToString());
         jsonTemplateVariables["virtualbox_source_path"] = buildDirectory.GetRelativePath(parentBuildOutputFile).ToString();
       }
+      if (template.Builders.Any(item => item.IsMatching("vmware"))) {
+        var parentBuildOutputFile = File(parentBuildDirectory + "/" + manifest["builds"][0]["files"][2]["name"].ToString());
+        jsonTemplateVariables["vmware_source_path"] = buildDirectory.GetRelativePath(parentBuildOutputFile).ToString();
+      }
     }
   }
   var descriptions = new List<string>();

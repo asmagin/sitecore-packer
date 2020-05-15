@@ -3,6 +3,7 @@
 var target = Argument("target", "default");
 var configuration = Argument("configuration", string.Empty);
 var recursive = Argument("recursive", false);
+var postProcessors = Argument("postprocessors", "vagrant-virtualbox");
 
 packerTemplates = new List<PackerTemplate>();
 
@@ -98,16 +99,17 @@ packerTemplates = packerTemplates.
 packerTemplate = configuration;
 packerRecursive = recursive;
 
-IEnumerable<PackerTemplate> PackerTemplates_Create(string type, bool amazon = false, IEnumerable<PackerTemplate> parents = null) {
+IList<PackerTemplate> PackerTemplatesInternal_Create(string type, bool amazon = false, IEnumerable<PackerTemplate> parents = null, 
+  string packerCoreName = null, string packerIso = null, string packerBuilderBasedOnParent = null, string postProcessors = null){
   var items = new List<PackerTemplate>();
 
   var virtualBoxCore = PackerTemplate_Create(
     type,
-    "virtualbox-core",
-    new [] { PackerBuilder_Create(parents == null ? "virtualbox-iso" : "virtualbox-ovf") },
+    packerCoreName,
+    new [] { PackerBuilder_Create(parents == null ? packerIso : packerBuilderBasedOnParent) },
     new [] { PackerProvisioner_Create("chef") },
-    new [] { PackerPostProcessor_Create("vagrant-virtualbox") },
-    parents != null ? parents.First(item => item.IsMatching("virtualbox-core")) : null
+    postProcessors.Split(',').Select(postProcessor => PackerPostProcessor_Create(postProcessor)).ToArray(),
+    parents != null ? parents.First(item => item.IsMatching(packerCoreName)) : null
   );
   // var virtualBoxSysprep = PackerTemplate_Create(
   //   type,
@@ -121,6 +123,14 @@ IEnumerable<PackerTemplate> PackerTemplates_Create(string type, bool amazon = fa
   // items.Add(virtualBoxSysprep);
 
   return items;
+
+}
+
+IEnumerable<PackerTemplate> PackerTemplates_Create(string type, bool amazon = false, IEnumerable<PackerTemplate> parents = null) {
+
+  var vmwareBoxItems = PackerTemplatesInternal_Create(type, amazon, parents, "vmware-core", "vmware-iso", "vmware-vmx", postProcessors);
+  var virtualBoxItems = PackerTemplatesInternal_Create(type, amazon, parents, "virtualbox-core", "virtualbox-iso", "virtualbox-ovf", postProcessors);
+  return vmwareBoxItems.Concat(virtualBoxItems);
 }
 
 Task("default")

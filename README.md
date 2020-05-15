@@ -2,7 +2,7 @@
 
 **Contents** [Overview] | [Getting started] | [Usage] | [Next steps] | [Contributing] | [Resources]
 
-This repository contains Packer templates for a local Sitecore hosting environment with IIS and and SQL Server on Windows, SOLR and Sitecore 9.0 building virtual machine images and Vagrant boxes for VirtualBox, provisioned with Chef.
+This repository contains Packer templates for a local Sitecore hosting environment with IIS and and SQL Server on Windows, SOLR and Sitecore 9.0 building virtual machine images and Vagrant boxes for VirtualBox or VmWare, provisioned with Chef.
 
 ## Overview
 
